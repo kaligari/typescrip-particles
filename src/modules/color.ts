@@ -12,6 +12,7 @@ export default class Color {
     multiply(value: number) {
         return new Color(this.red * value, this.green * value, this.blue * value)
     }
+    
     add(color: Color){
         this.red += color.red
         this.green += color.green

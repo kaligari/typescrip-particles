@@ -42,7 +42,7 @@ export default class RendererEngine {
         this.scene.render()
         this.ctx.putImageData(this.imagedata, 0, 0)
         this.ctx.fillStyle = "red";
-        this.ctx.fillText(`${this.fps} fps`, 10, 10)
+        this.ctx.fillText(`${this.fps} fps`, 10, 20)
     }
 
     setDelta() {
