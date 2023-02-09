@@ -1,81 +1,43 @@
-import Color from "./color";
-import Particle from "./particle";
-import RendererEngine from "./rendererEngine";
-
-function random(number: number) {
-    return Math.floor(Math.random() * number)
-}
+import Color from "./color"
+import Game from "./game"
+import Rectangle from "./rectangle"
 
 export default class Scene {
-    rendererEngine: RendererEngine
-    particles: Particle[]
-    amount: number
+    game: Game
+    rects: Rectangle[]
+    rectsX = 5
+    rectsY = 3
 
-    constructor(rendererEngine: RendererEngine) {
-        this.rendererEngine = rendererEngine
-        this.amount = 3000
-        this.particles = Array(this.amount)
-        for(let i = 0; i <= this.amount; i++ ) {
-            const snow = 100 + random(150)
-            this.particles[i] = new Particle(
-                random(320),
-                -1,
-                0,
-                new Color(snow, snow, snow),
-                false
-            )
+    constructor(game: Game) {
+        this.game = game
+        this.rects  = new Array(this.rectsX * this.rectsY)
+        for(let i = 0; i < this.rectsX * this.rectsY; i++) {
+            this.rects[i] = new Rectangle(this.game)
         }
     }
 
     render() {
         this.drawBackground()
-        this.drawParticles()
+        this.drawChecker()
+    }
+    
+    drawChecker() {
+        for(let i = 0; i < this.rectsX; i++) {
+            for(let j = 0; j < this.rectsY; j++) {
+                this.rects[i * j].handleInput()
+                this.rects[i * j].x = i * this.rects[i * j].width
+                this.rects[i * j].y = j * this.rects[i * j].height
+                this.rects[i * j].draw()
+            }
+        }
     }
 
     drawBackground() {
         const color = new Color(50, 50, 50)
-        for(let y = 0; y < this.rendererEngine.height; y++) {
-            for(let x = 0; x < this.rendererEngine.width; x++) {
-                this.rendererEngine.drawPixel(x, y, color)
+        for(let y = 0; y < this.game.rendererEngine.height; y++) {
+            for(let x = 0; x < this.game.rendererEngine.width; x++) {
+                this.game.rendererEngine.drawPixel(x, y, color)
             }
         }
-    }
-
-    drawParticles() {
-        for(let i = 0; i <= this.amount; i++ ) {
-            if(this.particles[i].active) {
-                this.drawParticle(this.particles[i])
-            }
-        }
-        if(random(2) == 0) {
-            for(let j = 0; j < 10; j++) {
-                this.particles[random(this.amount)].active = true
-                
-            }
-        }
-    }
-    
-    drawParticle(particle: Particle) {
-        this.rendererEngine.drawPixel(
-            particle.x,
-            particle.y,
-            particle.color
-        )
-
-        if(particle.life > 3000 || particle.y > this.rendererEngine.height) {
-            particle.x = random(320)
-            particle.y = -1
-            particle.life = 0
-            const snow = 100 + random(150)
-            particle.color = new Color(snow, snow, snow)
-            particle.active = false
-        }
-
-        if(particle.active) {
-            particle.x += 1
-            particle.y += random(3)
-        }
-        
-        particle.life += 10
     }
 }

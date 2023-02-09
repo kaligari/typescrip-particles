@@ -1,4 +1,5 @@
 import Color from "./color"
+import Game from "./game"
 import Scene from "./scene"
 
 export default class RendererEngine {
@@ -12,8 +13,10 @@ export default class RendererEngine {
     delta: number
     fps: number
     scene: Scene
+    game: Game
 
-    constructor() {
+    constructor(game: Game) {
+        this.game = game
         this.canvas = document.getElementById('canvas') as HTMLCanvasElement
         this.ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D
         this.width = 320
@@ -23,7 +26,7 @@ export default class RendererEngine {
         this.deltaThen = 0
         this.delta = 0
         this.fps = 0
-        this.scene = new Scene(this)
+        this.scene = new Scene(this.game)
     }
 
     init(width: number, height: number) {
@@ -32,7 +35,7 @@ export default class RendererEngine {
         this.canvas.width = this.width
         this.canvas.height = this.height
         this.ctx.clearRect(0, 0, this.width, this.height)
-        this.ctx.fillStyle = '#000000'
+        this.ctx.fillStyle = '#00FF00'
         this.ctx.fillRect(0, 0, this.width, this.height)
         this.imagedata = this.ctx.createImageData(this.width, this.height)
     }
