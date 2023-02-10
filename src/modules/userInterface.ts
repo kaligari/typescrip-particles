@@ -15,7 +15,6 @@ export default class UserInterface {
 
     constructor(game: Game) {
         this.game = game
-        console.log(font);
         this.allCharacters = "";
         for (let charCode = 33; charCode < 127; ++charCode) {
             if (charCode % 32 === 0) {
@@ -23,7 +22,6 @@ export default class UserInterface {
             }
             this.allCharacters += String.fromCharCode(charCode);
         }
-        console.log(this.allCharacters);
     }
 
     drawLetter(inputChar: Char, posX: number, posY: number, color: Color) {
@@ -44,11 +42,6 @@ export default class UserInterface {
     text(text: string, x: number, y: number, color: Color) {
         for(let i = 0; i < text.length; i++) {
             this.drawLetter(text[i] as Char, x + (6*i), y, color)
-            // console.log(text[i]);
         }
-        
-        
-        // const pixels = renderPixels(text, fonts.sevenPlus);
-        // console.log(pixels);
     }
 }
