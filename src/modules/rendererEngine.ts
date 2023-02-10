@@ -34,18 +34,14 @@ export default class RendererEngine {
         this.height = height
         this.canvas.width = this.width
         this.canvas.height = this.height
-        this.ctx.clearRect(0, 0, this.width, this.height)
-        this.ctx.fillStyle = '#00FF00'
-        this.ctx.fillRect(0, 0, this.width, this.height)
         this.imagedata = this.ctx.createImageData(this.width, this.height)
     }
 
     render() {
         this.setDelta()
         this.scene.render()
+        this.game.userInterface.text(`${this.fps} FPS`, 5, 5, new Color(255, 0, 0))
         this.ctx.putImageData(this.imagedata, 0, 0)
-        this.ctx.fillStyle = "red";
-        this.ctx.fillText(`${this.fps} fps`, 10, 20)
     }
 
     setDelta() {

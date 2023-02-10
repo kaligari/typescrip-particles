@@ -1,12 +1,13 @@
 import Color from "./color"
 import Game from "./game"
+import { floor } from "./helpers"
 import Rectangle from "./rectangle"
 
 export default class Scene {
     game: Game
     rects: Rectangle[]
-    rectsX = 5
-    rectsY = 3
+    rectsX = 9
+    rectsY = 6
 
     constructor(game: Game) {
         this.game = game
@@ -22,13 +23,11 @@ export default class Scene {
     }
     
     drawChecker() {
-        for(let i = 0; i < this.rectsX; i++) {
-            for(let j = 0; j < this.rectsY; j++) {
-                this.rects[i * j].handleInput()
-                this.rects[i * j].x = i * this.rects[i * j].width
-                this.rects[i * j].y = j * this.rects[i * j].height
-                this.rects[i * j].draw()
-            }
+        for(let id = 0; id < this.rectsX * this.rectsY; id++) {
+            this.rects[id].handleInput()
+            this.rects[id].x = id % this.rectsX * this.rects[id].width
+            this.rects[id].y = floor(id / this.rectsX) * this.rects[id].height
+            this.rects[id].draw()
         }
     }
 
