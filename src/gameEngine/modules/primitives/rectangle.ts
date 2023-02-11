@@ -1,14 +1,14 @@
-import Color from "./color";
-import Game from "./game";
+import Color from "../../libs/color";
+import Game from "../../game";
 
-export default class Primitives {
+export default class Rectangle {
     game: Game
 
     constructor(game: Game) {
         this.game = game
     }
 
-    drawRect(x: number, y: number, width: number, height: number, color: Color, fill: Color | null = null) {
+    draw(x: number, y: number, width: number, height: number, color: Color, fill: Color | null = null) {
         // TODO Optimize number of drawing pixels
         for(let i = x; i <= x + width; i++) {
             for(let j = y; j <= y + height; j++) {

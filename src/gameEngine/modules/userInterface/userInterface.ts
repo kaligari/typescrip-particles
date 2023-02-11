@@ -1,6 +1,6 @@
-import Game from "./game";
-import font from '../assets/font.json'
-import Color from "./color";
+import Game from "../../game";
+import font from './font.json'
+import Color from "../../libs/color";
 
 type Char = '!'|'"'|'#'|'$'|'%'|'&'|'\''|'('|')'|'*'|'+'|','|'-'|'.'|'/'
 |'0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'|':'|';'|'<'|'='|'>'|'?'|'@'|'A'

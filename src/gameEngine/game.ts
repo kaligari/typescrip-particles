@@ -1,10 +1,10 @@
 import RendererEngine from "./rendererEngine"
-import UserInput from "./userInput"
-import UserInterface from "./userInterface"
+import UserInput from "./modules/userInput"
+import UserInterface from "./modules/userInterface/userInterface"
 
 export default class Game {
     rendererEngine: RendererEngine
-    width: number
+    width: number   
     height: number
     userInput: UserInput
     userInterface: UserInterface

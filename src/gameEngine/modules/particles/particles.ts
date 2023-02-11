@@ -1,7 +1,7 @@
-import Color from "./color"
-import Game from "./game"
-import { random } from "./helpers"
-import Particle from "./particle"
+import Color from "../../libs/color"
+import Game from "../../game"
+import { random } from "../../helpers/math"
+import Particle from "../pathfinder/particles/particle"
 
 export default class Particles {
     particles: Particle[]

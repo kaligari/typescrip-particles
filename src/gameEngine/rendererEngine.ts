@@ -1,4 +1,4 @@
-import Color from "./color"
+import Color from "./libs/color"
 import Game from "./game"
 import Scene from "./scene"
 

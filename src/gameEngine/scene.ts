@@ -1,6 +1,6 @@
-import Color from "./color"
+import Color from "./libs/color"
 import Game from "./game"
-import Pathfinder from "./Pathfinder/pathfinder"
+import Pathfinder from "./modules/pathfinder/pathfinder"
 
 export default class Scene {
     game: Game

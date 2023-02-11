@@ -1,4 +1,4 @@
-export enum EPathfinderRectType {
+export enum EPathfinderNodeType {
     INIT = 'INIT',
     START = 'START',
     END = 'END',
