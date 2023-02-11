@@ -17,10 +17,12 @@ export default class Pathfinder {
         this.game = game
         this.rects  = new Array(this.rectsX * this.rectsY)
         for(let i = 0; i < this.rectsX * this.rectsY; i++) {
-            this.rects[i] = new Rectangle(this.game, this, i)
+            this.rects[i] = new Rectangle(this, i)
         }
         this.rectEnd = 15
         this.rectStart = 51
+        // this.rectEnd = 0
+        // this.rectStart = 65
         this.parentRect = this.rectStart
         this.rects[this.rectStart].type = EPathfinderRectType.START
         this.rects[this.rectEnd].type = EPathfinderRectType.END

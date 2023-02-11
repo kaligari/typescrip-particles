@@ -1,13 +1,11 @@
 import { EPathfinderRectType } from './enums'
 import Color from "../color"
-import Game from "../game"
 import GameObject from "../gameObject"
 import Primitives from "../primitives"
 import Pathfinder from './pathfinder'
-import { abs, floor, pow2, round, sqrt } from '../helpers'
+import { floor } from '../helpers'
 
 export default class Rectangle extends GameObject {
-    game: Game
     pathfinder: Pathfinder
     id: number
     borderColor: Color
@@ -16,9 +14,8 @@ export default class Rectangle extends GameObject {
     hCost: number | undefined
     fCost: number | undefined
 
-    constructor(game: Game, pathfinder: Pathfinder, id: number) {
-        super(game)
-        this.game = game
+    constructor(pathfinder: Pathfinder, id: number) {
+        super(pathfinder.game)
         this.pathfinder = pathfinder
         this.width = 29
         this.height = 30
@@ -29,7 +26,7 @@ export default class Rectangle extends GameObject {
 
     handleInput() {
         if(this.isMouseClick()) {
-            if(this.type === EPathfinderRectType.OBSTACLE) {
+            if(this.type === EPathfinderRectType.OBSTACLE || this.type === EPathfinderRectType.INIT) {
                 return
             }
             this.pathfinder.parentRect = this.id
@@ -74,50 +71,49 @@ export default class Rectangle extends GameObject {
 
     drawBackground() {
         if(this.type === EPathfinderRectType.START || this.type === EPathfinderRectType.END) {
-            new Primitives(this.game).drawRect(this.x, this.y, this.width, this.height, this.borderColor, new Color(0, 128, 255))
+            new Primitives(this.pathfinder.game).drawRect(this.x, this.y, this.width, this.height, this.borderColor, new Color(0, 128, 255))
             return
         }
         if(this.type === EPathfinderRectType.SELECTED) {
-            new Primitives(this.game).drawRect(this.x, this.y, this.width, this.height, this.borderColor, new Color(200, 0, 0))
+            new Primitives(this.pathfinder.game).drawRect(this.x, this.y, this.width, this.height, this.borderColor, new Color(200, 0, 0))
             return
         }
         if(this.type === EPathfinderRectType.REVEALED) {
-            new Primitives(this.game).drawRect(this.x, this.y, this.width, this.height, this.borderColor, new Color(0, 128, 0))
+            new Primitives(this.pathfinder.game).drawRect(this.x, this.y, this.width, this.height, this.borderColor, new Color(0, 128, 0))
+            if(this.isMouseHover()) {
+                new Primitives(this.pathfinder.game).drawRect(this.x, this.y, this.width, this.height, this.borderColor, new Color(128, 255, 128))
+                return
+            }
             return
         }
         if(this.type === EPathfinderRectType.OBSTACLE) {
-            new Primitives(this.game).drawRect(this.x, this.y, this.width, this.height, this.borderColor, new Color(0, 0, 0))
-            return
-        }
-        if(this.isMouseHover()) {
-            new Primitives(this.game).drawRect(this.x, this.y, this.width, this.height, this.borderColor, new Color(128, 128, 128))
+            new Primitives(this.pathfinder.game).drawRect(this.x, this.y, this.width, this.height, this.borderColor, new Color(0, 0, 0))
             return
         }
         if(this.type === EPathfinderRectType.INIT) {
-            new Primitives(this.game).drawRect(this.x, this.y, this.width, this.height, this.borderColor)
+            new Primitives(this.pathfinder.game).drawRect(this.x, this.y, this.width, this.height, this.borderColor)
             return
         }
     }
 
     drawText() {
         if(this.type === EPathfinderRectType.START) {
-            this.game.userInterface.text('A', this.x + 13, this.y + 20, new Color(0, 0, 0))
+            this.pathfinder.game.userInterface.text('A', this.x + 13, this.y + 20, new Color(0, 0, 0))
             return
         }
         if(this.type === EPathfinderRectType.END) {
-            this.game.userInterface.text('B', this.x + 13, this.y + 20, new Color(0, 0, 0))
+            this.pathfinder.game.userInterface.text('B', this.x + 13, this.y + 20, new Color(0, 0, 0))
             return
         }
         if(this.gCost) {
-            this.game.userInterface.text(this.gCost.toString(), this.x + 2, this.y + 2, new Color(0, 0, 100))
+            this.pathfinder.game.userInterface.text(this.gCost.toString(), this.x + 2, this.y + 2, new Color(0, 0, 100))
         }
         if(this.hCost) {
-            this.game.userInterface.text(this.hCost.toString(), this.x + this.width - 11, this.y + 2, new Color(100, 0, 0))
+            this.pathfinder.game.userInterface.text(this.hCost.toString(), this.x + this.width - 11, this.y + 2, new Color(100, 0, 0))
         }
         if(this.gCost && this.hCost) {
-            this.game.userInterface.text((this.gCost + this.hCost).toString(), this.x + 10, this.y + 17, new Color(0, 0, 0))
+            this.pathfinder.game.userInterface.text((this.gCost + this.hCost).toString(), this.x + 10, this.y + 17, new Color(0, 0, 0))
         }
-        // this.game.userInterface.text(this.posY().toString(), this.x + 13, this.y + 20, new Color(0, 0, 0))
     }
 
     draw() {
