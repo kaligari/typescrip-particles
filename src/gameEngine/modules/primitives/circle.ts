@@ -46,10 +46,14 @@ export default class Circle {
     }
 
     fill() {
-        for(let y = -this.radius; y <= this.radius; y++)
-            for(let x = -this.radius; x <= this.radius; x++)
-                if(x * x + y * y <= this.radius * this.radius)
+        for(let y = -this.radius; y <= this.radius; y++) {
+            for(let x = -this.radius; x <= this.radius; x++) {
+                if(x * x + y * y <= this.radius * this.radius) {
                     this.game.rendererEngine.drawPixel(this.xc + x, this.yc + y, this.color);
+                }
+            }
+        }
+                    
     }
 
 }

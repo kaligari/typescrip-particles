@@ -41,6 +41,8 @@ export default class RendererEngine {
         this.setDelta()
         this.scene.render()
         this.game.userInterface.text(`${this.fps} FPS`, 5, 5, new Color(255, 0, 0))
+        this.game.userInterface.text(`Mouse X: ${this.game.userInput.mouseX}`, 5, 15, new Color(255, 0, 0))
+        this.game.userInterface.text(`Mouse Y: ${this.game.userInput.mouseY}`, 5, 25, new Color(255, 0, 0))
         this.ctx.putImageData(this.imagedata, 0, 0)
     }
 
@@ -52,6 +54,7 @@ export default class RendererEngine {
     }
 
     drawPixel(x: number, y: number, color: Color) {
+        if(x < 0 || x > this.width - 1 || y < 0 || y > this.height - 1) return
         const pixelindex = (y * this.width + x) * 4
         if(color.alpha !== 255) {
             const alpha1 = (255 - color.alpha) / 255 

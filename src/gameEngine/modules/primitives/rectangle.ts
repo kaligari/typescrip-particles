@@ -12,7 +12,6 @@ export default class Rectangle {
         // TODO Optimize number of drawing pixels
         for(let i = x; i <= x + width; i++) {
             for(let j = y; j <= y + height; j++) {
-                if(i >= this.game.width || j >= this.game.height) continue
                 if(i === x || i === x + width || j === y || j === y + height) {
                     this.game.rendererEngine.drawPixel(i, j, color)
                     continue
