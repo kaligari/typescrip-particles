@@ -53,6 +53,15 @@ export default class RendererEngine {
 
     drawPixel(x: number, y: number, color: Color) {
         const pixelindex = (y * this.width + x) * 4
+        if(color.alpha !== 255) {
+            const alpha1 = (255 - color.alpha) / 255 
+            const alpha2 = color.alpha / 255
+            this.imagedata.data[pixelindex] = alpha1 * this.imagedata.data[pixelindex] + alpha2 * color.red
+            this.imagedata.data[pixelindex + 1] = alpha1 * this.imagedata.data[pixelindex + 1] + alpha2 * color.green
+            this.imagedata.data[pixelindex + 2] = alpha1 * this.imagedata.data[pixelindex + 2] + alpha2 * color.blue
+            this.imagedata.data[pixelindex + 3] = 255
+            return
+        }
         this.imagedata.data[pixelindex] = color.red
         this.imagedata.data[pixelindex + 1] = color.green
         this.imagedata.data[pixelindex + 2] = color.blue
