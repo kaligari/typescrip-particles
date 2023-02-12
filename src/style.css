@@ -14,7 +14,25 @@ body {
   -ms-interpolation-mode: nearest-neighbor;   /* IE8+                           */
 }
 
+#container {
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  flex-direction: column;
+  width: 100%;
+}
+
 canvas {
   display: block;
   margin: auto;
+}
+
+#debug {
+  margin-top: 20px;
+  width: 80%;
+  text-align: center;
+  color: white;
+  text-align: left;
+  font-family: monospace;
+  font-size: 20px;
 }

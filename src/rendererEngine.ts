@@ -1,6 +1,4 @@
 import Color from '@/libs/color'
-import userInput from '@/modules/userInput'
-import userInterface from '@/modules/userInterface/userInterface'
 import scene from '@/scene'
 
 class RendererEngine {
@@ -42,9 +40,6 @@ class RendererEngine {
     render() {
         this.setDelta()
         scene.render()
-        userInterface.text(`${this.fps} FPS`, 5, 5, new Color(255, 0, 0))
-        userInterface.text(`Mouse X: ${userInput.mouseX}`, 5, 15, new Color(255, 0, 0))
-        userInterface.text(`Mouse Y: ${userInput.mouseY}`, 5, 25, new Color(255, 0, 0))
         this.ctx.putImageData(this.imagedata, 0, 0)
         this.ctx.drawImage(this.canvas, 0, 0)
     }
