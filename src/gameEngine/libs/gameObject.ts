@@ -1,14 +1,12 @@
-import Game from "../game"
+import userInput from "../modules/userInput"
 
 export default class GameObject {
-    game: Game
     x: number
     y: number
     width: number
     height: number
 
-    constructor(game: Game) {
-        this.game = game
+    constructor() {
         this.x = 0
         this.y = 0
         this.width = 0
@@ -16,14 +14,14 @@ export default class GameObject {
     }
 
     isMouseHover() {
-        const mouseX = this.game.userInput.mouseX
-        const mouseY = this.game.userInput.mouseY
+        const mouseX = userInput.mouseX
+        const mouseY = userInput.mouseY
         return mouseX > this.x && mouseX < this.x + this.width &&
             mouseY > this.y && mouseY < this.y + this.height
     }
 
     isMouseClick() {        
-        return this.game.userInput.mouseClick && this.isMouseHover()
+        return userInput.mouseClick && this.isMouseHover()
     }
 
 }

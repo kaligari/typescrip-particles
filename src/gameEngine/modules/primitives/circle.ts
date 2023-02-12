@@ -1,15 +1,13 @@
-import Game from "../../game"
 import Color from "../../libs/color"
+import rendererEngine from "../../rendererEngine"
 
 export default class Circle {
-    game: Game
     xc: number
     yc: number
     radius: number
     color: Color
 
-    constructor(game: Game, xc: number, yc: number, radius: number, color: Color) {
-        this.game = game
+    constructor(xc: number, yc: number, radius: number, color: Color) {
         this.xc = xc
         this.yc = yc
         this.radius = radius
@@ -17,14 +15,14 @@ export default class Circle {
     }
 
     drawCircle(xc: number, yc: number, x: number, y: number) {
-        this.game.rendererEngine.drawPixel(xc+x, yc+y, this.color)
-        this.game.rendererEngine.drawPixel(xc-x, yc+y, this.color);
-        this.game.rendererEngine.drawPixel(xc+x, yc-y, this.color);
-        this.game.rendererEngine.drawPixel(xc-x, yc-y, this.color);
-        this.game.rendererEngine.drawPixel(xc+y, yc+x, this.color);
-        this.game.rendererEngine.drawPixel(xc-y, yc+x, this.color);
-        this.game.rendererEngine.drawPixel(xc+y, yc-x, this.color);
-        this.game.rendererEngine.drawPixel(xc-y, yc-x, this.color);
+        rendererEngine.drawPixel(xc+x, yc+y, this.color)
+        rendererEngine.drawPixel(xc-x, yc+y, this.color);
+        rendererEngine.drawPixel(xc+x, yc-y, this.color);
+        rendererEngine.drawPixel(xc-x, yc-y, this.color);
+        rendererEngine.drawPixel(xc+y, yc+x, this.color);
+        rendererEngine.drawPixel(xc-y, yc+x, this.color);
+        rendererEngine.drawPixel(xc+y, yc-x, this.color);
+        rendererEngine.drawPixel(xc-y, yc-x, this.color);
     }
 
     draw() {
@@ -49,7 +47,7 @@ export default class Circle {
         for(let y = -this.radius; y <= this.radius; y++) {
             for(let x = -this.radius; x <= this.radius; x++) {
                 if(x * x + y * y <= this.radius * this.radius) {
-                    this.game.rendererEngine.drawPixel(this.xc + x, this.yc + y, this.color);
+                    rendererEngine.drawPixel(this.xc + x, this.yc + y, this.color);
                 }
             }
         }

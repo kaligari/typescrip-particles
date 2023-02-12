@@ -1,35 +1,22 @@
-import RendererEngine from "./rendererEngine"
-import UserInput from "./modules/userInput"
-import UserInterface from "./modules/userInterface/userInterface"
-
+import rendererEngine from "./rendererEngine"
 export default class Game {
-    rendererEngine: RendererEngine
-    width: number   
-    height: number
-    userInput: UserInput
-    userInterface: UserInterface
 
     constructor(width: number, height: number) {
-        this.rendererEngine = new RendererEngine(this)
-        this.userInput = new UserInput(this)
-        this.userInterface = new UserInterface(this)
-        this.width = width
-        this.height = height
-
+        
         window.addEventListener('resize', () => {
-            this.init()
+            this.init(width, height)
         })
 
-        this.init()
+        this.init(width, height)
     }
 
     render() {
-        this.rendererEngine.render()
+        rendererEngine.render()
         window.requestAnimationFrame(this.render.bind(this))
     }
 
-    init() {
-        this.rendererEngine.init(this.width, this.height)
+    init(width: number, height: number) {
+        rendererEngine.init(width, height)
         this.render()
     }
 }

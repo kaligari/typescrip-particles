@@ -1,8 +1,9 @@
 import Color from "./libs/color"
-import Game from "./game"
-import Scene from "./scene"
+import userInput from "./modules/userInput"
+import userInterface from "./modules/userInterface/userInterface"
+import scene from "./scene"
 
-export default class RendererEngine {
+class RendererEngine {
     canvas: HTMLCanvasElement
     ctx: CanvasRenderingContext2D
     width: number
@@ -12,11 +13,8 @@ export default class RendererEngine {
     deltaThen: number
     delta: number
     fps: number
-    scene: Scene
-    game: Game
 
-    constructor(game: Game) {
-        this.game = game
+    constructor() {
         this.canvas = document.getElementById('canvas') as HTMLCanvasElement
         this.ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D
         this.width = 320
@@ -26,7 +24,6 @@ export default class RendererEngine {
         this.deltaThen = 0
         this.delta = 0
         this.fps = 0
-        this.scene = new Scene(this.game)
     }
 
     init(width: number, height: number) {
@@ -39,10 +36,10 @@ export default class RendererEngine {
 
     render() {
         this.setDelta()
-        this.scene.render()
-        this.game.userInterface.text(`${this.fps} FPS`, 5, 5, new Color(255, 0, 0))
-        this.game.userInterface.text(`Mouse X: ${this.game.userInput.mouseX}`, 5, 15, new Color(255, 0, 0))
-        this.game.userInterface.text(`Mouse Y: ${this.game.userInput.mouseY}`, 5, 25, new Color(255, 0, 0))
+        scene.render()
+        userInterface.text(`${this.fps} FPS`, 5, 5, new Color(255, 0, 0))
+        userInterface.text(`Mouse X: ${userInput.mouseX}`, 5, 15, new Color(255, 0, 0))
+        userInterface.text(`Mouse Y: ${userInput.mouseY}`, 5, 25, new Color(255, 0, 0))
         this.ctx.putImageData(this.imagedata, 0, 0)
     }
 
@@ -71,3 +68,6 @@ export default class RendererEngine {
         this.imagedata.data[pixelindex + 3] = 255
     }
 }
+
+const rendererEngine = new RendererEngine()
+export default rendererEngine

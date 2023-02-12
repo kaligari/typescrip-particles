@@ -1,6 +1,6 @@
-import Game from "../../game";
 import font from './font.json'
 import Color from "../../libs/color";
+import rendererEngine from "../../rendererEngine";
 
 type Char = '!'|'"'|'#'|'$'|'%'|'&'|'\''|'('|')'|'*'|'+'|','|'-'|'.'|'/'
 |'0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'|':'|';'|'<'|'='|'>'|'?'|'@'|'A'
@@ -9,12 +9,10 @@ type Char = '!'|'"'|'#'|'$'|'%'|'&'|'\''|'('|')'|'*'|'+'|','|'-'|'.'|'/'
 |'f'|'g'|'h'|'i'|'j'|'k'|'l'|'m'|'n'|'o'|'p'|'q'|'r'|'s'|'t'|'u'|'v'|'w'
 |'x'|'y'|'z'|'{'|'\|'|'}'|'~'
 
-export default class UserInterface {
-    game: Game
+class UserInterface {
     allCharacters: string
 
-    constructor(game: Game) {
-        this.game = game
+    constructor() {
         this.allCharacters = "";
         for (let charCode = 33; charCode < 127; ++charCode) {
             if (charCode % 32 === 0) {
@@ -34,7 +32,7 @@ export default class UserInterface {
         for(let y = 0; y < char.pixels.length; y++) {
             for(let x = 0; x < char.pixels[y].length; x++) {
                 if(char.pixels[y][x] === 0) continue
-                this.game.rendererEngine.drawPixel(posX + x, posY + y + offsetY, color)
+                rendererEngine.drawPixel(posX + x, posY + y + offsetY, color)
             }
         }
     }
@@ -45,3 +43,6 @@ export default class UserInterface {
         }
     }
 }
+
+const userInterface = new UserInterface()
+export default userInterface

@@ -1,4 +1,4 @@
-import Color from "../../../libs/Color"
+import Color from "../../libs/color"
 
 export default class Particle {
     x: number

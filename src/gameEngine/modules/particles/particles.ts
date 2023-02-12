@@ -1,15 +1,13 @@
 import Color from "../../libs/color"
-import Game from "../../game"
 import { random } from "../../helpers/math"
-import Particle from "../pathfinder/particles/particle"
+import Particle from "../particles/particle"
+import rendererEngine from "../../rendererEngine"
 
 export default class Particles {
     particles: Particle[]
     amount: number
-    game: Game
 
-    constructor(game: Game, amount: number) {
-        this.game = game
+    constructor(amount: number) {
         this.amount = amount
         this.particles = Array(this.amount)
         for(let i = 0; i <= this.amount; i++ ) {
@@ -39,13 +37,13 @@ export default class Particles {
     }
 
     private drawParticle(particle: Particle) {
-        this.game.rendererEngine.drawPixel(
+        rendererEngine.drawPixel(
             particle.x,
             particle.y,
             particle.color
         )
 
-        if(particle.life > 3000 || particle.y > this.game.rendererEngine.height) {
+        if(particle.life > 3000 || particle.y > rendererEngine.height) {
             particle.x = random(320)
             particle.y = -1
             particle.life = 0

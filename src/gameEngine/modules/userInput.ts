@@ -1,15 +1,13 @@
-import Game from "../game";
+import rendererEngine from "../rendererEngine"
 
-export default class UserInput {
-    game: Game
+class UserInput {
     mouseX: number
     mouseY: number
     mouseClick: boolean
     keyPressed: string[]
     keyPressedOnce: string[]
 
-    constructor(game: Game) {
-        this.game = game
+    constructor() {
         this.mouseX = 0
         this.mouseY = 0
         this.mouseClick = false
@@ -23,15 +21,15 @@ export default class UserInput {
     }
 
     getMousePosition(event: MouseEvent)   {        
-        const rect = this.game.rendererEngine.canvas.getBoundingClientRect()
+        const rect = rendererEngine.canvas.getBoundingClientRect()
 
         const mouseX = Math.floor(event.clientX - rect.left)
-        if(mouseX >= 0 && mouseX <= this.game.width) {
+        if(mouseX >= 0 && mouseX <= rendererEngine.width) {
             this.mouseX = mouseX
         }
 
         const mouseY = Math.floor(event.clientY - rect.top)
-        if(mouseY >= 0 && mouseY <= this.game.height) {
+        if(mouseY >= 0 && mouseY <= rendererEngine.height) {
             this.mouseY = mouseY
         }
     }
@@ -75,3 +73,6 @@ export default class UserInput {
     }
 
 }
+
+const userInput = new UserInput()
+export default userInput

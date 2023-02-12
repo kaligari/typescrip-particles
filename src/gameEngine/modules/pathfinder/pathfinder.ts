@@ -1,10 +1,8 @@
-import Game from "../../game"
 import { abs, floor } from "../../helpers/math"
 import { EPathfinderNodeType } from "./types"
 import PathfinderNode from "./pathfinderNode"
 
-export default class Pathfinder {
-    game: Game
+class Pathfinder {
     nodes: PathfinderNode[]
     obstacles: number[]
     sizeX = 11
@@ -13,11 +11,10 @@ export default class Pathfinder {
     endNodeId: number
     parentNodeId: number
     
-    constructor(game: Game) {
-        this.game = game
+    constructor() {
         this.nodes  = new Array(this.sizeX * this.sizeY)
         for(let i = 0; i < this.sizeX * this.sizeY; i++) {
-            this.nodes[i] = new PathfinderNode(this, i)
+            this.nodes[i] = new PathfinderNode(i)
         }
         this.endNodeId = 15
         this.startNodeId = 51
@@ -61,3 +58,6 @@ export default class Pathfinder {
     }
 
 }
+
+const pathfinder = new Pathfinder()
+export default pathfinder
