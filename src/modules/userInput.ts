@@ -23,12 +23,12 @@ class UserInput {
     getMousePosition(event: MouseEvent) {
         const rect = rendererEngine.canvas.getBoundingClientRect()
 
-        const mouseX = Math.floor(event.clientX - rect.left)
+        const mouseX = Math.floor((event.clientX - rect.left) / rendererEngine.scale)
         if (mouseX >= 0 && mouseX <= rendererEngine.width) {
             this.mouseX = mouseX
         }
 
-        const mouseY = Math.floor(event.clientY - rect.top)
+        const mouseY = Math.floor((event.clientY - rect.top) / rendererEngine.scale)
         if (mouseY >= 0 && mouseY <= rendererEngine.height) {
             this.mouseY = mouseY
         }

@@ -8,7 +8,7 @@ class RendererEngine {
     ctx: CanvasRenderingContext2D
     width: number
     height: number
-
+    scale: number
     imagedata: ImageData
     deltaNow: number
     deltaThen: number
@@ -25,14 +25,18 @@ class RendererEngine {
         this.deltaThen = 0
         this.delta = 0
         this.fps = 0
+        this.scale = 1
     }
 
-    init(width: number, height: number) {
+    init(width: number, height: number, scale: number) {
         this.width = width
         this.height = height
-        this.canvas.width = this.width
-        this.canvas.height = this.height
+        this.scale = scale
+        this.canvas.width = this.width * this.scale
+        this.canvas.height = this.height * this.scale
         this.imagedata = this.ctx.createImageData(this.width, this.height)
+        this.ctx.scale(scale, scale)
+        this.ctx.imageSmoothingEnabled = false
     }
 
     render() {
@@ -42,6 +46,7 @@ class RendererEngine {
         userInterface.text(`Mouse X: ${userInput.mouseX}`, 5, 15, new Color(255, 0, 0))
         userInterface.text(`Mouse Y: ${userInput.mouseY}`, 5, 25, new Color(255, 0, 0))
         this.ctx.putImageData(this.imagedata, 0, 0)
+        this.ctx.drawImage(this.canvas, 0, 0)
     }
 
     setDelta() {
