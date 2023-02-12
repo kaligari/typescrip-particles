@@ -12,6 +12,7 @@ printDebug()
 
 function printDebug() {
     debug.innerHTML = `${rendererEngine.fps} FPS<br />
+    Delta: ${rendererEngine.delta}<br />
     Mouse X: ${userInput.mouseX}<br />
     Mouse Y: ${userInput.mouseY}<br />`
     requestAnimationFrame(printDebug)
