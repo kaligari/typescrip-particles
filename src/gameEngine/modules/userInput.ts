@@ -24,8 +24,16 @@ export default class UserInput {
 
     getMousePosition(event: MouseEvent)   {        
         const rect = this.game.rendererEngine.canvas.getBoundingClientRect()
-        this.mouseX = Math.floor(event.clientX - rect.left)
-        this.mouseY = Math.floor(event.clientY - rect.top)
+
+        const mouseX = Math.floor(event.clientX - rect.left)
+        if(mouseX >= 0 && mouseX <= this.game.width) {
+            this.mouseX = mouseX
+        }
+
+        const mouseY = Math.floor(event.clientY - rect.top)
+        if(mouseY >= 0 && mouseY <= this.game.height) {
+            this.mouseY = mouseY
+        }
     }
 
     getMouseDown() {
