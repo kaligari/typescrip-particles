@@ -1,4 +1,4 @@
-import rendererEngine from "../rendererEngine"
+import rendererEngine from '@/rendererEngine'
 
 class UserInput {
     mouseX: number
@@ -20,16 +20,16 @@ class UserInput {
         window.addEventListener('keyup', this.getKeyUp.bind(this), false)
     }
 
-    getMousePosition(event: MouseEvent)   {        
+    getMousePosition(event: MouseEvent) {
         const rect = rendererEngine.canvas.getBoundingClientRect()
 
         const mouseX = Math.floor(event.clientX - rect.left)
-        if(mouseX >= 0 && mouseX <= rendererEngine.width) {
+        if (mouseX >= 0 && mouseX <= rendererEngine.width) {
             this.mouseX = mouseX
         }
 
         const mouseY = Math.floor(event.clientY - rect.top)
-        if(mouseY >= 0 && mouseY <= rendererEngine.height) {
+        if (mouseY >= 0 && mouseY <= rendererEngine.height) {
             this.mouseY = mouseY
         }
     }
@@ -43,25 +43,24 @@ class UserInput {
     }
 
     getKeyDown(event: KeyboardEvent) {
-        
-        if(!this.keyPressed.includes(event.code)) {
+        if (!this.keyPressed.includes(event.code)) {
             this.keyPressed.push(event.code)
-            
-            if(!this.keyPressedOnce.includes(event.code)) {
+
+            if (!this.keyPressedOnce.includes(event.code)) {
                 this.keyPressedOnce.push(event.code)
             }
         }
     }
 
     getKeyUp(event: KeyboardEvent) {
-        if(this.keyPressed.includes(event.code)) {
+        if (this.keyPressed.includes(event.code)) {
             const idx = this.keyPressed.findIndex(item => item === event.code)
             this.keyPressed.splice(idx, 1)
         }
     }
 
     resetInput() {
-        return this.keyPressedOnce = []
+        return (this.keyPressedOnce = [])
     }
 
     isKeyPressed(key: string) {
@@ -71,7 +70,6 @@ class UserInput {
     isKeyPressedOnce(key: string) {
         return this.keyPressedOnce.includes(key)
     }
-
 }
 
 const userInput = new UserInput()

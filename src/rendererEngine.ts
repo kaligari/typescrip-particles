@@ -1,13 +1,14 @@
-import Color from "./libs/color"
-import userInput from "./modules/userInput"
-import userInterface from "./modules/userInterface/userInterface"
-import scene from "./scene"
+import Color from '@/libs/color'
+import userInput from '@/modules/userInput'
+import userInterface from '@/modules/userInterface/userInterface'
+import scene from '@/scene'
 
 class RendererEngine {
     canvas: HTMLCanvasElement
     ctx: CanvasRenderingContext2D
     width: number
     height: number
+
     imagedata: ImageData
     deltaNow: number
     deltaThen: number
@@ -51,14 +52,17 @@ class RendererEngine {
     }
 
     drawPixel(x: number, y: number, color: Color) {
-        if(x < 0 || x > this.width - 1 || y < 0 || y > this.height - 1) return
+        if (x < 0 || x > this.width - 1 || y < 0 || y > this.height - 1) return
         const pixelindex = (y * this.width + x) * 4
-        if(color.alpha !== 255) {
-            const alpha1 = (255 - color.alpha) / 255 
+        if (color.alpha !== 255) {
+            const alpha1 = (255 - color.alpha) / 255
             const alpha2 = color.alpha / 255
-            this.imagedata.data[pixelindex] = alpha1 * this.imagedata.data[pixelindex] + alpha2 * color.red
-            this.imagedata.data[pixelindex + 1] = alpha1 * this.imagedata.data[pixelindex + 1] + alpha2 * color.green
-            this.imagedata.data[pixelindex + 2] = alpha1 * this.imagedata.data[pixelindex + 2] + alpha2 * color.blue
+            this.imagedata.data[pixelindex] =
+                alpha1 * this.imagedata.data[pixelindex] + alpha2 * color.red
+            this.imagedata.data[pixelindex + 1] =
+                alpha1 * this.imagedata.data[pixelindex + 1] + alpha2 * color.green
+            this.imagedata.data[pixelindex + 2] =
+                alpha1 * this.imagedata.data[pixelindex + 2] + alpha2 * color.blue
             this.imagedata.data[pixelindex + 3] = 255
             return
         }

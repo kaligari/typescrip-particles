@@ -1,4 +1,4 @@
-import Game from '@/gameEngine/game'
+import Game from '@/game'
 import './style.css'
 
 new Game(320, 200)

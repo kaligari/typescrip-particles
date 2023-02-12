@@ -1,8 +1,6 @@
-import rendererEngine from "./rendererEngine"
+import rendererEngine from '@/rendererEngine'
 export default class Game {
-
     constructor(width: number, height: number) {
-        
         window.addEventListener('resize', () => {
             this.init(width, height)
         })

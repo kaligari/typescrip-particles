@@ -4,5 +4,5 @@ export enum EPathfinderNodeType {
     END = 'END',
     REVEALED = 'REVEALED',
     SELECTED = 'SELECTED',
-    OBSTACLE = 'OBSTACLE'
+    OBSTACLE = 'OBSTACLE',
 }
