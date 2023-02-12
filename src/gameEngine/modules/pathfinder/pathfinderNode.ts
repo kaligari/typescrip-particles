@@ -142,6 +142,9 @@ export default class PathfinderNode extends GameObject {
         if(this.gCost === undefined || gCost < this.gCost) {
             this.gCost = gCost
         }
+        if(this.hCost !== undefined) {
+            this.fCost = this.hCost + this.gCost
+        }
     }
     
 }
