@@ -3,59 +3,74 @@ import GameImage from '../../libs/gameImage'
 import { floor } from '@/helpers/math'
 import userInterface from '@/modules/userInterface/userInterface'
 import Color from '../../libs/color'
-import { IAnimationTypes } from './types'
+import { IAnimation, IAnimationFile } from './types'
 
 export default class GameAnimation {
-    images: GameImage[][]
-    name: string
-    animation: string
+    animationFile: IAnimationFile
+    animation: IAnimation | undefined
+    sprite: GameImage
+    cols: number
+    rows: number
+    animationName: string
+    duration: number
     step: number
     maxSteps: number
-    speed: number
-    animations: IAnimationTypes[]
-    animationNum: number
 
-    constructor(animations: IAnimationTypes[]) {
-        this.name = 'adventurer'
-        this.animation = ''
-        this.animations = animations
-        this.animationNum = 0
-        this.images = []
+    constructor(animationFile: IAnimationFile) {
+        this.animationName = ''
+        this.animationFile = animationFile
+        this.sprite = new GameImage()
+        this.sprite.loadImage(animationFile.image)
+        this.duration = 0
         this.step = 0
-        this.speed = 8
         this.maxSteps = 0
-        for (let j = 0; j < this.animations.length; j++) {
-            const images: GameImage[] = []
-            for (let i = 0; i < this.animations[j].frames; i++) {
-                images.push(new GameImage())
-                images[i].loadImage(
-                    `./img/${this.name}/${this.name}-${this.animations[j].name}-${i
-                        .toString()
-                        .padStart(2, '0')}.png`,
-                )
-            }
-            this.images.push(images)
-        }
-
+        this.rows = floor(animationFile.imageheight / animationFile.tileheight)
+        this.cols = floor(animationFile.imagewidth / animationFile.tilewidth)
         this.changeAnimation('idle')
     }
 
-    render() {
-        this.images[this.animationNum][floor(this.step)].render()
-        this.step += rendererEngine.delta * this.speed
-        if (this.step > this.maxSteps) this.step = 0
-        userInterface.text(floor(this.step).toString(), 20, 50, new Color(255, 0, 0))
+    render(x: number, y: number) {
+        if (!this.animation) return
+
+        if (this.step >= this.maxSteps) {
+            this.step = 0
+            this.duration = 0
+        }
+
+        const frame = floor(this.step)
+        const tileId = this.animation.animation[frame].tileid
+
+        const row = tileId % this.cols
+        const col = floor(tileId / this.cols)
+
+        this.sprite.renderSelection(
+            {
+                x: row * this.animationFile.tilewidth,
+                y: col * this.animationFile.tileheight,
+                width: this.animationFile.tilewidth,
+                height: this.animationFile.tileheight,
+            },
+            x,
+            y,
+        )
+
+        this.duration += rendererEngine.delta
+        if (this.duration > this.animation.animation[frame].duration) {
+            this.duration = 0
+            this.step++
+        }
     }
 
     changeAnimation(animationName: string) {
-        if (this.animation === animationName) return
-        const animationIdx = this.animations.findIndex(item => item.name === animationName)
-        if (animationIdx === -1) {
-            throw Error('GameAnimation: Cannnot find animation')
+        if (this.animationName === animationName) return
+        this.animation = this.animationFile.tiles.find(
+            animation => animation.class === animationName,
+        )
+        if (typeof this.animation === 'undefined') {
+            throw Error(`GameAnimation: Cannnot find animation "${animationName}"`)
         }
         this.step = 0
-        this.animation = animationName
-        this.maxSteps = this.animations[animationIdx].frames
-        this.animationNum = animationIdx
+        this.animationName = animationName
+        this.maxSteps = this.animation.animation.length
     }
 }

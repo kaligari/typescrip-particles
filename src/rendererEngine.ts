@@ -1,5 +1,6 @@
 import Color from '@/libs/color'
 import scene from '@/scene'
+import { floor } from './helpers/math'
 
 class RendererEngine {
     canvas: HTMLCanvasElement
@@ -46,9 +47,9 @@ class RendererEngine {
 
     setDelta() {
         this.deltaNow = Date.now()
-        this.delta = (this.deltaNow - this.deltaThen) / 1000
+        this.delta = this.deltaNow - this.deltaThen
         this.deltaThen = this.deltaNow
-        this.fps = Math.floor(1 / this.delta)
+        this.fps = floor(1000 / this.delta)
     }
 
     drawPixel(x: number, y: number, color: Color) {
