@@ -17,7 +17,7 @@ function printDebug() {
     Mouse X: ${userInput.mouseX}<br />
     Mouse Y: ${userInput.mouseY}<br />
     ------<br />
-    ${scene.animation.animationName}<br />
-    step: ${scene.animation.step}`
+    ${scene.player.animation.animationName}<br />
+    step: ${scene.player.animation.step}`
     requestAnimationFrame(printDebug)
 }
