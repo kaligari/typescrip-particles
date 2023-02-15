@@ -47,22 +47,20 @@ export default class GameImage {
 
     renderSelection(crop: IRectangle, x: number, y: number, mirrorVertical = false) {
         if (this.data === undefined) return
-        let start = (this.width * crop.y + crop.x) * 4
-        const skip = (this.width - crop.width) * 4
-        for (let i = 1; i < crop.width * crop.height - 1; i++) {
-            const idx = i * 4
-            const newLine = i % crop.width
-            if (newLine === 0) {
-                start += skip
-            }
-            const color = start + idx
-            if (this.data[color + 3] === 0) continue
-            // console.log(color)
+        for (let i = 0; i < crop.width * crop.height; i++) {
+            const skipB = this.width - crop.width - crop.x
+            const offsetX = i % crop.width
+            const offsetY = floor(i / crop.width)
+            const scanDirection = mirrorVertical ? crop.width - offsetX : offsetX
+            let idx = (crop.x + crop.width + skipB) * (offsetY + crop.y) + crop.x + scanDirection
+            idx *= 4
+
+            if (this.data[idx + 3] === 0) continue
 
             rendererEngine.drawPixel(
-                newLine + x,
-                floor(i / crop.width) + y,
-                new Color(this.data[color], this.data[color + 1], this.data[color + 2]),
+                offsetX + x,
+                offsetY + y,
+                new Color(this.data[idx], this.data[idx + 1], this.data[idx + 2]),
             )
         }
     }

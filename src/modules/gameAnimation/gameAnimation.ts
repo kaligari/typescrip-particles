@@ -29,7 +29,7 @@ export default class GameAnimation {
         this.changeAnimation('idle')
     }
 
-    render(x: number, y: number) {
+    render(x: number, y: number, mirrorVertical: boolean) {
         if (!this.animation) return
 
         if (this.step >= this.maxSteps) {
@@ -52,6 +52,7 @@ export default class GameAnimation {
             },
             x,
             y,
+            mirrorVertical,
         )
 
         this.duration += rendererEngine.delta
