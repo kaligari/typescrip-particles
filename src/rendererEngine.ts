@@ -36,6 +36,7 @@ class RendererEngine {
         this.imagedata = this.ctx.createImageData(this.width, this.height)
         this.ctx.scale(scale, scale)
         this.ctx.imageSmoothingEnabled = false
+        scene.init()
     }
 
     render() {
