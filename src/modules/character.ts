@@ -14,7 +14,7 @@ export default class Character {
     constructor() {
         this.animation = new GameAnimation(animation as IAnimationFile)
         this.posX = 0
-        this.posY = 200 - 37
+        this.posY = 200 - 54
         this.isLeft = false
         this.isJumping = false
     }
@@ -39,7 +39,7 @@ export default class Character {
             this.animation.changeAnimation('run')
             this.isLeft = false
             this.posX += 1
-        } else if (userInput.isKeyPressed('ArrowLeft')) {
+        } else if (userInput.isKeyPressed('ArrowLeft') && this.posX > 0) {
             this.animation.changeAnimation('run')
             this.isLeft = true
             this.posX -= 1
@@ -49,6 +49,7 @@ export default class Character {
             this.animation.changeAnimation('idle')
         }
 
-        this.animation.render(floor(this.posX), this.posY, this.isLeft)
+        // this.animation.render(floor(this.posX), this.posY, this.isLeft)
+        this.animation.render(100, this.posY, this.isLeft)
     }
 }
