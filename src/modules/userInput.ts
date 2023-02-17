@@ -22,6 +22,7 @@ class UserInput {
     }
 
     getMousePosition(event: MouseEvent) {
+        event.preventDefault()
         const rect = rendererEngine.canvas.getBoundingClientRect()
 
         const mouseX = floor((event.clientX - rect.left) / rendererEngine.scale)
@@ -44,6 +45,7 @@ class UserInput {
     }
 
     getKeyDown(event: KeyboardEvent) {
+        event.preventDefault()
         if (!this.keyPressed.includes(event.code)) {
             this.keyPressed.push(event.code)
 
@@ -54,6 +56,7 @@ class UserInput {
     }
 
     getKeyUp(event: KeyboardEvent) {
+        event.preventDefault()
         if (this.keyPressed.includes(event.code)) {
             const idx = this.keyPressed.findIndex(item => item === event.code)
             this.keyPressed.splice(idx, 1)
