@@ -1,4 +1,4 @@
-import Character from '@/modules/character'
+import Character from '@/modules/character/character'
 import StateJump from './jump'
 
 export default class StateSomersault extends StateJump {

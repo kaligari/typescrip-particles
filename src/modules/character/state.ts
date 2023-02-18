@@ -1,5 +1,5 @@
 import { round } from '@/helpers/math'
-import Character from '../character'
+import Character from './character'
 
 export default abstract class State {
     character: Character

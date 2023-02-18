@@ -1,8 +1,8 @@
 import Color from '@/libs/color'
 import rendererEngine from '@/rendererEngine'
-import Character from './modules/character'
+import Character from './modules/character/character'
 import GameImage from './libs/gameImage'
-import Tiles from './modules/tiles'
+import Tiles from './modules/tiles/tiles'
 
 class Scene {
     level: GameImage

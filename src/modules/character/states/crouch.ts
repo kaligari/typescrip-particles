@@ -1,4 +1,4 @@
-import Character from '@/modules/character'
+import Character from '@/modules/character/character'
 import StateIdle from './idle'
 
 export default class StateCrouch extends StateIdle {

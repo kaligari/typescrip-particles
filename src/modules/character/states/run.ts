@@ -1,4 +1,4 @@
-import Character from '@/modules/character'
+import Character from '@/modules/character/character'
 import State from '../state'
 
 export default class StateRun extends State {
