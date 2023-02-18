@@ -72,7 +72,12 @@ class UserInput {
     }
 
     isKeyPressedOnce(key: string) {
-        return this.keyPressedOnce.includes(key)
+        const idx = this.keyPressedOnce.indexOf(key)
+        if (idx !== -1) {
+            this.keyPressedOnce.splice(idx, 1)
+            return true
+        }
+        return false
     }
 }
 
