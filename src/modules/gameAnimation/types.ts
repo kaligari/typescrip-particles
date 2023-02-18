@@ -3,10 +3,16 @@ export interface IAnimationFrame {
     tileid: number
 }
 
+export interface IAnimationProperty {
+    name: string
+    type: string
+    value: boolean | string
+}
 export interface IAnimation {
     animation: IAnimationFrame[]
     class: string
     id: number
+    properties?: IAnimationProperty[]
 }
 
 export interface IAnimationFile {

@@ -1,431 +1,434 @@
-{
-       "columns": 7,
-       "editorsettings": {
-              "export": {
-                     "format": "json",
-                     "target": ""
-              }
-       },
-       "image": "./img/adventurer.png",
-       "imageheight": 407,
-       "imagewidth": 350,
-       "margin": 0,
-       "name": "adventurer-Sheet",
-       "spacing": 0,
-       "tilecount": 77,
-       "tiledversion": "1.9.2",
-       "tileheight": 37,
-       "tiles": [
-              {
-                     "animation": [
-                            {
-                                   "duration": 120,
-                                   "tileid": 0
-                            },
-                            {
-                                   "duration": 120,
-                                   "tileid": 1
-                            },
-                            {
-                                   "duration": 120,
-                                   "tileid": 2
-                            },
-                            {
-                                   "duration": 120,
-                                   "tileid": 3
-                            }
-                     ],
-                     "class": "idle",
-                     "id": 0
-              },
-              {
-                     "animation": [
-                            {
-                                   "duration": 120,
-                                   "tileid": 4
-                            },
-                            {
-                                   "duration": 120,
-                                   "tileid": 5
-                            },
-                            {
-                                   "duration": 120,
-                                   "tileid": 6
-                            },
-                            {
-                                   "duration": 120,
-                                   "tileid": 7
-                            }
-                     ],
-                     "class": "crouch",
-                     "id": 4
-              },
-              {
-                     "animation": [
-                            {
-                                   "duration": 120,
-                                   "tileid": 8
-                            },
-                            {
-                                   "duration": 120,
-                                   "tileid": 9
-                            },
-                            {
-                                   "duration": 120,
-                                   "tileid": 10
-                            },
-                            {
-                                   "duration": 120,
-                                   "tileid": 11
-                            },
-                            {
-                                   "duration": 120,
-                                   "tileid": 12
-                            },
-                            {
-                                   "duration": 120,
-                                   "tileid": 13
-                            }
-                     ],
-                     "class": "run",
-                     "id": 8
-              },
-              {
-                     "animation": [
-                            {
-                                   "duration": 120,
-                                   "tileid": 14
-                            },
-                            {
-                                   "duration": 120,
-                                   "tileid": 15
-                            },
-                            {
-                                   "duration": 150,
-                                   "tileid": 16
-                            },
-                            {
-                                   "duration": 150,
-                                   "tileid": 17
-                            },
-                            {
-                                   "duration": 200,
-                                   "tileid": 16
-                            },
-                            {
-                                   "duration": 150,
-                                   "tileid": 15
-                            },
-                            {
-                                   "duration": 120,
-                                   "tileid": 14
-                            }
-                     ],
-                     "class": "jump",
-                     "id": 14
-              },
-              {
-                     "animation": [
-                            {
-                                   "duration": 150,
-                                   "tileid": 18
-                            },
-                            {
-                                   "duration": 150,
-                                   "tileid": 19
-                            },
-                            {
-                                   "duration": 150,
-                                   "tileid": 20
-                            },
-                            {
-                                   "duration": 150,
-                                   "tileid": 21
-                            }
-                     ],
-                     "class": "somersault",
-                     "id": 18
-              },
-              {
-                     "animation": [
-                            {
-                                   "duration": 150,
-                                   "tileid": 22
-                            },
-                            {
-                                   "duration": 150,
-                                   "tileid": 23
-                            }
-                     ],
-                     "class": "fall",
-                     "id": 22
-              },
-              {
-                     "animation": [
-                            {
-                                   "duration": 120,
-                                   "tileid": 24
-                            },
-                            {
-                                   "duration": 120,
-                                   "tileid": 25
-                            },
-                            {
-                                   "duration": 120,
-                                   "tileid": 26
-                            },
-                            {
-                                   "duration": 120,
-                                   "tileid": 27
-                            },
-                            {
-                                   "duration": 120,
-                                   "tileid": 28
-                            }
-                     ],
-                     "class": "stand",
-                     "id": 24
-              },
-              {
-                     "animation": [
-                            {
-                                   "duration": 200,
-                                   "tileid": 29
-                            },
-                            {
-                                   "duration": 200,
-                                   "tileid": 30
-                            },
-                            {
-                                   "duration": 200,
-                                   "tileid": 31
-                            },
-                            {
-                                   "duration": 200,
-                                   "tileid": 32
-                            }
-                     ],
-                     "class": "corner-grab",
-                     "id": 29
-              },
-              {
-                     "animation": [
-                            {
-                                   "duration": 120,
-                                   "tileid": 33
-                            },
-                            {
-                                   "duration": 120,
-                                   "tileid": 34
-                            },
-                            {
-                                   "duration": 120,
-                                   "tileid": 35
-                            },
-                            {
-                                   "duration": 120,
-                                   "tileid": 36
-                            },
-                            {
-                                   "duration": 120,
-                                   "tileid": 37
-                            }
-                     ],
-                     "class": "corner-climb",
-                     "id": 33
-              },
-              {
-                     "animation": [
-                            {
-                                   "duration": 150,
-                                   "tileid": 38
-                            },
-                            {
-                                   "duration": 150,
-                                   "tileid": 39
-                            },
-                            {
-                                   "duration": 150,
-                                   "tileid": 40
-                            },
-                            {
-                                   "duration": 150,
-                                   "tileid": 41
-                            }
-                     ],
-                     "class": "sword-idle",
-                     "id": 38
-              },
-              {
-                     "animation": [
-                            {
-                                   "duration": 130,
-                                   "tileid": 42
-                            },
-                            {
-                                   "duration": 130,
-                                   "tileid": 43
-                            },
-                            {
-                                   "duration": 130,
-                                   "tileid": 44
-                            },
-                            {
-                                   "duration": 130,
-                                   "tileid": 45
-                            },
-                            {
-                                   "duration": 130,
-                                   "tileid": 46
-                            }
-                     ],
-                     "class": "attack-1",
-                     "id": 42
-              },
-              {
-                     "animation": [
-                            {
-                                   "duration": 130,
-                                   "tileid": 47
-                            },
-                            {
-                                   "duration": 130,
-                                   "tileid": 48
-                            },
-                            {
-                                   "duration": 130,
-                                   "tileid": 49
-                            },
-                            {
-                                   "duration": 130,
-                                   "tileid": 50
-                            },
-                            {
-                                   "duration": 130,
-                                   "tileid": 51
-                            },
-                            {
-                                   "duration": 130,
-                                   "tileid": 52
-                            }
-                     ],
-                     "class": "attack-2",
-                     "id": 47
-              },
-              {
-                     "animation": [
-                            {
-                                   "duration": 130,
-                                   "tileid": 53
-                            },
-                            {
-                                   "duration": 130,
-                                   "tileid": 54
-                            },
-                            {
-                                   "duration": 130,
-                                   "tileid": 55
-                            },
-                            {
-                                   "duration": 130,
-                                   "tileid": 56
-                            },
-                            {
-                                   "duration": 130,
-                                   "tileid": 57
-                            },
-                            {
-                                   "duration": 130,
-                                   "tileid": 58
-                            }
-                     ],
-                     "class": "attack-3",
-                     "id": 53
-              },
-              {
-                     "animation": [
-                            {
-                                   "duration": 120,
-                                   "tileid": 59
-                            },
-                            {
-                                   "duration": 120,
-                                   "tileid": 60
-                            },
-                            {
-                                   "duration": 120,
-                                   "tileid": 61
-                            }
-                     ],
-                     "class": "hurt",
-                     "id": 59
-              },
-              {
-                     "animation": [
-                            {
-                                   "duration": 120,
-                                   "tileid": 62
-                            },
-                            {
-                                   "duration": 120,
-                                   "tileid": 63
-                            },
-                            {
-                                   "duration": 150,
-                                   "tileid": 64
-                            },
-                            {
-                                   "duration": 150,
-                                   "tileid": 65
-                            },
-                            {
-                                   "duration": 200,
-                                   "tileid": 66
-                            },
-                            {
-                                   "duration": 400,
-                                   "tileid": 67
-                            },
-                            {
-                                   "duration": 400,
-                                   "tileid": 68
-                            },
-                            {
-                                   "duration": 500,
-                                   "tileid": 67
-                            },
-                            {
-                                   "duration": 500,
-                                   "tileid": 66
-                            },
-                            {
-                                   "duration": 800,
-                                   "tileid": 67
-                            }
-                     ],
-                     "class": "die",
-                     "id": 62
-              },
-              {
-                     "animation": [
-                            {
-                                   "duration": 120,
-                                   "tileid": 69
-                            },
-                            {
-                                   "duration": 120,
-                                   "tileid": 70
-                            },
-                            {
-                                   "duration": 120,
-                                   "tileid": 71
-                            }
-                     ],
-                     "class": "corner-jump",
-                     "id": 69
-              }
-       ],
-       "tilewidth": 50,
-       "type": "tileset",
-       "version": "1.9"
+{ "columns":7,
+ "editorsettings":
+    {
+     "export":
+        {
+         "format":"json",
+         "target":""
+        }
+    },
+ "image":"adventurer.png",
+ "imageheight":407,
+ "imagewidth":350,
+ "margin":0,
+ "name":"adventurer-Sheet",
+ "spacing":0,
+ "tilecount":77,
+ "tiledversion":"1.9.2",
+ "tileheight":37,
+ "tiles":[
+        {
+         "animation":[
+                {
+                 "duration":120,
+                 "tileid":0
+                }, 
+                {
+                 "duration":120,
+                 "tileid":1
+                }, 
+                {
+                 "duration":120,
+                 "tileid":2
+                }, 
+                {
+                 "duration":120,
+                 "tileid":3
+                }],
+         "class":"idle",
+         "id":0
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":120,
+                 "tileid":4
+                }, 
+                {
+                 "duration":120,
+                 "tileid":5
+                }, 
+                {
+                 "duration":120,
+                 "tileid":6
+                }, 
+                {
+                 "duration":120,
+                 "tileid":7
+                }],
+         "class":"crouch",
+         "id":4
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":120,
+                 "tileid":8
+                }, 
+                {
+                 "duration":120,
+                 "tileid":9
+                }, 
+                {
+                 "duration":120,
+                 "tileid":10
+                }, 
+                {
+                 "duration":120,
+                 "tileid":11
+                }, 
+                {
+                 "duration":120,
+                 "tileid":12
+                }, 
+                {
+                 "duration":120,
+                 "tileid":13
+                }],
+         "class":"run",
+         "id":8
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":120,
+                 "tileid":14
+                }, 
+                {
+                 "duration":120,
+                 "tileid":15
+                }, 
+                {
+                 "duration":150,
+                 "tileid":16
+                }, 
+                {
+                 "duration":150,
+                 "tileid":17
+                }, 
+                {
+                 "duration":200,
+                 "tileid":16
+                }],
+         "class":"jump",
+         "id":14
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":120,
+                 "tileid":17
+                }, 
+                {
+                 "duration":120,
+                 "tileid":16
+                }, 
+                {
+                 "duration":120,
+                 "tileid":15
+                }, 
+                {
+                 "duration":100,
+                 "tileid":14
+                }],
+         "class":"jumpEnd",
+         "id":17
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":150,
+                 "tileid":18
+                }, 
+                {
+                 "duration":150,
+                 "tileid":19
+                }, 
+                {
+                 "duration":150,
+                 "tileid":20
+                }, 
+                {
+                 "duration":150,
+                 "tileid":21
+                }],
+         "class":"somersault",
+         "id":18
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":150,
+                 "tileid":22
+                }, 
+                {
+                 "duration":150,
+                 "tileid":23
+                }],
+         "class":"fall",
+         "id":22,
+         "properties":[
+                {
+                 "name":"ignoreInput",
+                 "type":"bool",
+                 "value":true
+                }]
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":120,
+                 "tileid":24
+                }, 
+                {
+                 "duration":120,
+                 "tileid":25
+                }, 
+                {
+                 "duration":120,
+                 "tileid":26
+                }, 
+                {
+                 "duration":120,
+                 "tileid":27
+                }, 
+                {
+                 "duration":120,
+                 "tileid":28
+                }],
+         "class":"stand",
+         "id":24
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":200,
+                 "tileid":29
+                }, 
+                {
+                 "duration":200,
+                 "tileid":30
+                }, 
+                {
+                 "duration":200,
+                 "tileid":31
+                }, 
+                {
+                 "duration":200,
+                 "tileid":32
+                }],
+         "class":"corner-grab",
+         "id":29
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":120,
+                 "tileid":33
+                }, 
+                {
+                 "duration":120,
+                 "tileid":34
+                }, 
+                {
+                 "duration":120,
+                 "tileid":35
+                }, 
+                {
+                 "duration":120,
+                 "tileid":36
+                }, 
+                {
+                 "duration":120,
+                 "tileid":37
+                }],
+         "class":"corner-climb",
+         "id":33
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":150,
+                 "tileid":38
+                }, 
+                {
+                 "duration":150,
+                 "tileid":39
+                }, 
+                {
+                 "duration":150,
+                 "tileid":40
+                }, 
+                {
+                 "duration":150,
+                 "tileid":41
+                }],
+         "class":"sword-idle",
+         "id":38
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":130,
+                 "tileid":42
+                }, 
+                {
+                 "duration":130,
+                 "tileid":43
+                }, 
+                {
+                 "duration":130,
+                 "tileid":44
+                }, 
+                {
+                 "duration":130,
+                 "tileid":45
+                }, 
+                {
+                 "duration":130,
+                 "tileid":46
+                }],
+         "class":"attack-1",
+         "id":42
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":130,
+                 "tileid":47
+                }, 
+                {
+                 "duration":130,
+                 "tileid":48
+                }, 
+                {
+                 "duration":130,
+                 "tileid":49
+                }, 
+                {
+                 "duration":130,
+                 "tileid":50
+                }, 
+                {
+                 "duration":130,
+                 "tileid":51
+                }, 
+                {
+                 "duration":130,
+                 "tileid":52
+                }],
+         "class":"attack-2",
+         "id":47
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":130,
+                 "tileid":53
+                }, 
+                {
+                 "duration":130,
+                 "tileid":54
+                }, 
+                {
+                 "duration":130,
+                 "tileid":55
+                }, 
+                {
+                 "duration":130,
+                 "tileid":56
+                }, 
+                {
+                 "duration":130,
+                 "tileid":57
+                }, 
+                {
+                 "duration":130,
+                 "tileid":58
+                }],
+         "class":"attack-3",
+         "id":53
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":120,
+                 "tileid":59
+                }, 
+                {
+                 "duration":120,
+                 "tileid":60
+                }, 
+                {
+                 "duration":120,
+                 "tileid":61
+                }],
+         "class":"hurt",
+         "id":59
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":120,
+                 "tileid":62
+                }, 
+                {
+                 "duration":120,
+                 "tileid":63
+                }, 
+                {
+                 "duration":150,
+                 "tileid":64
+                }, 
+                {
+                 "duration":150,
+                 "tileid":65
+                }, 
+                {
+                 "duration":200,
+                 "tileid":66
+                }, 
+                {
+                 "duration":400,
+                 "tileid":67
+                }, 
+                {
+                 "duration":400,
+                 "tileid":68
+                }, 
+                {
+                 "duration":500,
+                 "tileid":67
+                }, 
+                {
+                 "duration":500,
+                 "tileid":66
+                }, 
+                {
+                 "duration":800,
+                 "tileid":67
+                }],
+         "class":"die",
+         "id":62
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":120,
+                 "tileid":69
+                }, 
+                {
+                 "duration":120,
+                 "tileid":70
+                }, 
+                {
+                 "duration":120,
+                 "tileid":71
+                }],
+         "class":"corner-jump",
+         "id":69
+        }],
+ "tilewidth":50,
+ "type":"tileset",
+ "version":"1.9"
 }
