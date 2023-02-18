@@ -6,13 +6,5 @@ export default class StateCrouch extends StateIdle {
         super(character, 'crouch')
     }
 
-    onRight() {
-        this.character.changeState(this.character.stateRun, false)
-    }
-
-    onLeft() {
-        this.character.changeState(this.character.stateRun, true)
-    }
-
     onAction1() {}
 }

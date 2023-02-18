@@ -11,11 +11,11 @@ export default class StateIdle extends State {
     }
 
     onRight() {
-        this.character.changeState(this.character.stateRun, false)
+        this.character.changeState(this.character.stateRun)
     }
 
     onLeft() {
-        this.character.changeState(this.character.stateRun, true)
+        this.character.changeState(this.character.stateRun)
     }
 
     onDown() {

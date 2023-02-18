@@ -1,3 +1,4 @@
+import { round } from '@/helpers/math'
 import Character from '../character'
 
 export default abstract class State {
@@ -31,14 +32,8 @@ export default abstract class State {
 
         const direction = this.character.isLeft ? -1 : 1
         this.character.posX += this.character.currSpeedX * direction
-        this.character.posY += Math.round(this.character.currSpeedY)
+        this.character.posY += round(this.character.currSpeedY)
     }
-
-    calc() {}
-    onAction1() {}
-    onRight() {}
-    onLeft() {}
-    onDown() {}
     onNoInput() {
         if (this.character.currSpeedX === 0 && this.character.currSpeedY === 0) {
             this.character.changeState(this.character.stateIdle)
@@ -47,8 +42,14 @@ export default abstract class State {
     canChangeState(): boolean {
         return true
     }
-    onChangeState() {}
     changeAnimation() {
         this.character.animation.changeAnimation(this.name)
     }
+
+    calc() {}
+    onAction1() {}
+    onRight() {}
+    onLeft() {}
+    onDown() {}
+    onChangeState() {}
 }

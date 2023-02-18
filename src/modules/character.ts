@@ -1,7 +1,7 @@
 import GameAnimation from '@/modules/gameAnimation/gameAnimation'
 import { IAnimationFile } from '@/modules/gameAnimation/types'
 import animation from '@/modules/gameAnimation/adventurer.json'
-import { floor } from '@/helpers/math'
+import { abs, floor } from '@/helpers/math'
 import userInput from '@/modules/userInput/userInput'
 import rendererEngine from '@/rendererEngine'
 import State from './character/state'
@@ -57,18 +57,15 @@ export default class Character {
         this.posX = rendererEngine.width / 2
     }
 
-    changeState(state: TStateTypes, isLeft: undefined | boolean = undefined) {
-        if (this.state === state && this.isLeft === isLeft) return
-        if (typeof isLeft !== 'undefined') {
-            this.isLeft = isLeft
-        }
-        const canChangeState = state.canChangeState()
-        if (canChangeState) {
+    changeState(state: TStateTypes) {
+        if (this.state === state) return
+        if (state.canChangeState()) {
             this.state = state
             state.changeAnimation()
             state.onChangeState()
+            return true
         }
-        return canChangeState
+        return false
     }
 
     handleInput() {
@@ -79,7 +76,6 @@ export default class Character {
         }
         if (userInput.isKeyPressed('ArrowDown')) {
             this.state.onDown()
-            this.accY = 1
             return
         }
         if (userInput.isKeyPressed('ArrowRight')) {
@@ -106,7 +102,7 @@ export default class Character {
     }
 
     accelerationX(factor: number, maxVal = 1) {
-        const accX = Math.abs(this.accX) * factor
+        const accX = abs(this.accX) * factor
         if (this.currSpeedX < maxVal) {
             this.currSpeedX += accX
             return
