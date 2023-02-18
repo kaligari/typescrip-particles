@@ -8,8 +8,15 @@ export default class StateSomersault extends StateJump {
 
     onAction1() {}
 
+    canChangeState() {
+        return !this.character.jumpBlocked
+    }
+
+    onChangeState() {
+        this.character.jumpBlocked = true
+    }
+
     onDown() {
-        this.character.accelerationY(1, 20)
         this.character.changeState(this.character.stateJump)
     }
 }

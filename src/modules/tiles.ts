@@ -18,7 +18,7 @@ export default class Tiles {
     }
 
     init() {
-        this.sizeX = 8 // rendererEngine.width / this.tileWidth
+        this.sizeX = 19 // rendererEngine.width / this.tileWidth
         this.startX = (rendererEngine.width - this.sizeX * this.tileWidth) / 2 - this.tileWidth / 2
     }
 

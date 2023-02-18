@@ -8,8 +8,9 @@ import State from './character/state'
 import StateIdle from './character/states/idle'
 import StateRun from './character/states/run'
 import StateJump from './character/states/jump'
-import stateJumpEnd from './character/states/jumpEnd'
-import stateSomersault from './character/states/somersault'
+import StateSomersault from './character/states/somersault'
+import StateFall from './character/states/fall'
+import StateCrouch from './character/states/crouch'
 
 export type TStateTypes = StateRun | StateJump
 
@@ -24,11 +25,13 @@ export default class Character {
     stateRun: State
     stateJump: State
     stateSomersault: State
-    stateJumpEnd: State
+    stateFall: State
+    stateCrouch: State
     accX: number
     accY: number
     currSpeedX: number
     currSpeedY: number
+    jumpBlocked: boolean
 
     constructor() {
         this.animation = new GameAnimation(animation as IAnimationFile)
@@ -39,13 +42,15 @@ export default class Character {
         this.stateRun = new StateRun(this)
         this.stateIdle = new StateIdle(this)
         this.stateJump = new StateJump(this)
-        this.stateJumpEnd = new stateJumpEnd(this)
-        this.stateSomersault = new stateSomersault(this)
+        this.stateSomersault = new StateSomersault(this)
+        this.stateFall = new StateFall(this)
+        this.stateCrouch = new StateCrouch(this)
         this.state = this.stateIdle
         this.accX = 0
         this.accY = 0
         this.currSpeedX = 0
         this.currSpeedY = 0
+        this.jumpBlocked = false
     }
 
     init() {
@@ -57,8 +62,13 @@ export default class Character {
         if (typeof isLeft !== 'undefined') {
             this.isLeft = isLeft
         }
-        this.state = state
-        state.onChangeState()
+        const canChangeState = state.canChangeState()
+        if (canChangeState) {
+            this.state = state
+            state.changeAnimation()
+            state.onChangeState()
+        }
+        return canChangeState
     }
 
     handleInput() {
@@ -102,23 +112,6 @@ export default class Character {
             return
         }
         this.currSpeedX = maxVal
-    }
-
-    decelerationY(factor: number, minVal = 0) {
-        if (this.currSpeedY > minVal) {
-            this.currSpeedY -= factor
-            return
-        }
-        this.currSpeedY = 0
-    }
-
-    accelerationY(factor: number, maxVal = 1) {
-        const accY = Math.abs(this.accY) * factor
-        if (this.currSpeedY < maxVal) {
-            this.currSpeedY += accY
-            return
-        }
-        this.currSpeedY = maxVal
     }
 
     calcState() {

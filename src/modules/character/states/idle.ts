@@ -2,8 +2,8 @@ import Character from '@/modules/character'
 import State from '../state'
 
 export default class StateIdle extends State {
-    constructor(character: Character) {
-        super(character, 'idle')
+    constructor(character: Character, name = 'idle') {
+        super(character, name)
     }
 
     calc() {
@@ -18,8 +18,12 @@ export default class StateIdle extends State {
         this.character.changeState(this.character.stateRun, true)
     }
 
+    onDown() {
+        this.character.changeState(this.character.stateCrouch)
+    }
+
     onAction1() {
-        this.character.currSpeedY -= 3
+        this.character.currSpeedY -= 4
         this.character.changeState(this.character.stateJump)
     }
 }

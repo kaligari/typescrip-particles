@@ -1,9 +1,14 @@
 import Character from '@/modules/character'
 import StateRun from './run'
 
-export default class StateJump extends StateRun {
-    constructor(character: Character, name = 'jump') {
+export default class StateFall extends StateRun {
+    constructor(character: Character, name = 'fall') {
         super(character, name)
+    }
+
+    onDown() {
+        this.character.currSpeedY += 0.5
+        this.character.changeState(this.character.stateJump)
     }
 
     onAction1() {
