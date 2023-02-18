@@ -25,7 +25,7 @@ class Scene {
         this.player.handleInput()
         this.player.calcState()
         this.drawBackground()
-        this.tiles.render(0) //this.player.posX)
+        this.tiles.render(Math.floor(this.player.posX))
         this.player.render()
     }
 
