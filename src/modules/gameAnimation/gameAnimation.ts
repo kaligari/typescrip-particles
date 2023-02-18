@@ -1,8 +1,6 @@
 import rendererEngine from '@/rendererEngine'
 import GameImage from '../../libs/gameImage'
 import { floor } from '@/helpers/math'
-import userInterface from '@/modules/userInterface/userInterface'
-import Color from '../../libs/color'
 import { IAnimation, IAnimationFile } from './types'
 
 export default class GameAnimation {
@@ -15,6 +13,8 @@ export default class GameAnimation {
     duration: number
     step: number
     maxSteps: number
+    afterEnd: string
+    ignoreInput: boolean
 
     constructor(animationFile: IAnimationFile) {
         this.animationName = ''
@@ -24,6 +24,8 @@ export default class GameAnimation {
         this.duration = 0
         this.step = 0
         this.maxSteps = 0
+        this.afterEnd = ''
+        this.ignoreInput = false
         this.rows = floor(animationFile.imageheight / animationFile.tileheight)
         this.cols = floor(animationFile.imagewidth / animationFile.tilewidth)
         this.changeAnimation('idle')
@@ -73,5 +75,9 @@ export default class GameAnimation {
         this.step = 0
         this.animationName = animationName
         this.maxSteps = this.animation.animation.length
+    }
+
+    isEnd() {
+        return this.step === this.maxSteps
     }
 }

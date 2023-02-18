@@ -27,7 +27,7 @@ export default abstract class State {
 
         const direction = this.character.isLeft ? -1 : 1
         this.character.posX += this.character.currSpeedX * direction
-        this.character.posY += Math.floor(this.character.currSpeedY)
+        this.character.posY += Math.round(this.character.currSpeedY)
     }
 
     calc() {}
