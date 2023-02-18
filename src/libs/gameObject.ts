@@ -1,4 +1,4 @@
-import userInput from '@/modules/userInput'
+import userInput from '@/modules/userInput/userInput'
 
 export default class GameObject {
     x: number

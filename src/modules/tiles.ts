@@ -1,6 +1,4 @@
 import rendererEngine from '@/rendererEngine'
-import Rectangle from './primitives/rectangle'
-import Color from '@/libs/color'
 import GameImage from '@/libs/gameImage'
 
 export default class Tiles {
@@ -20,9 +18,8 @@ export default class Tiles {
     }
 
     init() {
-        this.sizeX = rendererEngine.width / this.tileWidth + 1
-        this.startX = (rendererEngine.width - this.sizeX * this.tileWidth) / 2
-        console.log(this.startX)
+        this.sizeX = 8 // rendererEngine.width / this.tileWidth
+        this.startX = (rendererEngine.width - this.sizeX * this.tileWidth) / 2 - this.tileWidth / 2
     }
 
     render(scrollX: number) {
@@ -39,8 +36,6 @@ export default class Tiles {
                 this.startX + destX,
                 180,
             )
-
-            // new Rectangle().draw(this.startX + destX, 100, 16, 16, new Color(255, 255, 255))
         }
     }
 }
