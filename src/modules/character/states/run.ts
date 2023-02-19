@@ -11,7 +11,7 @@ export default class StateRun extends State {
             this.character.decelerationX(0.15)
             return
         }
-        this.character.accelerationX(0.2, 2.5)
+        this.character.accelerationX(0.2, 2)
     }
 
     onLeft() {
