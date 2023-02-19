@@ -1,12 +1,11 @@
 import rendererEngine from '@/rendererEngine'
-import GameImage from '../../libs/gameImage'
 import { floor } from '@/helpers/math'
 import { IAnimation, IAnimationFile } from './types'
+import GameTiles from '@/libs/gameTiles'
 
 export default class GameAnimation {
-    animationFile: IAnimationFile
+    tiles: GameTiles
     animation: IAnimation | undefined
-    sprite: GameImage
     cols: number
     rows: number
     animationName: string
@@ -18,16 +17,14 @@ export default class GameAnimation {
 
     constructor(animationFile: IAnimationFile) {
         this.animationName = ''
-        this.animationFile = animationFile
-        this.sprite = new GameImage()
-        this.sprite.loadImage(animationFile.image)
+        this.tiles = new GameTiles(animationFile)
         this.duration = 0
         this.step = 0
         this.maxSteps = 0
         this.afterEnd = ''
         this.ignoreInput = false
-        this.rows = floor(animationFile.imageheight / animationFile.tileheight)
-        this.cols = floor(animationFile.imagewidth / animationFile.tilewidth)
+        this.rows = this.tiles.rows
+        this.cols = this.tiles.cols
         this.changeAnimation('idle')
     }
 
@@ -45,12 +42,12 @@ export default class GameAnimation {
         const row = tileId % this.cols
         const col = floor(tileId / this.cols)
 
-        this.sprite.renderSelection(
+        this.tiles.image.renderSelection(
             {
-                x: row * this.animationFile.tilewidth,
-                y: col * this.animationFile.tileheight,
-                width: this.animationFile.tilewidth,
-                height: this.animationFile.tileheight,
+                x: row * this.tiles.tileWidth,
+                y: col * this.tiles.tileHeight,
+                width: this.tiles.tileWidth,
+                height: this.tiles.tileHeight,
             },
             x,
             y,
@@ -66,9 +63,7 @@ export default class GameAnimation {
 
     changeAnimation(animationName: string) {
         if (this.animationName === animationName) return
-        this.animation = this.animationFile.tiles.find(
-            animation => animation.class === animationName,
-        )
+        this.animation = this.tiles.tiles.find(animation => animation.class === animationName)
         if (typeof this.animation === 'undefined') {
             throw Error(`GameAnimation: Cannnot find animation "${animationName}"`)
         }
