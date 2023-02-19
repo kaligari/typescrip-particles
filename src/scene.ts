@@ -22,6 +22,7 @@ class Scene {
     init() {
         this.tiles.init()
         this.player.init()
+        this.player.addCollisionsTiles(this.tiles)
     }
 
     updateCamera() {

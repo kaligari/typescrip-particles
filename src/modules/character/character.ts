@@ -19,7 +19,7 @@ import game from '@/game'
 export type TStateTypes = StateRun | StateJump
 
 export default class Character {
-    collisions: Tiles | null
+    tiles: Tiles | null
     animation: GameAnimation
     posX: number
     posY: number
@@ -61,7 +61,7 @@ export default class Character {
         this.currSpeedX = 0
         this.currSpeedY = 0
         this.jumpBlocked = false
-        this.collisions = null
+        this.tiles = null
         this.offsetX = 0
         this.offsetY = 0
         this.offsetWidth = 0
@@ -77,11 +77,23 @@ export default class Character {
         this.offsetHeight = 30
     }
 
-    addCollisionsTiles(collisions: Tiles) {
-        this.collisions = collisions
+    addCollisionsTiles(tiles: Tiles) {
+        this.tiles = tiles
     }
 
     calcColisions() {}
+
+    calcColision(x: number, y: number) {
+        if (!this.tiles) return
+
+        // x = this.posX
+        // y = this.posY
+
+        const col = floor(x / this.tiles.tileWidth)
+        const row = floor(x / this.tiles.tileWidth)
+        const tileId = row * this.tiles.tileSetWidth + (col % this.tiles.tileSetWidth)
+        // console.log(tileId)
+    }
 
     changeState(state: TStateTypes) {
         if (this.state === state) return
