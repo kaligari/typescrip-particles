@@ -11,7 +11,7 @@ export default abstract class State {
     }
 
     physics() {
-        const minY = 200 - 60
+        const minY = 200 - 54
         if (this.character.posY < minY) {
             this.character.currSpeedY += 0.15
             if (this.character.currSpeedY > 0) {

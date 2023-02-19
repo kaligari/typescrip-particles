@@ -1,6 +1,12 @@
 import rendererEngine from '@/rendererEngine'
-export default class Game {
-    constructor(width: number, height: number, scale = 1) {
+class Game {
+    debug: boolean
+
+    constructor() {
+        this.debug = false
+    }
+
+    init(width: number, height: number, scale = 1) {
         rendererEngine.init(width, height, scale)
         this.render()
     }
@@ -10,3 +16,5 @@ export default class Game {
         window.requestAnimationFrame(this.render.bind(this))
     }
 }
+const game = new Game()
+export default game

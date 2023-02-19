@@ -10,10 +10,16 @@ import StateJump from './states/jump'
 import StateSomersault from './states/somersault'
 import StateFall from './states/fall'
 import StateCrouch from './states/crouch'
+import Tiles from '../tiles/tiles'
+import Rectangle from '../primitives/rectangle'
+import Color from '@/libs/color'
+import rendererEngine from '@/rendererEngine'
+import game from '@/game'
 
 export type TStateTypes = StateRun | StateJump
 
 export default class Character {
+    collisions: Tiles | null
     animation: GameAnimation
     posX: number
     posY: number
@@ -31,13 +37,17 @@ export default class Character {
     currSpeedX: number
     currSpeedY: number
     jumpBlocked: boolean
+    offsetX: number
+    offsetY: number
+    offsetWidth: number
+    offsetHeight: number
 
     constructor() {
         this.animation = new GameAnimation(animation as ITiledFileTileset)
         this.animation.tiles.load('./adventurer.png')
         this.states = []
         this.posX = 0
-        this.posY = 50
+        this.posY = 0
         this.isLeft = false
         this.stateRun = new StateRun(this)
         this.stateIdle = new StateIdle(this)
@@ -51,11 +61,27 @@ export default class Character {
         this.currSpeedX = 0
         this.currSpeedY = 0
         this.jumpBlocked = false
+        this.collisions = null
+        this.offsetX = 0
+        this.offsetY = 0
+        this.offsetWidth = 0
+        this.offsetHeight = 0
     }
 
     init() {
-        this.posX = 0
+        this.posX = 20
+        this.posY = 10
+        this.offsetX = 13
+        this.offsetY = 6
+        this.offsetWidth = 20
+        this.offsetHeight = 30
     }
+
+    addCollisionsTiles(collisions: Tiles) {
+        this.collisions = collisions
+    }
+
+    calcColisions() {}
 
     changeState(state: TStateTypes) {
         if (this.state === state) return
@@ -116,7 +142,18 @@ export default class Character {
     }
 
     render(cameraX: number) {
-        this.animation.render(floor(this.posX) - cameraX, this.posY, this.isLeft)
-        // new Rectangle().draw(floor(this.posX) - cameraX, this.posY, 50, 37, new Color(0, 0, 0))
+        const posX = floor(this.posX) - cameraX
+        const posY = this.posY
+        this.animation.render(posX - this.offsetX, posY - this.offsetY, this.isLeft)
+        if (game.debug) {
+            new Rectangle().draw(
+                posX,
+                posY,
+                this.offsetWidth,
+                this.offsetHeight,
+                new Color(0, 0, 0),
+            )
+            rendererEngine.drawPixel(floor(this.posX) - cameraX, this.posY, new Color(255, 0, 0))
+        }
     }
 }

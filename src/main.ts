@@ -1,11 +1,12 @@
-import Game from '@/game'
+import game from '@/game'
 import './style.css'
 import rendererEngine from './rendererEngine'
 import userInput from '@/modules/userInput/userInput'
 import scene from './scene'
 
 // new Game(640, 480, 2)
-new Game(320, 200, 3)
+game.init(320, 200, 3)
+// game.debug = true
 
 const debug = document.getElementById('debug') as HTMLElement
 
