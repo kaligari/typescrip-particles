@@ -1,111 +1,69 @@
 import rendererEngine from '@/rendererEngine'
-import GameImage from '@/libs/gameImage'
-import levelFile from './level.json'
-import userInterface from '../userInterface/userInterface'
-import Color from '@/libs/color'
-import Rectangle from '../primitives/rectangle'
+import { floor } from '@/helpers/math'
+import GameTiles from '@/libs/gameTiles'
+import { ITiledFileMapFile, ITiledFileTileset } from '../gameAnimation/types'
+
 export default class Tiles {
     tileWidth: number
+    tileHeight: number
     sizeX: number
     sizeY: number
     startX: number
     destX: number
-    tiles: GameImage
+    tiles: GameTiles
     tileSet: number[]
     tileSetWidth: number
-    tileId: number
-    offset: number
+    file: ITiledFileMapFile
 
-    constructor() {
-        this.tileWidth = 16
+    constructor(file: ITiledFileMapFile, tiles: ITiledFileTileset) {
+        this.file = file
+        this.tileWidth = file.tilewidth
+        this.tileHeight = file.tileheight
         this.sizeX = 0
         this.sizeY = 0
         this.startX = 0
         this.destX = 0
-        this.tiles = new GameImage()
-        this.tiles.loadImage('./img/level.png')
+        this.tiles = new GameTiles(tiles)
+        this.tiles.load('./img/level.png')
         this.tileSet = []
         this.tileSetWidth = 0
-        this.tileId = 0
-        this.offset = 0
     }
 
     init() {
-        this.sizeX = 21 // rendererEngine.width / this.tileWidth
-        this.sizeY = 13
-        // this.startX = (rendererEngine.width - this.sizeX * this.tileWidth) / 2 - this.tileWidth / 2
-        this.startX = (rendererEngine.width - this.sizeX * this.tileWidth) / 2
-        console.log(this.startX)
-
         this.readLevelFile()
+        this.sizeX = floor(rendererEngine.width / this.tileWidth) + 1
+        this.sizeY = floor(rendererEngine.height / this.tileHeight) + 1
+
+        // start x offset where start to draw pixel, negative to startX
+        this.startX = (rendererEngine.width - this.sizeX * this.tileWidth) / 2
     }
 
     readLevelFile() {
-        this.tileWidth = levelFile.tileheight
-        this.tileSet = levelFile.layers[0].data
-        this.tileSetWidth = levelFile.layers[0].width
+        this.tileWidth = this.file.tileheight
+        this.tileHeight = this.file.tileheight
+        this.tileSet = this.file.layers[0].data
+        this.tileSetWidth = this.file.layers[0].width
     }
 
     render(scrollX: number) {
-        // const destX = (-scrollX % this.tileWidth) * this.tileWidth + this.tileWidth / 2
-        const destX = scrollX % this.tileWidth // + this.tileWidth + this.tileWidth / 2
+        const destX = scrollX % this.tileWidth
         this.destX = destX
-        // const destX = scrollX % this.tileWidth
 
         for (let x = 0; x < this.sizeX * this.sizeY; x++) {
-            // const tileId = Math.floor(scrollX / this.tileWidth)
-            // tileId *= 16
-            // console.log(tileId)
-
-            // const xPos = 16 * 14
-            // const yPos = 16 * 9
-
             const row = Math.floor(x / this.sizeX)
             const col = x % this.sizeX
 
             const offset =
-                Math.floor(x / this.sizeX) * this.tileSetWidth + col + Math.floor(scrollX / 16)
-            // +
-            //th.floor(scrollX / this.sizeX)
+                Math.floor(x / this.sizeX) * this.tileSetWidth +
+                col +
+                Math.floor(scrollX / this.tileWidth)
 
-            // const offset = destX
+            const tileId = this.tileSet[offset] - 1
 
-            this.tileId = this.tileSet[offset] - 1
-            const j = 0
-            if (x === 0) {
-                this.offset = offset
-            }
-            if (this.tileId === -1) continue
-            // new Rectangle().draw(col * 16 - destX, row * 16, 16, 16, new Color(255, 255, 255))
+            // skip empty pixels
+            if (tileId === -1) continue
 
-            // continue
-
-            this.tiles.renderSelection(
-                {
-                    x: (this.tileId % 44) * 16,
-                    y: Math.floor(this.tileId / 44) * 16,
-                    width: 16,
-                    height: 16,
-                },
-                col * 16 - destX, //this.startX + col * 16 + destX, //// col * 16 + 8,
-                row * 16,
-            )
+            this.tiles.render(tileId, col * this.tileWidth - destX, row * this.tileHeight)
         }
-    }
-
-    renderOld(scrollX: number) {
-        // for (let x = 0; x < this.sizeX; x++) {
-        //     const destX = (-scrollX % this.tileWidth) + x * this.tileWidth + this.tileWidth / 2
-        //     if (x === 0) {
-        //         this.destX = destX
-        //     }
-        //     const xPos = 16 * 14
-        //     const yPos = 16 * 9
-        //     this.tiles.renderSelection(
-        //         { x: xPos, y: yPos, width: 16, height: 16 },
-        //         this.startX + destX,
-        //         180,
-        //     )
-        // }
     }
 }

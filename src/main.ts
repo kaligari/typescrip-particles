@@ -1,7 +1,7 @@
 import Game from '@/game'
 import './style.css'
 import rendererEngine from './rendererEngine'
-import userInput from './modules/userInput'
+import userInput from '@/modules/userInput/userInput'
 import scene from './scene'
 
 // new Game(640, 480, 2)
@@ -17,10 +17,6 @@ function printDebug() {
     Mouse X: ${userInput.mouseX}<br />
     Mouse Y: ${userInput.mouseY}<br />
     ------<br />
-    ${scene.player.animation.animationName}<br />
-    step: ${scene.player.animation.step}<br />
-    ------<br />
-    destX: ${scene.tiles.destX}<br />
-    playerX: ${scene.player.posX}`
+    cameraX: ${scene.cameraX}<br />`
     requestAnimationFrame(printDebug)
 }

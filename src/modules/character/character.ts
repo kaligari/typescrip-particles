@@ -1,9 +1,8 @@
 import GameAnimation from '@/modules/gameAnimation/gameAnimation'
-import { IAnimationFile } from '@/modules/gameAnimation/types'
+import { ITiledFileTileset } from '@/modules/gameAnimation/types'
 import animation from '@/modules/gameAnimation/adventurer.json'
 import { abs, floor } from '@/helpers/math'
 import userInput from '@/modules/userInput/userInput'
-import rendererEngine from '@/rendererEngine'
 import State from './state'
 import StateIdle from './states/idle'
 import StateRun from './states/run'
@@ -34,7 +33,8 @@ export default class Character {
     jumpBlocked: boolean
 
     constructor() {
-        this.animation = new GameAnimation(animation as IAnimationFile)
+        this.animation = new GameAnimation(animation as ITiledFileTileset)
+        this.animation.tiles.load('./adventurer.png')
         this.states = []
         this.posX = 0
         this.posY = 50
@@ -54,7 +54,7 @@ export default class Character {
     }
 
     init() {
-        this.posX = rendererEngine.width / 2
+        this.posX = 0
     }
 
     changeState(state: TStateTypes) {
@@ -115,7 +115,8 @@ export default class Character {
         this.state.physics()
     }
 
-    render() {
-        this.animation.render(floor(this.posX), this.posY, this.isLeft)
+    render(cameraX: number) {
+        this.animation.render(floor(this.posX) - cameraX, this.posY, this.isLeft)
+        // new Rectangle().draw(floor(this.posX) - cameraX, this.posY, 50, 37, new Color(0, 0, 0))
     }
 }

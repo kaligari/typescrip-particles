@@ -1,13 +1,11 @@
 import rendererEngine from '@/rendererEngine'
 import { floor } from '@/helpers/math'
-import { IAnimation, IAnimationFile } from './types'
+import { ITiledFileTile, ITiledFileTileset } from './types'
 import GameTiles from '@/libs/gameTiles'
 
 export default class GameAnimation {
     tiles: GameTiles
-    animation: IAnimation | undefined
-    cols: number
-    rows: number
+    animation: ITiledFileTile | undefined
     animationName: string
     duration: number
     step: number
@@ -15,7 +13,7 @@ export default class GameAnimation {
     afterEnd: string
     ignoreInput: boolean
 
-    constructor(animationFile: IAnimationFile) {
+    constructor(animationFile: ITiledFileTileset) {
         this.animationName = ''
         this.tiles = new GameTiles(animationFile)
         this.duration = 0
@@ -23,8 +21,6 @@ export default class GameAnimation {
         this.maxSteps = 0
         this.afterEnd = ''
         this.ignoreInput = false
-        this.rows = this.tiles.rows
-        this.cols = this.tiles.cols
         this.changeAnimation('idle')
     }
 
@@ -39,20 +35,7 @@ export default class GameAnimation {
         const frame = floor(this.step)
         const tileId = this.animation.animation[frame].tileid
 
-        const row = tileId % this.cols
-        const col = floor(tileId / this.cols)
-
-        this.tiles.image.renderSelection(
-            {
-                x: row * this.tiles.tileWidth,
-                y: col * this.tiles.tileHeight,
-                width: this.tiles.tileWidth,
-                height: this.tiles.tileHeight,
-            },
-            x,
-            y,
-            mirrorVertical,
-        )
+        this.tiles.render(tileId, x, y, mirrorVertical)
 
         this.duration += rendererEngine.delta
         if (this.duration > this.animation.animation[frame].duration) {

@@ -1,19 +1,22 @@
 import Color from '@/libs/color'
 import rendererEngine from '@/rendererEngine'
 import Character from './modules/character/character'
-import GameImage from './libs/gameImage'
 import Tiles from './modules/tiles/tiles'
+import levelFile from './modules/tiles/level.json'
+import levelTilesFile from './modules/tiles/tiles.json'
+import { ITiledFileMapFile, ITiledFileTileset } from './modules/gameAnimation/types'
 
 class Scene {
-    level: GameImage
     player: Character
     tiles: Tiles
+    cameraX: number
+    cameraY: number
 
     constructor() {
         this.player = new Character()
-        this.level = new GameImage()
-        this.level.loadImage('./img/level.png')
-        this.tiles = new Tiles()
+        this.tiles = new Tiles(levelFile as ITiledFileMapFile, levelTilesFile as ITiledFileTileset)
+        this.cameraX = 0
+        this.cameraY = 0
     }
 
     init() {
@@ -21,12 +24,31 @@ class Scene {
         this.player.init()
     }
 
+    updateCamera() {
+        const marginRight = rendererEngine.width * 0.6
+        const marginLeft = rendererEngine.width * 0.4
+
+        if (this.cameraX < this.player.posX - marginRight) {
+            this.cameraX += 2
+        }
+        if (this.cameraX > this.player.posX - marginLeft) {
+            this.cameraX -= 2
+        }
+        if (this.cameraX < 0) {
+            this.cameraX = 0
+        }
+        if (this.cameraX > 20 * 16) {
+            this.cameraX = 20 * 16
+        }
+    }
+
     render() {
         this.player.handleInput()
         this.player.calcState()
+        this.updateCamera()
         this.drawBackground()
-        this.tiles.render(Math.round(this.player.posX))
-        this.player.render()
+        this.tiles.render(this.cameraX)
+        this.player.render(this.cameraX)
     }
 
     drawBackground() {
