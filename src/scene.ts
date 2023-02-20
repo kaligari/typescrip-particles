@@ -45,9 +45,11 @@ class Scene {
 
     render() {
         this.player.handleInput()
-        this.player.calcState()
-        this.player.calcColisions()
+        // this.player.calcState()
+        // this.player.calcColisions()
         this.updateCamera()
+        this.player.calcState(this.cameraX)
+        this.player.updateState()
         this.drawBackground()
         this.tiles.render(this.cameraX)
         this.player.render(this.cameraX)

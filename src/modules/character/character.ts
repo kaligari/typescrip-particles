@@ -1,7 +1,7 @@
 import GameAnimation from '@/modules/gameAnimation/gameAnimation'
 import { ITiledFileTileset } from '@/modules/gameAnimation/types'
 import animation from '@/modules/gameAnimation/adventurer.json'
-import { abs, floor } from '@/helpers/math'
+import { abs, floor, round } from '@/helpers/math'
 import userInput from '@/modules/userInput/userInput'
 import State from './state'
 import StateIdle from './states/idle'
@@ -41,6 +41,7 @@ export default class Character {
     offsetY: number
     offsetWidth: number
     offsetHeight: number
+    boundBottom: number | null
 
     constructor() {
         this.animation = new GameAnimation(animation as ITiledFileTileset)
@@ -66,6 +67,7 @@ export default class Character {
         this.offsetY = 0
         this.offsetWidth = 0
         this.offsetHeight = 0
+        this.boundBottom = null
     }
 
     init() {
@@ -81,18 +83,21 @@ export default class Character {
         this.tiles = tiles
     }
 
-    calcColisions() {}
+    // calcColisions() {}
 
-    calcColision(x: number, y: number) {
-        if (!this.tiles) return
+    calcColision(x: number, y: number, cameraX: number) {
+        if (!this.tiles) return null
 
-        // x = this.posX
-        // y = this.posY
+        rendererEngine.drawPixel(x - cameraX, y, new Color(255, 0, 0))
 
         const col = floor(x / this.tiles.tileWidth)
-        const row = floor(x / this.tiles.tileWidth)
-        const tileId = row * this.tiles.tileSetWidth + (col % this.tiles.tileSetWidth)
-        // console.log(tileId)
+        const row = floor(y / this.tiles.tileWidth)
+        const tileId = row * this.tiles.tileSetWidth + col
+
+        if (this.tiles.tileSet[tileId] !== 0) {
+            return row * this.tiles.tileHeight
+        }
+        return null
     }
 
     changeState(state: TStateTypes) {
@@ -148,9 +153,60 @@ export default class Character {
         this.currSpeedX = maxVal
     }
 
-    calcState() {
+    calcState(cameraX: number) {
         this.state.calc()
+
+        const direction = this.isLeft ? -1 : 1
+        const desiredX = this.currSpeedX * direction
+        const desiredY = round(this.currSpeedY)
+
+        const x = floor(this.posX) + floor(desiredX)
+        const y = floor(this.posY) + floor(desiredY)
+
+        const bottomX = x + floor(this.offsetWidth / 2)
+        const bottomY = y + this.offsetHeight
+        const collisionBottom = this.calcColision(bottomX, bottomY, cameraX)
+        if (collisionBottom !== null && this.boundBottom === null) {
+            this.boundBottom = collisionBottom - this.offsetHeight
+        } else if (collisionBottom === null) {
+            this.boundBottom = null
+        }
+
+        const rightX = x + this.offsetWidth
+        const rightY = y + floor(this.offsetHeight / 2)
+        const collisionRight = this.calcColision(rightX, rightY, cameraX)
+        if (collisionRight !== null) {
+            this.currSpeedX = 0
+        }
+
+        const leftX = x
+        const leftY = y + floor(this.offsetHeight / 2)
+        const collisionLeft = this.calcColision(leftX, leftY, cameraX)
+        if (collisionLeft !== null) {
+            this.currSpeedX = 0
+        }
+
+        const topX = x + floor(this.offsetWidth / 2)
+        const topY = y
+        const collisionTop = this.calcColision(topX, topY, cameraX)
+        if (collisionTop !== null) {
+            this.currSpeedY = 0
+        }
+
         this.state.physics()
+    }
+
+    updateState() {
+        const direction = this.isLeft ? -1 : 1
+        const desiredX = this.currSpeedX * direction
+        const desiredY = round(this.currSpeedY)
+        // this.posY += desiredY
+
+        const x = floor(this.posX) + floor(desiredX)
+        const y = floor(this.posY) + floor(desiredY)
+
+        this.posX = x
+        this.posY = y
     }
 
     render(cameraX: number) {

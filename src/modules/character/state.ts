@@ -1,4 +1,3 @@
-import { round } from '@/helpers/math'
 import Character from './character'
 
 export default abstract class State {
@@ -11,17 +10,20 @@ export default abstract class State {
     }
 
     physics() {
-        const minY = 200 - 54
-        if (this.character.posY < minY) {
+        if (this.character.boundBottom === null) {
             this.character.currSpeedY += 0.15
             if (this.character.currSpeedY > 0) {
                 this.character.changeState(this.character.stateFall)
             }
         }
 
-        if (this.character.posY > minY && this.character.currSpeedY > 0) {
+        if (
+            this.character.boundBottom &&
+            this.character.posY > this.character.boundBottom &&
+            this.character.currSpeedY > 0
+        ) {
             this.character.currSpeedY = 0
-            this.character.posY = minY
+            this.character.posY = this.character.boundBottom
             this.character.jumpBlocked = false
             if (this.character.currSpeedX > 0) {
                 this.character.changeState(this.character.stateRun)
@@ -29,10 +31,6 @@ export default abstract class State {
                 this.character.changeState(this.character.stateIdle)
             }
         }
-
-        const direction = this.character.isLeft ? -1 : 1
-        this.character.posX += this.character.currSpeedX * direction
-        this.character.posY += round(this.character.currSpeedY)
     }
     onNoInput() {
         if (this.character.currSpeedX === 0 && this.character.currSpeedY === 0) {
