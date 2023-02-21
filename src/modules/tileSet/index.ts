@@ -25,8 +25,11 @@ export default class TileSet {
         this.tilesFile = new GameTiles()
     }
 
-    async load(mapFile: ITiledFileMapFile, tiles: ITiledFileTileset) {
-        await this.tilesFile.load(tiles)
+    async load(mapFile: ITiledFileMapFile) {
+        const tilesFile = await fetch(`./assets/${mapFile.tilesets[0].source}`)
+            .then(response => response.json())
+            .catch(error => console.log(error))
+        await this.tilesFile.load(tilesFile)
         this.tileWidth = mapFile.tileheight
         this.tileHeight = mapFile.tileheight
         this.tiles = mapFile.layers[0].data

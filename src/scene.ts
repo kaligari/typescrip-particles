@@ -18,13 +18,14 @@ export default class Scene {
     }
 
     async init() {
-        const levelFile = await fetch('./assets/level.json').then(response => response.json())
-        const levelTilesFile = await fetch('./assets/tiles.json').then(response => response.json())
-        const characterFile = await fetch('./assets/adventurer.json').then(response =>
-            response.json(),
-        )
+        const levelFile = await fetch('./assets/level.json')
+            .then(response => response.json())
+            .catch(error => console.log(error))
+        const characterFile = await fetch('./assets/adventurer.json')
+            .then(response => response.json())
+            .catch(error => console.log(error))
 
-        await this.tiles.load(levelFile as ITiledFileMapFile, levelTilesFile as ITiledFileTileset)
+        await this.tiles.load(levelFile as ITiledFileMapFile)
         await this.player.load(characterFile)
         this.player.addCollisionsTiles(this.tiles)
     }
