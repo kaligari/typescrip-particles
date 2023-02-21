@@ -1,6 +1,6 @@
 import GameAnimation from '@/modules/gameAnimation/gameAnimation'
 import { ITiledFileTileset } from '@/modules/gameAnimation/types'
-import animation from '@/modules/gameAnimation/adventurer.json'
+import animation from '../../../public/assets/character/adventurer.json'
 import { abs, floor, round } from '@/helpers/math'
 import userInput from '@/modules/userInput/userInput'
 import State from './state'

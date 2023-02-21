@@ -22,12 +22,13 @@ export default class Scene {
         const levelTilesFile = await fetch('./assets/level/tiles.json').then(response =>
             response.json(),
         )
+
         this.tiles = new TileSet(
             levelFile as ITiledFileMapFile,
             levelTilesFile as ITiledFileTileset,
         )
+        await this.player.init()
         this.tiles.init()
-        this.player.init()
         this.player.addCollisionsTiles(this.tiles)
     }
 
