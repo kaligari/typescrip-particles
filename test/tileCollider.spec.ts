@@ -2,12 +2,16 @@ import { expect, it } from 'vitest'
 import Rectangle from '@/libs/rectangle'
 import TileSet from '@/modules/tileSet'
 import TileCollider from '@/modules/collider'
-import { ITiledFileMapFile, ITiledFileTileset } from '@/modules/gameAnimation/types'
-import levelFile from './assets/level.json'
-import levelTilesFile from './assets/tiles.json'
+import { ITiledFileMapFile } from '@/modules/gameAnimation/types'
+// import levelFile from './assets/level.json'
+// import levelTilesFile from './assets/tiles.json'
 
+const levelFile = await fetch('./assets/level.json')
+    .then(response => response.json())
+    .catch(error => console.log(error))
 const parent = new Rectangle(20, 20, 22, 22)
-const tileset = new TileSet(levelFile as ITiledFileMapFile, levelTilesFile as ITiledFileTileset)
+const tileset = new TileSet()
+tileset.load(levelFile as ITiledFileMapFile)
 tileset.tileWidth = 16
 tileset.tileHeight = 16
 tileset.tileSetWidth = 4
