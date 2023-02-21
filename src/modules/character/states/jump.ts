@@ -12,4 +12,8 @@ export default class StateJump extends StateRun {
             this.character.currSpeedY -= 5
         }
     }
+
+    onDown() {
+        this.character.changeState(this.character.stateJump)
+    }
 }

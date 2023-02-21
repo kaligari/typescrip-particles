@@ -10,16 +10,16 @@ import StateJump from './states/jump'
 import StateSomersault from './states/somersault'
 import StateFall from './states/fall'
 import StateCrouch from './states/crouch'
-import Tiles from '../tiles/tiles'
 import Rectangle from '../primitives/rectangle'
 import Color from '@/libs/color'
 import rendererEngine from '@/rendererEngine'
 import game from '@/game'
+import TileSet from '../tileSet'
 
 export type TStateTypes = StateRun | StateJump
 
 export default class Character {
-    tiles: Tiles | null
+    tiles: TileSet | null
     animation: GameAnimation
     posX: number
     posY: number
@@ -79,7 +79,7 @@ export default class Character {
         this.offsetHeight = 30
     }
 
-    addCollisionsTiles(tiles: Tiles) {
+    addCollisionsTiles(tiles: TileSet) {
         this.tiles = tiles
     }
 
@@ -94,7 +94,7 @@ export default class Character {
         const row = floor(y / this.tiles.tileWidth)
         const tileId = row * this.tiles.tileSetWidth + col
 
-        if (this.tiles.tileSet[tileId] !== 0) {
+        if (this.tiles.tiles[tileId] !== 0) {
             return row * this.tiles.tileHeight
         }
         return null
@@ -172,17 +172,43 @@ export default class Character {
             this.boundBottom = null
         }
 
-        const rightX = x + this.offsetWidth
-        const rightY = y + floor(this.offsetHeight / 2)
-        const collisionRight = this.calcColision(rightX, rightY, cameraX)
-        if (collisionRight !== null) {
+        // const rightX = x + this.offsetWidth
+        // const rightY = y + floor(this.offsetHeight / 2)
+        // const collisionRight = this.calcColision(rightX, rightY, cameraX)
+        // if (collisionRight !== null) {
+        //     this.currSpeedX = 0
+        // }
+
+        // const leftX = x
+        // const leftY = y + floor(this.offsetHeight / 2)
+        // const collisionLeft = this.calcColision(leftX, leftY, cameraX)
+        // if (collisionLeft !== null) {
+        //     this.currSpeedX = 0
+        // }
+
+        const rightTopX = x + this.offsetWidth
+        const rightTopY = y + floor(this.offsetWidth * 0.25)
+        const collisionRightTop = this.calcColision(rightTopX, rightTopY, cameraX)
+        if (collisionRightTop !== null) {
+            this.currSpeedX = 0
+        }
+        const rightBottomX = x + this.offsetWidth
+        const rightBottomY = y + floor(this.offsetWidth * 0.75)
+        const collisionRightBottom = this.calcColision(rightBottomX, rightBottomY, cameraX)
+        if (collisionRightBottom !== null) {
             this.currSpeedX = 0
         }
 
-        const leftX = x
-        const leftY = y + floor(this.offsetHeight / 2)
-        const collisionLeft = this.calcColision(leftX, leftY, cameraX)
-        if (collisionLeft !== null) {
+        const leftTopX = x
+        const leftTopY = y + floor(this.offsetWidth * 0.25)
+        const collisionLeftTop = this.calcColision(leftTopX, leftTopY, cameraX)
+        if (collisionLeftTop !== null) {
+            this.currSpeedX = 0
+        }
+        const leftBottomX = x
+        const leftBottomY = y + floor(this.offsetWidth * 0.75)
+        const collisionLeftBottom = this.calcColision(leftBottomX, leftBottomY, cameraX)
+        if (collisionLeftBottom !== null) {
             this.currSpeedX = 0
         }
 

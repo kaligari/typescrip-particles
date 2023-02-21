@@ -1,20 +1,23 @@
 import Color from '@/libs/color'
 import rendererEngine from '@/rendererEngine'
 import Character from './modules/character/character'
-import Tiles from './modules/tiles/tiles'
-import levelFile from './modules/tiles/level.json'
-import levelTilesFile from './modules/tiles/tiles.json'
+import levelFile from './assets/level/level.json'
+import levelTilesFile from './assets/level/tiles.json'
 import { ITiledFileMapFile, ITiledFileTileset } from './modules/gameAnimation/types'
+import TileSet from './modules/tileSet'
 
 class Scene {
     player: Character
-    tiles: Tiles
+    tiles: TileSet
     cameraX: number
     cameraY: number
 
     constructor() {
         this.player = new Character()
-        this.tiles = new Tiles(levelFile as ITiledFileMapFile, levelTilesFile as ITiledFileTileset)
+        this.tiles = new TileSet(
+            levelFile as ITiledFileMapFile,
+            levelTilesFile as ITiledFileTileset,
+        )
         this.cameraX = 0
         this.cameraY = 0
     }
