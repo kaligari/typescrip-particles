@@ -21,19 +21,16 @@ export default class TileSet {
     /** Where start to draw tiles regarding to screen coords */
     startXOffset = 0
 
-    constructor(mapFile: ITiledFileMapFile, tiles: ITiledFileTileset) {
-        // console.log(mapFile)
+    constructor() {
+        this.tilesFile = new GameTiles()
+    }
 
-        this.tilesFile = new GameTiles(tiles)
+    async load(mapFile: ITiledFileMapFile, tiles: ITiledFileTileset) {
+        await this.tilesFile.load(tiles)
         this.tileWidth = mapFile.tileheight
         this.tileHeight = mapFile.tileheight
         this.tiles = mapFile.layers[0].data
         this.tileSetWidth = mapFile.layers[0].width
-    }
-
-    async init() {
-        // TODO Loading files
-        await this.tilesFile.load('./assets/level/tiles.png')
         this.renderedSizeWidth = floor(rendererEngine.width / this.tileWidth) + 1
         this.renderedSizeHeigh = floor(rendererEngine.height / this.tileHeight) + 1
         this.startXOffset = (rendererEngine.width - this.renderedSizeWidth * this.tileWidth) / 2

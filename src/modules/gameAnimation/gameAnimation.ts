@@ -13,15 +13,20 @@ export default class GameAnimation {
     afterEnd: string
     ignoreInput: boolean
 
-    constructor(animationFile: ITiledFileTileset) {
+    constructor() {
         this.animationName = ''
-        this.tiles = new GameTiles(animationFile)
+        this.tiles = new GameTiles()
+
         this.duration = 0
         this.step = 0
         this.maxSteps = 0
         this.afterEnd = ''
         this.ignoreInput = false
         this.changeAnimation('idle')
+    }
+
+    load(animationFile: ITiledFileTileset) {
+        this.tiles.load(animationFile)
     }
 
     render(x: number, y: number, mirrorVertical: boolean) {
@@ -45,7 +50,7 @@ export default class GameAnimation {
     }
 
     changeAnimation(animationName: string) {
-        if (this.animationName === animationName) return
+        if (this.animationName === animationName || !this.tiles.tiles) return
         this.animation = this.tiles.tiles.find(animation => animation.class === animationName)
         if (typeof this.animation === 'undefined') {
             throw Error(`GameAnimation: Cannnot find animation "${animationName}"`)

@@ -6,7 +6,7 @@ import TileSet from './modules/tileSet'
 
 export default class Scene {
     player: Character
-    tiles: TileSet | null
+    tiles: TileSet
     cameraX: number
     cameraY: number
 
@@ -14,21 +14,18 @@ export default class Scene {
         this.player = new Character()
         this.cameraX = 0
         this.cameraY = 0
-        this.tiles = null
+        this.tiles = new TileSet()
     }
 
     async init() {
-        const levelFile = await fetch('./assets/level/level.json').then(response => response.json())
-        const levelTilesFile = await fetch('./assets/level/tiles.json').then(response =>
+        const levelFile = await fetch('./assets/level.json').then(response => response.json())
+        const levelTilesFile = await fetch('./assets/tiles.json').then(response => response.json())
+        const characterFile = await fetch('./assets/adventurer.json').then(response =>
             response.json(),
         )
 
-        this.tiles = new TileSet(
-            levelFile as ITiledFileMapFile,
-            levelTilesFile as ITiledFileTileset,
-        )
-        await this.player.init()
-        this.tiles.init()
+        await this.tiles.load(levelFile as ITiledFileMapFile, levelTilesFile as ITiledFileTileset)
+        await this.player.load(characterFile)
         this.player.addCollisionsTiles(this.tiles)
     }
 
@@ -51,8 +48,6 @@ export default class Scene {
     }
 
     render() {
-        if (!this.tiles) return
-
         this.player.handleInput()
         // this.player.calcState()
         // this.player.calcColisions()

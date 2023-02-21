@@ -1,6 +1,6 @@
 import GameAnimation from '@/modules/gameAnimation/gameAnimation'
 import { ITiledFileTileset } from '@/modules/gameAnimation/types'
-import animation from '../../../public/assets/character/adventurer.json'
+import animation from '../../../public/assets/adventurer.json'
 import { abs, floor, round } from '@/helpers/math'
 import userInput from '@/modules/userInput/userInput'
 import State from './state'
@@ -44,8 +44,7 @@ export default class Character {
     boundBottom: number | null
 
     constructor() {
-        this.animation = new GameAnimation(animation as ITiledFileTileset)
-        this.animation.tiles.load('./assets/character/adventurer.png')
+        this.animation = new GameAnimation()
         this.states = []
         this.posX = 0
         this.posY = 0
@@ -70,7 +69,8 @@ export default class Character {
         this.boundBottom = null
     }
 
-    init() {
+    load(animation: ITiledFileTileset) {
+        this.animation.load(animation)
         this.posX = 20
         this.posY = 10
         this.offsetX = 13
@@ -82,8 +82,6 @@ export default class Character {
     addCollisionsTiles(tiles: TileSet) {
         this.tiles = tiles
     }
-
-    // calcColisions() {}
 
     calcColision(x: number, y: number, cameraX: number) {
         if (!this.tiles) return null

@@ -3,8 +3,8 @@ import Rectangle from '@/libs/rectangle'
 import TileSet from '@/modules/tileSet'
 import TileCollider from '@/modules/collider'
 import { ITiledFileMapFile, ITiledFileTileset } from '@/modules/gameAnimation/types'
-import levelFile from './assets/level/level.json'
-import levelTilesFile from './assets/level/tiles.json'
+import levelFile from './assets/level.json'
+import levelTilesFile from './assets/tiles.json'
 
 const parent = new Rectangle(20, 20, 22, 22)
 const tileset = new TileSet(levelFile as ITiledFileMapFile, levelTilesFile as ITiledFileTileset)
