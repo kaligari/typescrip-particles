@@ -45,7 +45,7 @@ export default class Character {
 
     constructor() {
         this.animation = new GameAnimation(animation as ITiledFileTileset)
-        this.animation.tiles.load('./adventurer.png')
+        this.animation.tiles.load('./assets/character/adventurer.png')
         this.states = []
         this.posX = 0
         this.posY = 0

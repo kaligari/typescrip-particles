@@ -1,28 +1,31 @@
 import Color from '@/libs/color'
 import rendererEngine from '@/rendererEngine'
 import Character from './modules/character/character'
-import levelFile from './assets/level/level.json'
-import levelTilesFile from './assets/level/tiles.json'
 import { ITiledFileMapFile, ITiledFileTileset } from './modules/gameAnimation/types'
 import TileSet from './modules/tileSet'
 
-class Scene {
+export default class Scene {
     player: Character
-    tiles: TileSet
+    tiles: TileSet | null
     cameraX: number
     cameraY: number
 
     constructor() {
         this.player = new Character()
+        this.cameraX = 0
+        this.cameraY = 0
+        this.tiles = null
+    }
+
+    async init() {
+        const levelFile = await fetch('./assets/level/level.json').then(response => response.json())
+        const levelTilesFile = await fetch('./assets/level/tiles.json').then(response =>
+            response.json(),
+        )
         this.tiles = new TileSet(
             levelFile as ITiledFileMapFile,
             levelTilesFile as ITiledFileTileset,
         )
-        this.cameraX = 0
-        this.cameraY = 0
-    }
-
-    init() {
         this.tiles.init()
         this.player.init()
         this.player.addCollisionsTiles(this.tiles)
@@ -47,6 +50,8 @@ class Scene {
     }
 
     render() {
+        if (!this.tiles) return
+
         this.player.handleInput()
         // this.player.calcState()
         // this.player.calcColisions()
@@ -67,6 +72,3 @@ class Scene {
         }
     }
 }
-
-const scene = new Scene()
-export default scene

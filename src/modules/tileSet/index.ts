@@ -1,5 +1,5 @@
 import GameTiles from '@/libs/gameTiles'
-import { ITiledFileMapFile, ITiledFileTileset } from '../gameAnimation/types'
+import { ITiledFileMapFile, ITiledFileTileset } from '@/modules/gameAnimation/types'
 import { floor } from '@/helpers/math'
 import rendererEngine from '@/rendererEngine'
 
@@ -22,16 +22,18 @@ export default class TileSet {
     startXOffset = 0
 
     constructor(mapFile: ITiledFileMapFile, tiles: ITiledFileTileset) {
+        // console.log(mapFile)
+
         this.tilesFile = new GameTiles(tiles)
-        // TODO Loading files
-        this.tilesFile.load('./img/level.png')
         this.tileWidth = mapFile.tileheight
         this.tileHeight = mapFile.tileheight
         this.tiles = mapFile.layers[0].data
         this.tileSetWidth = mapFile.layers[0].width
     }
 
-    init() {
+    async init() {
+        // TODO Loading files
+        await this.tilesFile.load('./assets/level/tiles.png')
         this.renderedSizeWidth = floor(rendererEngine.width / this.tileWidth) + 1
         this.renderedSizeHeigh = floor(rendererEngine.height / this.tileHeight) + 1
         this.startXOffset = (rendererEngine.width - this.renderedSizeWidth * this.tileWidth) / 2

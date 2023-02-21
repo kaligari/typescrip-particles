@@ -1,33 +1,36 @@
 import Color from '@/libs/color'
-import scene from '@/scene'
 import { floor } from './helpers/math'
+import Scene from './scene'
 
 class RendererEngine {
-    canvas: HTMLCanvasElement
-    ctx: CanvasRenderingContext2D
+    canvas: HTMLCanvasElement | null
+    ctx: CanvasRenderingContext2D | null
     width: number
     height: number
     scale: number
-    imagedata: ImageData
+    imagedata: ImageData | null
     deltaNow: number
     deltaThen: number
     delta: number
     fps: number
 
     constructor() {
-        this.canvas = document.getElementById('canvas') as HTMLCanvasElement
-        this.ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D
         this.width = 320
         this.height = 200
-        this.imagedata = this.ctx.createImageData(this.width, this.height)
         this.deltaNow = 0
         this.deltaThen = 0
         this.delta = 0
         this.fps = 0
         this.scale = 1
+        this.imagedata = null
+        this.canvas = null
+        this.ctx = null
     }
 
-    init(width: number, height: number, scale: number) {
+    init(canvas: HTMLCanvasElement, width: number, height: number, scale: number) {
+        this.canvas = canvas
+        this.ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D
+        this.imagedata = this.ctx.createImageData(this.width, this.height)
         this.width = width
         this.height = height
         this.scale = scale
@@ -36,10 +39,10 @@ class RendererEngine {
         this.imagedata = this.ctx.createImageData(this.width, this.height)
         this.ctx.scale(scale, scale)
         this.ctx.imageSmoothingEnabled = false
-        scene.init()
     }
 
-    render() {
+    render(scene: Scene) {
+        if (!this.imagedata || !this.ctx || !this.canvas) return
         this.setDelta()
         scene.render()
         this.ctx.putImageData(this.imagedata, 0, 0)
@@ -54,6 +57,7 @@ class RendererEngine {
     }
 
     drawPixel(x: number, y: number, color: Color) {
+        if (!this.imagedata) return
         if (x < 0 || x > this.width - 1 || y < 0 || y > this.height - 1) return
         const pixelindex = (y * this.width + x) * 4
         if (color.alpha !== 255) {

@@ -21,8 +21,8 @@ export default class GameTiles {
         this.tiles = file.tiles
     }
 
-    load(fileName: string) {
-        this.image.loadImage(fileName)
+    async load(fileName: string) {
+        await this.image.loadImage(fileName)
     }
 
     render(tileId: number, x: number, y: number, mirrorVertical = false) {
