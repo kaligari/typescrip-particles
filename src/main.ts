@@ -2,7 +2,6 @@ import game from '@/game'
 import './style.css'
 import rendererEngine from './rendererEngine'
 import userInput from '@/modules/userInput/userInput'
-import scene from './scene'
 
 // new Game(640, 480, 2)
 game.init(320, 200, 3)
@@ -17,7 +16,6 @@ function printDebug() {
     Delta: ${rendererEngine.delta}<br />
     Mouse X: ${userInput.mouseX}<br />
     Mouse Y: ${userInput.mouseY}<br />
-    ------<br />
-    cameraX: ${scene.cameraX}<br />`
+    ------<br />`
     requestAnimationFrame(printDebug)
 }

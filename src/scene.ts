@@ -1,19 +1,19 @@
 import Color from '@/libs/color'
 import rendererEngine from '@/rendererEngine'
 import Character from './modules/character/character'
-import { ITiledFileMapFile, ITiledFileTileset } from './modules/gameAnimation/types'
+import { ITiledFileMapFile } from './modules/gameAnimation/types'
 import TileSet from './modules/tileSet'
+import Camera from './libs/camera'
 
 export default class Scene {
     player: Character
     tiles: TileSet
-    cameraX: number
-    cameraY: number
+    camera = new Camera()
 
     constructor() {
-        this.player = new Character()
-        this.cameraX = 0
-        this.cameraY = 0
+        this.player = new Character(this.camera)
+        this.camera.x = 0
+        this.camera.y = 0
         this.tiles = new TileSet()
     }
 
@@ -34,17 +34,17 @@ export default class Scene {
         const marginRight = rendererEngine.width * 0.6
         const marginLeft = rendererEngine.width * 0.4
 
-        if (this.cameraX < this.player.posX - marginRight) {
-            this.cameraX += 2
+        if (this.camera.x < this.player.posX - marginRight) {
+            this.camera.x += 2
         }
-        if (this.cameraX > this.player.posX - marginLeft) {
-            this.cameraX -= 2
+        if (this.camera.x > this.player.posX - marginLeft) {
+            this.camera.x -= 2
         }
-        if (this.cameraX < 0) {
-            this.cameraX = 0
+        if (this.camera.x < 0) {
+            this.camera.x = 0
         }
-        if (this.cameraX > 20 * 16) {
-            this.cameraX = 20 * 16
+        if (this.camera.x > 20 * 16) {
+            this.camera.x = 20 * 16
         }
     }
 
@@ -53,11 +53,11 @@ export default class Scene {
         // this.player.calcState()
         // this.player.calcColisions()
         this.updateCamera()
-        this.player.calcState(this.cameraX)
-        this.player.updateState()
         this.drawBackground()
-        this.tiles.render(this.cameraX)
-        this.player.render(this.cameraX)
+        this.tiles.render(this.camera.x)
+        this.player.calcState(this.camera.x)
+        this.player.updateState()
+        this.player.render()
     }
 
     drawBackground() {

@@ -1,6 +1,5 @@
 import GameAnimation from '@/modules/gameAnimation/gameAnimation'
 import { ITiledFileTileset } from '@/modules/gameAnimation/types'
-import animation from '../../../public/assets/adventurer.json'
 import { abs, floor, round } from '@/helpers/math'
 import userInput from '@/modules/userInput/userInput'
 import State from './state'
@@ -15,10 +14,13 @@ import Color from '@/libs/color'
 import rendererEngine from '@/rendererEngine'
 import game from '@/game'
 import TileSet from '../tileSet'
+import TileCollider from '../collider'
+import Camera from '@/libs/camera'
 
 export type TStateTypes = StateRun | StateJump
 
 export default class Character {
+    camera: Camera
     tiles: TileSet | null
     animation: GameAnimation
     posX: number
@@ -42,8 +44,10 @@ export default class Character {
     offsetWidth: number
     offsetHeight: number
     boundBottom: number | null
+    collider: TileCollider | null
 
-    constructor() {
+    constructor(camera: Camera) {
+        this.camera = camera
         this.animation = new GameAnimation()
         this.states = []
         this.posX = 0
@@ -67,12 +71,13 @@ export default class Character {
         this.offsetWidth = 0
         this.offsetHeight = 0
         this.boundBottom = null
+        this.collider = null
     }
 
     load(animation: ITiledFileTileset) {
         this.animation.load(animation)
         this.posX = 20
-        this.posY = 10
+        this.posY = 100
         this.offsetX = 13
         this.offsetY = 6
         this.offsetWidth = 20
@@ -81,12 +86,13 @@ export default class Character {
 
     addCollisionsTiles(tiles: TileSet) {
         this.tiles = tiles
+        this.collider = new TileCollider(this, tiles)
     }
 
     calcColision(x: number, y: number, cameraX: number) {
         if (!this.tiles) return null
 
-        rendererEngine.drawPixel(x - cameraX, y, new Color(255, 0, 0))
+        // rendererEngine.drawPixel(x - cameraX, y, new Color(255, 0, 0))
 
         const col = floor(x / this.tiles.tileWidth)
         const row = floor(y / this.tiles.tileWidth)
@@ -110,21 +116,22 @@ export default class Character {
     }
 
     handleInput() {
-        if (userInput.isKeyPressedOnce('Space')) {
+        userInput.update()
+        if (userInput.actionA) {
             this.state.onAction1()
             this.accY = 1
             return
         }
-        if (userInput.isKeyPressed('ArrowDown')) {
+        if (userInput.down) {
             this.state.onDown()
             return
         }
-        if (userInput.isKeyPressed('ArrowRight')) {
+        if (userInput.right) {
             this.state.onRight()
             this.accX = 1
             return
         }
-        if (userInput.isKeyPressed('ArrowLeft')) {
+        if (userInput.left) {
             this.state.onLeft()
             this.accX = 1
             return
@@ -152,7 +159,10 @@ export default class Character {
     }
 
     calcState(cameraX: number) {
+        this.collider?.update()
         this.state.calc()
+        if (!this.collider) return
+        if (!this.tiles) return
 
         const direction = this.isLeft ? -1 : 1
         const desiredX = this.currSpeedX * direction
@@ -170,45 +180,142 @@ export default class Character {
             this.boundBottom = null
         }
 
-        // const rightX = x + this.offsetWidth
-        // const rightY = y + floor(this.offsetHeight / 2)
-        // const collisionRight = this.calcColision(rightX, rightY, cameraX)
-        // if (collisionRight !== null) {
+        // const rightTopX = x + this.offsetWidth
+        // const rightTopY = y + floor(this.offsetWidth * 0.25)
+        // const collisionRightTop = this.calcColision(rightTopX, rightTopY, cameraX)
+        // if (collisionRightTop !== null) {
         //     this.currSpeedX = 0
         // }
-
-        // const leftX = x
-        // const leftY = y + floor(this.offsetHeight / 2)
-        // const collisionLeft = this.calcColision(leftX, leftY, cameraX)
-        // if (collisionLeft !== null) {
+        // const rightBottomX = x + this.offsetWidth
+        // const rightBottomY = y + floor(this.offsetWidth * 0.75)
+        // const collisionRightBottom = this.calcColision(rightBottomX, rightBottomY, cameraX)
+        // if (collisionRightBottom !== null) {
         //     this.currSpeedX = 0
         // }
+        // console.log(this.collider.topRightTileId, this.collider.bottomRightTileId, this.tiles.tileSetWidth)
 
-        const rightTopX = x + this.offsetWidth
-        const rightTopY = y + floor(this.offsetWidth * 0.25)
-        const collisionRightTop = this.calcColision(rightTopX, rightTopY, cameraX)
-        if (collisionRightTop !== null) {
-            this.currSpeedX = 0
-        }
-        const rightBottomX = x + this.offsetWidth
-        const rightBottomY = y + floor(this.offsetWidth * 0.75)
-        const collisionRightBottom = this.calcColision(rightBottomX, rightBottomY, cameraX)
-        if (collisionRightBottom !== null) {
-            this.currSpeedX = 0
+        if (!this.isLeft) {
+            if (this.posX >= this.tiles.tileSetWidth * this.tiles.tileWidth - this.width) {
+                this.currSpeedX = 0
+            }
+            for (
+                let tileId = this.collider.topRightTileId;
+                tileId < this.collider.bottomRightTileId;
+                tileId += this.tiles.tileSetWidth
+            ) {
+                const tile = this.tiles.tiles[tileId]
+                const tmpX = tileId % this.tiles.tileSetWidth
+                const tmpY = floor(tileId / this.tiles.tileSetWidth)
+                if (tile !== 0) {
+                    this.currSpeedX = 0
+                    if (game.debug) {
+                        new Rectangle().draw(
+                            tmpX * 16 - this.camera.x,
+                            tmpY * 16,
+                            16,
+                            16,
+                            new Color(0, 0, 0),
+                            new Color(255, 0, 0),
+                        )
+                    }
+                    continue
+                } else {
+                    if (game.debug) {
+                        new Rectangle().draw(
+                            tmpX * 16 - this.camera.x,
+                            tmpY * 16,
+                            16,
+                            16,
+                            new Color(0, 0, 0),
+                        )
+                    }
+                }
+            }
         }
 
-        const leftTopX = x
-        const leftTopY = y + floor(this.offsetWidth * 0.25)
-        const collisionLeftTop = this.calcColision(leftTopX, leftTopY, cameraX)
-        if (collisionLeftTop !== null) {
-            this.currSpeedX = 0
+        if (this.isLeft) {
+            if (this.posX <= 0) {
+                this.currSpeedX = 0
+            }
+            for (
+                let tileId = this.collider.topLeftTileId;
+                tileId < this.collider.bottomLeftTileId;
+                tileId += this.tiles.tileSetWidth
+            ) {
+                const tile = this.tiles.tiles[tileId]
+                const tmpX = tileId % this.tiles.tileSetWidth
+                const tmpY = floor(tileId / this.tiles.tileSetWidth)
+                if (tile !== 0) {
+                    this.currSpeedX = 0
+                    if (game.debug) {
+                        new Rectangle().draw(
+                            tmpX * 16 - this.camera.x,
+                            tmpY * 16,
+                            16,
+                            16,
+                            new Color(0, 0, 0),
+                            new Color(255, 0, 0),
+                        )
+                    }
+                    continue
+                } else {
+                    if (game.debug) {
+                        new Rectangle().draw(
+                            tmpX * 16 - this.camera.x,
+                            tmpY * 16,
+                            16,
+                            16,
+                            new Color(0, 0, 0),
+                        )
+                    }
+                }
+            }
         }
-        const leftBottomX = x
-        const leftBottomY = y + floor(this.offsetWidth * 0.75)
-        const collisionLeftBottom = this.calcColision(leftBottomX, leftBottomY, cameraX)
-        if (collisionLeftBottom !== null) {
-            this.currSpeedX = 0
+        if (game.debug) {
+            for (
+                let tileId = this.collider.topRightTileId;
+                tileId < this.collider.bottomRightTileId;
+                tileId += this.tiles.tileSetWidth
+            ) {
+                const tmpX = tileId % this.tiles.tileSetWidth
+                const tmpY = floor(tileId / this.tiles.tileSetWidth)
+                new Rectangle().draw(
+                    tmpX * 16 - this.camera.x,
+                    tmpY * 16,
+                    16,
+                    16,
+                    new Color(0, 0, 0),
+                )
+            }
+            for (
+                let tileId = this.collider.topLeftTileId;
+                tileId < this.collider.bottomLeftTileId;
+                tileId += this.tiles.tileSetWidth
+            ) {
+                const tmpX = tileId % this.tiles.tileSetWidth
+                const tmpY = floor(tileId / this.tiles.tileSetWidth)
+                new Rectangle().draw(
+                    tmpX * 16 - this.camera.x,
+                    tmpY * 16,
+                    16,
+                    16,
+                    new Color(0, 0, 0),
+                )
+            }
         }
+
+        // const leftTopX = x
+        // const leftTopY = y + floor(this.offsetWidth * 0.25)
+        // const collisionLeftTop = this.calcColision(leftTopX, leftTopY, cameraX)
+        // if (collisionLeftTop !== null) {
+        //     this.currSpeedX = 0
+        // }
+        // const leftBottomX = x
+        // const leftBottomY = y + floor(this.offsetWidth * 0.75)
+        // const collisionLeftBottom = this.calcColision(leftBottomX, leftBottomY, cameraX)
+        // if (collisionLeftBottom !== null) {
+        //     this.currSpeedX = 0
+        // }
 
         const topX = x + floor(this.offsetWidth / 2)
         const topY = y
@@ -233,19 +340,34 @@ export default class Character {
         this.posY = y
     }
 
-    render(cameraX: number) {
-        const posX = floor(this.posX) - cameraX
-        const posY = this.posY
-        this.animation.render(posX - this.offsetX, posY - this.offsetY, this.isLeft)
+    get x() {
+        return floor(this.posX) - this.camera.x
+    }
+
+    get y() {
+        return this.posY
+    }
+
+    get width() {
+        return this.offsetWidth
+    }
+
+    get height() {
+        return this.offsetHeight
+    }
+
+    render() {
+        this.animation.render(this.x - this.offsetX, this.y - this.offsetY, this.isLeft)
         if (game.debug) {
+            // new Rectangle().draw(this.x, this.y, this.width, this.height, new Color(0, 0, 0))
             new Rectangle().draw(
-                posX,
-                posY,
+                this.x,
+                this.y,
                 this.offsetWidth,
                 this.offsetHeight,
                 new Color(0, 0, 0),
             )
-            rendererEngine.drawPixel(floor(this.posX) - cameraX, this.posY, new Color(255, 0, 0))
+            // rendererEngine.drawPixel(this.x, this.y, new Color(255, 0, 0))
         }
     }
 }

@@ -1,4 +1,4 @@
-import { expect, it } from 'vitest'
+import { expect, it, vi } from 'vitest'
 import Rectangle from '@/libs/rectangle'
 import TileSet from '@/modules/tileSet'
 import TileCollider from '@/modules/collider'
@@ -6,6 +6,12 @@ import { ITiledFileMapFile } from '@/modules/gameAnimation/types'
 // import levelFile from './assets/level.json'
 // import levelTilesFile from './assets/tiles.json'
 
+global.fetch = vi.fn()
+
+function createFetchResponse(data: unknown) {
+    return { json: () => new Promise(resolve => resolve(data)) }
+}
+// fetch.mockResolvedValue(createFetchResponse(levelFile))
 const levelFile = await fetch('./assets/level.json')
     .then(response => response.json())
     .catch(error => console.log(error))
