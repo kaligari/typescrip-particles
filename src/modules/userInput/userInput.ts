@@ -7,6 +7,10 @@ class UserInput {
     mouseClick: boolean
     keyPressed: string[]
     keyPressedOnce: string[]
+    gamepads: Gamepad[]
+    gamepad: Gamepad | null
+    buttonPressedOncePrevious: boolean[]
+    buttonPressedOnce: boolean[]
 
     constructor() {
         this.mouseX = 0
@@ -14,6 +18,10 @@ class UserInput {
         this.mouseClick = false
         this.keyPressed = []
         this.keyPressedOnce = []
+        this.gamepads = []
+        this.gamepad = null
+        this.buttonPressedOncePrevious = Array(3).fill(false)
+        this.buttonPressedOnce = Array(3).fill(false)
         window.addEventListener('mousemove', this.getMousePosition.bind(this), false)
         window.addEventListener('mousedown', this.getMouseDown.bind(this), false)
         window.addEventListener('mouseup', this.getMouseUp.bind(this), false)
@@ -21,7 +29,23 @@ class UserInput {
         window.addEventListener('keyup', this.getKeyUp.bind(this), false)
     }
 
+    update() {
+        this.buttonPressedOnce = Array(3).fill(false)
+
+        this.gamepad = navigator.getGamepads()[0]
+        if (this.gamepad) {
+            for (let i = 0; i < 3; i++) {
+                const gamepadButton = this.gamepad.buttons[i].pressed
+                if (gamepadButton && !this.buttonPressedOncePrevious[i]) {
+                    this.buttonPressedOnce[i] = true
+                }
+                this.buttonPressedOncePrevious[i] = gamepadButton
+            }
+        }
+    }
+
     getMousePosition(event: MouseEvent) {
+        if (!rendererEngine.canvas) return
         event.preventDefault()
         const rect = rendererEngine.canvas.getBoundingClientRect()
 
@@ -63,10 +87,6 @@ class UserInput {
         }
     }
 
-    resetInput() {
-        return (this.keyPressedOnce = [])
-    }
-
     isKeyPressed(key: string) {
         return this.keyPressed.includes(key)
     }
@@ -78,6 +98,30 @@ class UserInput {
             return true
         }
         return false
+    }
+
+    isButtonPressedOnce(button: number) {
+        return this.buttonPressedOnce[button]
+    }
+
+    get left() {
+        return this.isKeyPressed('ArrowLeft') || this.gamepad?.axes[0] === -1
+    }
+
+    get right() {
+        return this.isKeyPressed('ArrowRight') || this.gamepad?.axes[0] === 1
+    }
+
+    get up() {
+        return this.isKeyPressed('ArrowUp')
+    }
+
+    get down() {
+        return this.isKeyPressed('ArrowDown') || this.gamepad?.axes[1] === 1
+    }
+
+    get actionA() {
+        return this.isKeyPressed('Space') || this.isButtonPressedOnce(2)
     }
 }
 
