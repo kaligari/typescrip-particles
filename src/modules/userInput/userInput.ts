@@ -121,7 +121,7 @@ class UserInput {
     }
 
     get actionA() {
-        return this.isKeyPressed('Space') || this.isButtonPressedOnce(2)
+        return this.isKeyPressedOnce('Space') || this.isButtonPressedOnce(2)
     }
 }
 
