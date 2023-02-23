@@ -54,10 +54,11 @@ export default class Scene {
         // this.player.calcColisions()
         this.updateCamera()
         this.drawBackground()
-        this.tiles.render(this.camera.x)
+        this.tiles.renderBackground(this.camera.x)
         this.player.calcState(this.camera.x)
         this.player.updateState()
         this.player.render()
+        // this.tiles.renderForeground(this.camera.x)
     }
 
     drawBackground() {
