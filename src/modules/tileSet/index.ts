@@ -1,11 +1,13 @@
 import GameTiles from '@/libs/gameTiles'
-import { ITiledFileMapFile, ITiledFileTileset } from '@/modules/gameAnimation/types'
+import { ITiledFileMapFile } from '@/modules/gameAnimation/types'
 import { floor } from '@/helpers/math'
 import rendererEngine from '@/rendererEngine'
+import Camera from '@/libs/camera'
 
 export default class TileSet {
     tilesFile: GameTiles
-
+    /** Camera instance */
+    camera: Camera
     /** Width of one tile (in px) */
     tileWidth = 0
     /** Height of one tile (in px) */
@@ -25,7 +27,8 @@ export default class TileSet {
     /** Where start to draw tiles regarding to screen coords */
     startXOffset = 0
 
-    constructor() {
+    constructor(camera: Camera) {
+        this.camera = camera
         this.tilesFile = new GameTiles()
     }
 

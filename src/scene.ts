@@ -12,9 +12,7 @@ export default class Scene {
 
     constructor() {
         this.player = new Character(this.camera)
-        this.camera.x = 0
-        this.camera.y = 0
-        this.tiles = new TileSet()
+        this.tiles = new TileSet(this.camera)
     }
 
     async init() {
@@ -30,32 +28,11 @@ export default class Scene {
         this.player.addCollisionsTiles(this.tiles)
     }
 
-    updateCamera() {
-        const marginRight = rendererEngine.width * 0.6
-        const marginLeft = rendererEngine.width * 0.4
-
-        if (this.camera.x < this.player.posX - marginRight) {
-            this.camera.x += 2
-        }
-        if (this.camera.x > this.player.posX - marginLeft) {
-            this.camera.x -= 2
-        }
-        if (this.camera.x < 0) {
-            this.camera.x = 0
-        }
-        if (this.camera.x > 20 * 16) {
-            this.camera.x = 20 * 16
-        }
-    }
-
     render() {
         this.player.handleInput()
-        // this.player.calcState()
-        // this.player.calcColisions()
-        this.updateCamera()
         this.drawBackground()
+        this.player.calcState()
         this.tiles.renderBackground(this.camera.x)
-        this.player.calcState(this.camera.x)
         this.player.updateState()
         this.player.render()
         // this.tiles.renderForeground(this.camera.x)

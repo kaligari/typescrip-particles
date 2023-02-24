@@ -89,10 +89,8 @@ export default class Character {
         this.collider = new TileCollider(this, tiles)
     }
 
-    calcColision(x: number, y: number, cameraX: number) {
+    calcColision(x: number, y: number) {
         if (!this.tiles) return null
-
-        // rendererEngine.drawPixel(x - cameraX, y, new Color(255, 0, 0))
 
         const col = floor(x / this.tiles.tileWidth)
         const row = floor(y / this.tiles.tileWidth)
@@ -158,7 +156,7 @@ export default class Character {
         this.currSpeedX = maxVal
     }
 
-    calcState(cameraX: number) {
+    calcState() {
         this.collider?.update()
         this.state.calc()
         if (!this.collider) return
@@ -173,7 +171,7 @@ export default class Character {
 
         const bottomX = x + floor(this.offsetWidth / 2)
         const bottomY = y + this.offsetHeight
-        const collisionBottom = this.calcColision(bottomX, bottomY, cameraX)
+        const collisionBottom = this.calcColision(bottomX, bottomY)
         if (collisionBottom !== null && this.boundBottom === null) {
             this.boundBottom = collisionBottom - this.offsetHeight
         } else if (collisionBottom === null) {
@@ -319,7 +317,7 @@ export default class Character {
 
         const topX = x + floor(this.offsetWidth / 2)
         const topY = y
-        const collisionTop = this.calcColision(topX, topY, cameraX)
+        const collisionTop = this.calcColision(topX, topY)
         if (collisionTop !== null) {
             this.currSpeedY = 0
         }
@@ -338,6 +336,23 @@ export default class Character {
 
         this.posX = x
         this.posY = y
+
+        // update camera
+        const marginRight = rendererEngine.width * 0.45
+        const marginLeft = rendererEngine.width * 0.55
+
+        if (!this.tiles) return
+
+        if (
+            this.camera.x < this.posX - marginRight &&
+            this.posX <
+                this.tiles?.tileSetWidth * this.tiles?.tileWidth - rendererEngine.width * 0.45
+        ) {
+            this.camera.x += 2
+        }
+        if (this.camera.x > this.posX - marginLeft && this.camera.x > 0) {
+            this.camera.x -= 2
+        }
     }
 
     get x() {
