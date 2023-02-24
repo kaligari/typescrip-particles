@@ -15,12 +15,11 @@ import rendererEngine from '@/rendererEngine'
 import game from '@/game'
 import TileSet from '../tileSet'
 import TileCollider from '../collider'
-import Camera from '@/libs/camera'
+import camera from '@/libs/camera'
 
 export type TStateTypes = StateRun | StateJump
 
 export default class Character {
-    camera: Camera
     tiles: TileSet | null
     animation: GameAnimation
     posX: number
@@ -46,8 +45,7 @@ export default class Character {
     boundBottom: number | null
     collider: TileCollider | null
 
-    constructor(camera: Camera) {
-        this.camera = camera
+    constructor() {
         this.animation = new GameAnimation()
         this.states = []
         this.posX = 0
@@ -208,7 +206,7 @@ export default class Character {
                     this.currSpeedX = 0
                     if (game.debug) {
                         new Rectangle().draw(
-                            tmpX * 16 - this.camera.x,
+                            tmpX * 16 - camera.x,
                             tmpY * 16,
                             16,
                             16,
@@ -220,7 +218,7 @@ export default class Character {
                 } else {
                     if (game.debug) {
                         new Rectangle().draw(
-                            tmpX * 16 - this.camera.x,
+                            tmpX * 16 - camera.x,
                             tmpY * 16,
                             16,
                             16,
@@ -247,7 +245,7 @@ export default class Character {
                     this.currSpeedX = 0
                     if (game.debug) {
                         new Rectangle().draw(
-                            tmpX * 16 - this.camera.x,
+                            tmpX * 16 - camera.x,
                             tmpY * 16,
                             16,
                             16,
@@ -259,7 +257,7 @@ export default class Character {
                 } else {
                     if (game.debug) {
                         new Rectangle().draw(
-                            tmpX * 16 - this.camera.x,
+                            tmpX * 16 - camera.x,
                             tmpY * 16,
                             16,
                             16,
@@ -277,13 +275,7 @@ export default class Character {
             ) {
                 const tmpX = tileId % this.tiles.tileSetWidth
                 const tmpY = floor(tileId / this.tiles.tileSetWidth)
-                new Rectangle().draw(
-                    tmpX * 16 - this.camera.x,
-                    tmpY * 16,
-                    16,
-                    16,
-                    new Color(0, 0, 0),
-                )
+                new Rectangle().draw(tmpX * 16 - camera.x, tmpY * 16, 16, 16, new Color(0, 0, 0))
             }
             for (
                 let tileId = this.collider.topLeftTileId;
@@ -292,13 +284,7 @@ export default class Character {
             ) {
                 const tmpX = tileId % this.tiles.tileSetWidth
                 const tmpY = floor(tileId / this.tiles.tileSetWidth)
-                new Rectangle().draw(
-                    tmpX * 16 - this.camera.x,
-                    tmpY * 16,
-                    16,
-                    16,
-                    new Color(0, 0, 0),
-                )
+                new Rectangle().draw(tmpX * 16 - camera.x, tmpY * 16, 16, 16, new Color(0, 0, 0))
             }
         }
 
@@ -344,19 +330,19 @@ export default class Character {
         if (!this.tiles) return
 
         if (
-            this.camera.x < this.posX - marginRight &&
+            camera.x < this.posX - marginRight &&
             this.posX <
                 this.tiles?.tileSetWidth * this.tiles?.tileWidth - rendererEngine.width * 0.45
         ) {
-            this.camera.x += 2
+            camera.x += 2
         }
-        if (this.camera.x > this.posX - marginLeft && this.camera.x > 0) {
-            this.camera.x -= 2
+        if (camera.x > this.posX - marginLeft && camera.x > 0) {
+            camera.x -= 2
         }
     }
 
     get x() {
-        return floor(this.posX) - this.camera.x
+        return floor(this.posX) - camera.x
     }
 
     get y() {

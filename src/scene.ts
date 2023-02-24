@@ -3,16 +3,14 @@ import rendererEngine from '@/rendererEngine'
 import Character from './modules/character/character'
 import { ITiledFileMapFile } from './modules/gameAnimation/types'
 import TileSet from './modules/tileSet'
-import Camera from './libs/camera'
 
 export default class Scene {
     player: Character
     tiles: TileSet
-    camera = new Camera()
 
     constructor() {
-        this.player = new Character(this.camera)
-        this.tiles = new TileSet(this.camera)
+        this.player = new Character()
+        this.tiles = new TileSet()
     }
 
     async init() {
@@ -32,10 +30,10 @@ export default class Scene {
         this.player.handleInput()
         this.drawBackground()
         this.player.calcState()
-        this.tiles.renderBackground(this.camera.x)
+        this.tiles.renderBackground()
         this.player.updateState()
         this.player.render()
-        // this.tiles.renderForeground(this.camera.x)
+        this.tiles.renderForeground()
     }
 
     drawBackground() {

@@ -2,12 +2,9 @@ import GameTiles from '@/libs/gameTiles'
 import { ITiledFileMapFile } from '@/modules/gameAnimation/types'
 import { floor } from '@/helpers/math'
 import rendererEngine from '@/rendererEngine'
-import Camera from '@/libs/camera'
-
+import camera from '@/libs/camera'
 export default class TileSet {
     tilesFile: GameTiles
-    /** Camera instance */
-    camera: Camera
     /** Width of one tile (in px) */
     tileWidth = 0
     /** Height of one tile (in px) */
@@ -27,8 +24,7 @@ export default class TileSet {
     /** Where start to draw tiles regarding to screen coords */
     startXOffset = 0
 
-    constructor(camera: Camera) {
-        this.camera = camera
+    constructor() {
         this.tilesFile = new GameTiles()
     }
 
@@ -59,9 +55,9 @@ export default class TileSet {
         }
     }
 
-    // TODO Change scrollX to Camera class
-    renderBackground(scrollX: number) {
-        const destX = scrollX % this.tileWidth
+    // TODO Change camera.x to Camera class
+    renderBackground() {
+        const destX = camera.x % this.tileWidth
 
         for (let x = 0; x < this.renderedSizeWidth * this.renderedSizeHeigh; x++) {
             const row = Math.floor(x / this.renderedSizeWidth)
@@ -70,7 +66,7 @@ export default class TileSet {
             const offset =
                 Math.floor(x / this.renderedSizeWidth) * this.tileSetWidth +
                 col +
-                Math.floor(scrollX / this.tileWidth)
+                Math.floor(camera.x / this.tileWidth)
 
             // background tiles
             const backgroundTileId = this.backgroundTiles[offset] - 1
@@ -94,8 +90,8 @@ export default class TileSet {
         }
     }
 
-    renderForeground(scrollX: number) {
-        const destX = scrollX % this.tileWidth
+    renderForeground() {
+        const destX = camera.x % this.tileWidth
 
         for (let x = 0; x < this.renderedSizeWidth * this.renderedSizeHeigh; x++) {
             const row = Math.floor(x / this.renderedSizeWidth)
@@ -104,7 +100,7 @@ export default class TileSet {
             const offset =
                 Math.floor(x / this.renderedSizeWidth) * this.tileSetWidth +
                 col +
-                Math.floor(scrollX / this.tileWidth)
+                Math.floor(camera.x / this.tileWidth)
 
             // foreground tiles
             const foregroundTileId = this.foregroundTiles[offset] - 1

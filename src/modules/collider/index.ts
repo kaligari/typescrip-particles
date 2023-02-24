@@ -1,5 +1,6 @@
 import TileSet from '@/modules/tileSet'
 import Character from '../character/character'
+import camera from '@/libs/camera'
 
 export default class TileCollider {
     parent: Character
@@ -13,10 +14,7 @@ export default class TileCollider {
     }
 
     update() {
-        // const col = Math.round(this.parent.posX / this.tiles.tileWidth)
-        // const row = Math.round(this.parent.y / this.tiles.tileHeight) * this.tiles.tileSetWidth
-        // this.mainId = row + col
-        const col = Math.floor((this.parent.x + this.parent.camera.x) / this.tiles.tileWidth)
+        const col = Math.floor((this.parent.x + camera.x) / this.tiles.tileWidth)
         const row = Math.floor(this.parent.y / this.tiles.tileWidth)
         this.mainId = row * this.tiles.tileSetWidth + col
     }
@@ -35,11 +33,10 @@ export default class TileCollider {
 
     get topRightTileId() {
         const col = Math.floor(
-            (this.parent.x + this.parent.camera.x + this.parent.width) / this.tiles.tileWidth,
+            (this.parent.x + camera.x + this.parent.width) / this.tiles.tileWidth,
         )
         const row = Math.floor(this.parent.y / this.tiles.tileWidth)
         return row * this.tiles.tileSetWidth + col
-        // return this.mainId + this.width
     }
 
     get bottomLeftTileId() {
@@ -48,7 +45,7 @@ export default class TileCollider {
 
     get bottomRightTileId() {
         const col = Math.floor(
-            (this.parent.x + this.parent.camera.x + this.parent.width) / this.tiles.tileWidth,
+            (this.parent.x + camera.x + this.parent.width) / this.tiles.tileWidth,
         )
         const row = Math.floor((this.parent.y + this.parent.height) / this.tiles.tileWidth)
         return row * this.tiles.tileSetWidth + col
