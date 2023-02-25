@@ -33,8 +33,8 @@ export default class Character {
     stateSomersault: State
     stateFall: State
     stateCrouch: State
-    accX: number
-    accY: number
+    inputXPressure: number
+    inputYPressure: number
     currSpeedX: number
     currSpeedY: number
     jumpBlocked: boolean
@@ -58,8 +58,8 @@ export default class Character {
         this.stateFall = new StateFall(this)
         this.stateCrouch = new StateCrouch(this)
         this.state = this.stateIdle
-        this.accX = 0
-        this.accY = 0
+        this.inputXPressure = 0
+        this.inputYPressure = 0
         this.currSpeedX = 0
         this.currSpeedY = 0
         this.jumpBlocked = false
@@ -115,7 +115,7 @@ export default class Character {
         userInput.update()
         if (userInput.actionA) {
             this.state.onAction1()
-            this.accY = 1
+            this.inputYPressure = 1
             return
         }
         if (userInput.down) {
@@ -124,17 +124,17 @@ export default class Character {
         }
         if (userInput.right) {
             this.state.onRight()
-            this.accX = 1
+            this.inputXPressure = 1
             return
         }
         if (userInput.left) {
             this.state.onLeft()
-            this.accX = 1
+            this.inputXPressure = 1
             return
         }
         this.state.onNoInput()
-        this.accX = 0
-        this.accY = 0
+        this.inputXPressure = 0
+        this.inputYPressure = 0
     }
 
     decelerationX(factor: number, minVal = 0) {
@@ -146,9 +146,9 @@ export default class Character {
     }
 
     accelerationX(factor: number, maxVal = 1) {
-        const accX = abs(this.accX) * factor
         if (this.currSpeedX < maxVal) {
-            this.currSpeedX += accX
+            // TODO Remove abs?
+            this.currSpeedX += abs(this.inputXPressure) * factor
             return
         }
         this.currSpeedX = maxVal
@@ -175,20 +175,6 @@ export default class Character {
         } else if (collisionBottom === null) {
             this.boundBottom = null
         }
-
-        // const rightTopX = x + this.offsetWidth
-        // const rightTopY = y + floor(this.offsetWidth * 0.25)
-        // const collisionRightTop = this.calcColision(rightTopX, rightTopY, cameraX)
-        // if (collisionRightTop !== null) {
-        //     this.currSpeedX = 0
-        // }
-        // const rightBottomX = x + this.offsetWidth
-        // const rightBottomY = y + floor(this.offsetWidth * 0.75)
-        // const collisionRightBottom = this.calcColision(rightBottomX, rightBottomY, cameraX)
-        // if (collisionRightBottom !== null) {
-        //     this.currSpeedX = 0
-        // }
-        // console.log(this.collider.topRightTileId, this.collider.bottomRightTileId, this.tiles.tileSetWidth)
 
         if (!this.isLeft) {
             if (this.posX >= this.tiles.tileSetWidth * this.tiles.tileWidth - this.width) {
@@ -287,19 +273,6 @@ export default class Character {
                 new Rectangle().draw(tmpX * 16 - camera.x, tmpY * 16, 16, 16, new Color(0, 0, 0))
             }
         }
-
-        // const leftTopX = x
-        // const leftTopY = y + floor(this.offsetWidth * 0.25)
-        // const collisionLeftTop = this.calcColision(leftTopX, leftTopY, cameraX)
-        // if (collisionLeftTop !== null) {
-        //     this.currSpeedX = 0
-        // }
-        // const leftBottomX = x
-        // const leftBottomY = y + floor(this.offsetWidth * 0.75)
-        // const collisionLeftBottom = this.calcColision(leftBottomX, leftBottomY, cameraX)
-        // if (collisionLeftBottom !== null) {
-        //     this.currSpeedX = 0
-        // }
 
         const topX = x + floor(this.offsetWidth / 2)
         const topY = y

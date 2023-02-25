@@ -7,7 +7,7 @@ export default class StateRun extends State {
     }
 
     calc() {
-        if (this.character.accX === 0) {
+        if (this.character.inputXPressure === 0) {
             this.character.decelerationX(0.1)
         }
     }
