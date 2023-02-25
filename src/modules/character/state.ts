@@ -11,8 +11,11 @@ export default abstract class State {
 
     updateAlways() {
         // if (this.character.inputXPressure === 0) {
-        //     this.character.currSpeedX += 0.15
+        //     this.character.interpolateForceX(0.2, 1)
         // }
+        // apply gravity
+        // const gravity = 0.12
+        // this.character.currSpeedX += gravity
         // -----------------------------------------
         if (this.character.boundBottom === null) {
             this.character.currSpeedY += 0.15

@@ -7,29 +7,34 @@ export default class StateRun extends State {
     }
 
     update() {
+        // console.log('sss')
         if (this.character.inputXPressure === 0) {
-            this.character.decelerationX(0.1)
+            this.character.interpolateForceX(0.15, 0)
         }
     }
 
     onLeft() {
-        if (!this.character.isLeft) {
-            this.character.decelerationX(0.6)
+        this.character.isLeft = true
+        if (this.character.currSpeedX > 0) {
+            this.character.interpolateForceX(0.15, 0)
             if (this.character.currSpeedX === 0) {
                 this.character.isLeft = true
             }
+            return
         }
-        this.character.accelerationX(0.15, 2)
+        this.character.interpolateForceX(0.15 * this.character.inputXPressure, -2)
     }
 
     onRight() {
-        if (this.character.isLeft) {
-            this.character.decelerationX(0.6)
+        this.character.isLeft = false
+        if (this.character.currSpeedX < 0) {
+            this.character.interpolateForceX(0.15, 0)
             if (this.character.currSpeedX === 0) {
                 this.character.isLeft = false
             }
+            return
         }
-        this.character.accelerationX(0.15, 2)
+        this.character.interpolateForceX(0.15 * this.character.inputXPressure, 2)
     }
 
     onDown() {

@@ -138,21 +138,16 @@ export default class Character {
         this.inputYPressure = 0
     }
 
-    decelerationX(factor: number, minVal = 0) {
-        if (this.currSpeedX > minVal) {
+    interpolateForceX(factor: number, target = 1) {
+        if (this.currSpeedX - factor > target) {
             this.currSpeedX -= factor
             return
         }
-        this.currSpeedX = 0
-    }
-
-    accelerationX(factor: number, maxVal = 1) {
-        if (this.currSpeedX < maxVal) {
-            // TODO Remove abs?
-            this.currSpeedX += abs(this.inputXPressure) * factor
+        if (this.currSpeedX + factor < target) {
+            this.currSpeedX += factor
             return
         }
-        this.currSpeedX = maxVal
+        this.currSpeedX = target
     }
 
     calcState() {
@@ -162,8 +157,7 @@ export default class Character {
         if (!this.collider) return
         if (!this.tiles) return
 
-        const direction = this.isLeft ? -1 : 1
-        const desiredX = this.currSpeedX * direction
+        const desiredX = this.currSpeedX // * direction
         const desiredY = round(this.currSpeedY)
 
         const x = floor(this.posX) + desiredX
@@ -178,7 +172,8 @@ export default class Character {
             this.boundBottom = null
         }
 
-        if (!this.isLeft) {
+        if (this.currSpeedX > 0) {
+            // end of the level
             if (this.posX >= this.tiles.tileSetWidth * this.tiles.tileWidth - this.width) {
                 this.currSpeedX = 0
             }
@@ -217,10 +212,12 @@ export default class Character {
             }
         }
 
-        if (this.isLeft) {
+        if (this.currSpeedX < 0) {
+            // begin of the level
             if (this.posX <= 0) {
                 this.currSpeedX = 0
             }
+
             for (
                 let tileId = this.collider.topLeftTileId;
                 tileId < this.collider.bottomLeftTileId;
@@ -285,12 +282,8 @@ export default class Character {
     }
 
     updateState() {
-        const direction = this.isLeft ? -1 : 1
-        const desiredX = this.currSpeedX * direction
+        const desiredX = this.currSpeedX
         const desiredY = round(this.currSpeedY)
-
-        // this.posX = floor(this.posX + desiredX)
-        // this.posY = floor(this.posY + desiredY)
 
         this.posX = this.posX + desiredX
         this.posY = this.posY + desiredY

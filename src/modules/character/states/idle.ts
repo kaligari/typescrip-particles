@@ -7,7 +7,7 @@ export default class StateIdle extends State {
     }
 
     update() {
-        this.character.decelerationX(0.09)
+        this.character.interpolateForceX(0.15, 0)
     }
 
     onRight() {
