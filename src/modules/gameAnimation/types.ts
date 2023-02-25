@@ -37,6 +37,10 @@ export interface ITiledFileTileset {
     type: 'tileset'
     version: '1.9'
     tiles: ITiledFileTile[]
+    tileoffset: {
+        x: number
+        y: number
+    }
 }
 
 export interface ITiledFileMapLayersFile {
