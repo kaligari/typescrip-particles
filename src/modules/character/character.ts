@@ -76,8 +76,8 @@ export default class Character {
         this.animation.load(animation)
         this.posX = 120
         this.posY = 20
-        this.offsetX = 13
-        this.offsetY = 6
+        this.offsetX = animation.tileoffset.x
+        this.offsetY = animation.tileoffset.y
         this.offsetWidth = 20
         this.offsetHeight = 30
     }

@@ -16,6 +16,11 @@
  "tilecount":77,
  "tiledversion":"1.9.2",
  "tileheight":37,
+ "tileoffset":
+    {
+     "x":13,
+     "y":6
+    },
  "tiles":[
         {
          "animation":[
