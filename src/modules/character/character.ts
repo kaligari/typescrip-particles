@@ -74,8 +74,8 @@ export default class Character {
 
     load(animation: ITiledFileTileset) {
         this.animation.load(animation)
-        this.posX = 20
-        this.posY = 100
+        this.posX = 120
+        this.posY = 20
         this.offsetX = 13
         this.offsetY = 6
         this.offsetWidth = 20
@@ -315,13 +315,12 @@ export default class Character {
         const direction = this.isLeft ? -1 : 1
         const desiredX = this.currSpeedX * direction
         const desiredY = round(this.currSpeedY)
-        // this.posY += desiredY
 
-        const x = floor(this.posX) + floor(desiredX)
-        const y = floor(this.posY) + floor(desiredY)
+        // this.posX = floor(this.posX + desiredX)
+        // this.posY = floor(this.posY + desiredY)
 
-        this.posX = x
-        this.posY = y
+        this.posX = this.posX + desiredX
+        this.posY = this.posY + desiredY
 
         // update camera
         const marginRight = rendererEngine.width * 0.45

@@ -8,10 +8,8 @@ export default class StateRun extends State {
 
     calc() {
         if (this.character.accX === 0) {
-            this.character.decelerationX(0.15)
-            return
+            this.character.decelerationX(0.1)
         }
-        this.character.accelerationX(0.2, 2)
     }
 
     onLeft() {
@@ -21,6 +19,7 @@ export default class StateRun extends State {
                 this.character.isLeft = true
             }
         }
+        this.character.accelerationX(0.15, 2)
     }
 
     onRight() {
@@ -30,6 +29,7 @@ export default class StateRun extends State {
                 this.character.isLeft = false
             }
         }
+        this.character.accelerationX(0.15, 2)
     }
 
     onDown() {
