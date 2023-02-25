@@ -124,6 +124,7 @@ export default class Character {
         }
         if (userInput.right) {
             this.state.onRight()
+            // TODO Read pressure from controller
             this.inputXPressure = 1
             return
         }
@@ -156,7 +157,8 @@ export default class Character {
 
     calcState() {
         this.collider?.update()
-        this.state.calc()
+        this.state.updateAlways()
+        this.state.update()
         if (!this.collider) return
         if (!this.tiles) return
 
@@ -164,8 +166,8 @@ export default class Character {
         const desiredX = this.currSpeedX * direction
         const desiredY = round(this.currSpeedY)
 
-        const x = floor(this.posX) + floor(desiredX)
-        const y = floor(this.posY) + floor(desiredY)
+        const x = floor(this.posX) + desiredX
+        const y = floor(this.posY) + desiredY
 
         const bottomX = x + floor(this.offsetWidth / 2)
         const bottomY = y + this.offsetHeight
@@ -280,8 +282,6 @@ export default class Character {
         if (collisionTop !== null) {
             this.currSpeedY = 0
         }
-
-        this.state.physics()
     }
 
     updateState() {

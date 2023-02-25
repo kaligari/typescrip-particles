@@ -9,7 +9,11 @@ export default abstract class State {
         this.name = name
     }
 
-    physics() {
+    updateAlways() {
+        // if (this.character.inputXPressure === 0) {
+        //     this.character.currSpeedX += 0.15
+        // }
+        // -----------------------------------------
         if (this.character.boundBottom === null) {
             this.character.currSpeedY += 0.15
             if (this.character.currSpeedY > 0) {
@@ -25,7 +29,7 @@ export default abstract class State {
             this.character.currSpeedY = 0
             this.character.posY = this.character.boundBottom
             this.character.jumpBlocked = false
-            if (this.character.currSpeedX > 0) {
+            if (this.character.currSpeedX > 0 && this.character.inputXPressure !== 0) {
                 this.character.changeState(this.character.stateRun)
             } else {
                 this.character.changeState(this.character.stateIdle)
@@ -44,7 +48,7 @@ export default abstract class State {
         this.character.animation.changeAnimation(this.name)
     }
 
-    calc() {}
+    update() {}
     onAction1() {}
     onRight() {}
     onLeft() {}

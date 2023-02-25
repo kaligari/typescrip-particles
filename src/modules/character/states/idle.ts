@@ -6,7 +6,7 @@ export default class StateIdle extends State {
         super(character, name)
     }
 
-    calc() {
+    update() {
         this.character.decelerationX(0.09)
     }
 
