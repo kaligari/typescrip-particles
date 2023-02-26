@@ -16,14 +16,13 @@ import game from '@/game'
 import TileSet from '../tileSet'
 import TileCollider from '../collider'
 import camera from '@/libs/camera'
+import RigidBody from '@/libs/rigidBody'
 
 export type TStateTypes = StateRun | StateJump
 
-export default class Character {
+export default class Character extends RigidBody {
     tiles: TileSet | null
     animation: GameAnimation
-    posX: number
-    posY: number
     isLeft: boolean
     state: TStateTypes
     states: TStateTypes[]
@@ -40,8 +39,6 @@ export default class Character {
     jumpBlocked: boolean
     offsetX: number
     offsetY: number
-    offsetWidth: number
-    offsetHeight: number
     boundBottom: number | null
     collider: TileCollider | null
     X_ACCELERATION: number
@@ -50,14 +47,14 @@ export default class Character {
     X_DESIRED_DECELERATION: number
     X_OPPOSITE_DECELERATION: number
     X_JUMP: number
+    X_JUMP_FROM_RUN: number
     X_SOMERSAULT: number
     X_CROUCH: number
 
     constructor() {
+        super()
         this.animation = new GameAnimation()
         this.states = []
-        this.posX = 0
-        this.posY = 0
         this.isLeft = false
         this.stateRun = new StateRun(this)
         this.stateIdle = new StateIdle(this)
@@ -74,8 +71,6 @@ export default class Character {
         this.tiles = null
         this.offsetX = 0
         this.offsetY = 0
-        this.offsetWidth = 0
-        this.offsetHeight = 0
         this.boundBottom = null
         this.collider = null
         // -----
@@ -85,18 +80,19 @@ export default class Character {
         this.X_DESIRED_DECELERATION = 0
         this.X_OPPOSITE_DECELERATION = 0.15
         this.X_JUMP = 3
-        this.X_SOMERSAULT = 3
+        this.X_JUMP_FROM_RUN = 4
+        this.X_SOMERSAULT = 4
         this.X_CROUCH = 0.5
     }
 
     load(animation: ITiledFileTileset) {
         this.animation.load(animation)
-        this.posX = 120
-        this.posY = 20
+        this.x = 120
+        this.y = 20
         this.offsetX = animation.tileoffset.x
         this.offsetY = animation.tileoffset.y
-        this.offsetWidth = 20
-        this.offsetHeight = 30
+        this.width = 20
+        this.height = 30
     }
 
     addCollisionsTiles(tiles: TileSet) {
@@ -174,24 +170,24 @@ export default class Character {
         if (!this.collider) return
         if (!this.tiles) return
 
-        const desiredX = this.currSpeedX // * direction
+        const desiredX = this.currSpeedX
         const desiredY = round(this.currSpeedY)
 
-        const x = floor(this.posX) + desiredX
-        const y = floor(this.posY) + desiredY
+        const x = floor(this.x) + desiredX
+        const y = floor(this.y) + desiredY
 
-        const bottomX = x + floor(this.offsetWidth / 2)
-        const bottomY = y + this.offsetHeight
+        const bottomX = x + floor(this.width / 2)
+        const bottomY = y + this.height
         const collisionBottom = this.calcColision(bottomX, bottomY)
         if (collisionBottom !== null && this.boundBottom === null) {
-            this.boundBottom = collisionBottom - this.offsetHeight
+            this.boundBottom = collisionBottom - this.height
         } else if (collisionBottom === null) {
             this.boundBottom = null
         }
 
         if (this.currSpeedX > 0) {
             // end of the level
-            if (this.posX >= this.tiles.tileSetWidth * this.tiles.tileWidth - this.width) {
+            if (this.x >= this.tiles.tileSetWidth * this.tiles.tileWidth - this.width) {
                 this.currSpeedX = 0
             }
             for (
@@ -206,10 +202,10 @@ export default class Character {
                     this.currSpeedX = 0
                     if (game.debug) {
                         new Rectangle().draw(
-                            tmpX * 16 - camera.x,
-                            tmpY * 16,
-                            16,
-                            16,
+                            tmpX * this.tiles.tileWidth - camera.x,
+                            tmpY * this.tiles.tileHeight,
+                            this.tiles.tileWidth,
+                            this.tiles.tileHeight,
                             new Color(0, 0, 0),
                             new Color(255, 0, 0),
                         )
@@ -218,10 +214,10 @@ export default class Character {
                 } else {
                     if (game.debug) {
                         new Rectangle().draw(
-                            tmpX * 16 - camera.x,
-                            tmpY * 16,
-                            16,
-                            16,
+                            tmpX * this.tiles.tileWidth - camera.x,
+                            tmpY * this.tiles.tileHeight,
+                            this.tiles.tileWidth,
+                            this.tiles.tileHeight,
                             new Color(0, 0, 0),
                         )
                     }
@@ -231,7 +227,7 @@ export default class Character {
 
         if (this.currSpeedX < 0) {
             // begin of the level
-            if (this.posX <= 0) {
+            if (this.x <= 0) {
                 this.currSpeedX = 0
             }
 
@@ -247,10 +243,10 @@ export default class Character {
                     this.currSpeedX = 0
                     if (game.debug) {
                         new Rectangle().draw(
-                            tmpX * 16 - camera.x,
-                            tmpY * 16,
-                            16,
-                            16,
+                            tmpX * this.tiles.tileWidth - camera.x,
+                            tmpY * this.tiles.tileHeight,
+                            this.tiles.tileWidth,
+                            this.tiles.tileHeight,
                             new Color(0, 0, 0),
                             new Color(255, 0, 0),
                         )
@@ -259,10 +255,10 @@ export default class Character {
                 } else {
                     if (game.debug) {
                         new Rectangle().draw(
-                            tmpX * 16 - camera.x,
-                            tmpY * 16,
-                            16,
-                            16,
+                            tmpX * this.tiles.tileWidth - camera.x,
+                            tmpY * this.tiles.tileHeight,
+                            this.tiles.tileWidth,
+                            this.tiles.tileHeight,
                             new Color(0, 0, 0),
                         )
                     }
@@ -277,7 +273,13 @@ export default class Character {
             ) {
                 const tmpX = tileId % this.tiles.tileSetWidth
                 const tmpY = floor(tileId / this.tiles.tileSetWidth)
-                new Rectangle().draw(tmpX * 16 - camera.x, tmpY * 16, 16, 16, new Color(0, 0, 0))
+                new Rectangle().draw(
+                    tmpX * this.tiles.tileWidth - camera.x,
+                    tmpY * this.tiles.tileHeight,
+                    this.tiles.tileWidth,
+                    this.tiles.tileHeight,
+                    new Color(0, 0, 0),
+                )
             }
             for (
                 let tileId = this.collider.topLeftTileId;
@@ -286,11 +288,17 @@ export default class Character {
             ) {
                 const tmpX = tileId % this.tiles.tileSetWidth
                 const tmpY = floor(tileId / this.tiles.tileSetWidth)
-                new Rectangle().draw(tmpX * 16 - camera.x, tmpY * 16, 16, 16, new Color(0, 0, 0))
+                new Rectangle().draw(
+                    tmpX * this.tiles.tileWidth - camera.x,
+                    tmpY * this.tiles.tileHeight,
+                    this.tiles.tileWidth,
+                    this.tiles.tileHeight,
+                    new Color(0, 0, 0),
+                )
             }
         }
 
-        const topX = x + floor(this.offsetWidth / 2)
+        const topX = x + floor(this.width / 2)
         const topY = y
         const collisionTop = this.calcColision(topX, topY)
         if (collisionTop !== null) {
@@ -299,11 +307,8 @@ export default class Character {
     }
 
     updateState() {
-        const desiredX = this.currSpeedX
-        const desiredY = round(this.currSpeedY)
-
-        this.posX = this.posX + desiredX
-        this.posY = this.posY + desiredY
+        this.x += this.currSpeedX
+        this.y += round(this.currSpeedY)
 
         // update camera
         const marginRight = rendererEngine.width * 0.45
@@ -312,45 +317,22 @@ export default class Character {
         if (!this.tiles) return
 
         if (
-            camera.x < this.posX - marginRight &&
-            this.posX <
-                this.tiles?.tileSetWidth * this.tiles?.tileWidth - rendererEngine.width * 0.45
+            camera.x < this.x - marginRight &&
+            this.x < this.tiles?.tileSetWidth * this.tiles?.tileWidth - rendererEngine.width * 0.45
         ) {
-            camera.x += 2
+            camera.x += this.X_DESIRED_ACCELERATION
         }
-        if (camera.x > this.posX - marginLeft && camera.x > 0) {
-            camera.x -= 2
+        if (camera.x > this.x - marginLeft && camera.x > 0) {
+            camera.x -= this.X_DESIRED_ACCELERATION
         }
-    }
-
-    get x() {
-        return floor(this.posX) - camera.x
-    }
-
-    get y() {
-        return this.posY
-    }
-
-    get width() {
-        return this.offsetWidth
-    }
-
-    get height() {
-        return this.offsetHeight
     }
 
     render() {
-        this.animation.render(this.x - this.offsetX, this.y - this.offsetY, this.isLeft)
+        const x = round(this.x) - camera.x
+        const y = this.y
+        this.animation.render(x - this.offsetX, y - this.offsetY, this.isLeft)
         if (game.debug) {
-            // new Rectangle().draw(this.x, this.y, this.width, this.height, new Color(0, 0, 0))
-            new Rectangle().draw(
-                this.x,
-                this.y,
-                this.offsetWidth,
-                this.offsetHeight,
-                new Color(0, 0, 0),
-            )
-            // rendererEngine.drawPixel(this.x, this.y, new Color(255, 0, 0))
+            new Rectangle().draw(x, y, this.width, this.height, new Color(0, 0, 0))
         }
     }
 }

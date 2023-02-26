@@ -50,7 +50,7 @@ export default class StateRun extends State {
     }
 
     onAction1() {
-        this.character.currSpeedY -= this.character.X_JUMP
+        this.character.currSpeedY -= this.character.X_JUMP_FROM_RUN
         this.character.changeState(this.character.stateJump)
     }
 }

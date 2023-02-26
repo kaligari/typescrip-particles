@@ -14,8 +14,9 @@ export default abstract class State {
         //     this.character.interpolateForceX(0.2, 1)
         // }
         // apply gravity
-        // const gravity = 0.12
+        // const gravity = 0.01
         // this.character.currSpeedX += gravity
+        // this.character.posX += 0.01 * this.character.posX
         // -----------------------------------------
         if (this.character.boundBottom === null) {
             this.character.currSpeedY += 0.15
@@ -26,11 +27,11 @@ export default abstract class State {
 
         if (
             this.character.boundBottom &&
-            this.character.posY > this.character.boundBottom &&
+            this.character.y > this.character.boundBottom &&
             this.character.currSpeedY > 0
         ) {
             this.character.currSpeedY = 0
-            this.character.posY = this.character.boundBottom
+            this.character.y = this.character.boundBottom
             this.character.jumpBlocked = false
             if (this.character.currSpeedX > 0 && this.character.inputXPressure !== 0) {
                 this.character.changeState(this.character.stateRun)
