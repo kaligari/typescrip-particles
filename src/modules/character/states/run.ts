@@ -10,7 +10,7 @@ export default class StateRun extends State {
         if (this.character.inputXPressure === 0) {
             this.character.interpolateForceX(
                 this.character.X_DECELERATION,
-                this.character.X_MAX_DECELERATION,
+                this.character.X_DESIRED_DECELERATION,
             )
         }
     }
@@ -26,7 +26,7 @@ export default class StateRun extends State {
         }
         this.character.interpolateForceX(
             this.character.X_ACCELERATION * this.character.inputXPressure,
-            -this.character.X_MAX_ACCELERATION,
+            -this.character.X_DESIRED_ACCELERATION,
         )
     }
 
@@ -41,7 +41,7 @@ export default class StateRun extends State {
         }
         this.character.interpolateForceX(
             this.character.X_ACCELERATION * this.character.inputXPressure,
-            this.character.X_MAX_ACCELERATION,
+            this.character.X_DESIRED_ACCELERATION,
         )
     }
 

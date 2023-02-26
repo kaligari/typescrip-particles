@@ -45,9 +45,9 @@ export default class Character {
     boundBottom: number | null
     collider: TileCollider | null
     X_ACCELERATION: number
-    X_MAX_ACCELERATION: number
+    X_DESIRED_ACCELERATION: number
     X_DECELERATION: number
-    X_MAX_DECELERATION: number
+    X_DESIRED_DECELERATION: number
     X_OPPOSITE_DECELERATION: number
     X_JUMP: number
     X_SOMERSAULT: number
@@ -80,9 +80,9 @@ export default class Character {
         this.collider = null
         // -----
         this.X_ACCELERATION = 0.15
-        this.X_MAX_ACCELERATION = 20
+        this.X_DESIRED_ACCELERATION = 2
         this.X_DECELERATION = 0.15
-        this.X_MAX_DECELERATION = 0
+        this.X_DESIRED_DECELERATION = 0
         this.X_OPPOSITE_DECELERATION = 0.15
         this.X_JUMP = 3
         this.X_SOMERSAULT = 3

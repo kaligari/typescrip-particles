@@ -9,7 +9,7 @@ export default class StateIdle extends State {
     update() {
         this.character.interpolateForceX(
             this.character.X_DECELERATION,
-            this.character.X_MAX_DECELERATION,
+            this.character.X_DESIRED_DECELERATION,
         )
     }
 
