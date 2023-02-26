@@ -11,6 +11,8 @@ class UserInput {
     gamepad: Gamepad | null
     buttonPressedOncePrevious: boolean[]
     buttonPressedOnce: boolean[]
+    touch: Touch | null
+    touchStart: number | null
 
     constructor() {
         this.mouseX = 0
@@ -22,11 +24,16 @@ class UserInput {
         this.gamepad = null
         this.buttonPressedOncePrevious = Array(3).fill(false)
         this.buttonPressedOnce = Array(3).fill(false)
+        this.touch = null
+        this.touchStart = null
         window.addEventListener('mousemove', this.getMousePosition.bind(this), false)
         window.addEventListener('mousedown', this.getMouseDown.bind(this), false)
         window.addEventListener('mouseup', this.getMouseUp.bind(this), false)
         window.addEventListener('keydown', this.getKeyDown.bind(this), false)
         window.addEventListener('keyup', this.getKeyUp.bind(this), false)
+        window.addEventListener('touchstart', this.onTouchStart.bind(this), false)
+        window.addEventListener('touchmove', this.onTouchMove.bind(this), false)
+        window.addEventListener('touchend', this.onTouchEnd.bind(this), false)
     }
 
     update() {
@@ -102,6 +109,19 @@ class UserInput {
 
     isButtonPressedOnce(button: number) {
         return this.buttonPressedOnce[button]
+    }
+
+    onTouchStart(event: TouchEvent) {
+        this.touchStart = event.touches[0].clientX
+    }
+
+    onTouchMove(event: TouchEvent) {
+        this.touch = event.touches[0]
+    }
+
+    onTouchEnd() {
+        this.touch = null
+        this.touchStart = null
     }
 
     get left() {
