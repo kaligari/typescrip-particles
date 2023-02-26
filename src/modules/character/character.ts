@@ -1,6 +1,6 @@
 import GameAnimation from '@/modules/gameAnimation/gameAnimation'
 import { ITiledFileTileset } from '@/modules/gameAnimation/types'
-import { abs, floor, round } from '@/helpers/math'
+import { floor, round } from '@/helpers/math'
 import userInput from '@/modules/userInput/userInput'
 import State from './state'
 import StateIdle from './states/idle'
@@ -44,6 +44,14 @@ export default class Character {
     offsetHeight: number
     boundBottom: number | null
     collider: TileCollider | null
+    X_ACCELERATION: number
+    X_MAX_ACCELERATION: number
+    X_DECELERATION: number
+    X_MAX_DECELERATION: number
+    X_OPPOSITE_DECELERATION: number
+    X_JUMP: number
+    X_SOMERSAULT: number
+    X_CROUCH: number
 
     constructor() {
         this.animation = new GameAnimation()
@@ -70,6 +78,15 @@ export default class Character {
         this.offsetHeight = 0
         this.boundBottom = null
         this.collider = null
+        // -----
+        this.X_ACCELERATION = 0.15
+        this.X_MAX_ACCELERATION = 20
+        this.X_DECELERATION = 0.15
+        this.X_MAX_DECELERATION = 0
+        this.X_OPPOSITE_DECELERATION = 0.15
+        this.X_JUMP = 3
+        this.X_SOMERSAULT = 3
+        this.X_CROUCH = 0.5
     }
 
     load(animation: ITiledFileTileset) {

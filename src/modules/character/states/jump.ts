@@ -9,7 +9,7 @@ export default class StateJump extends StateRun {
     onAction1() {
         if (this.character.changeState(this.character.stateSomersault)) {
             this.character.currSpeedY = 0
-            this.character.currSpeedY -= 5
+            this.character.currSpeedY -= this.character.X_SOMERSAULT
         }
     }
 

@@ -7,7 +7,10 @@ export default class StateIdle extends State {
     }
 
     update() {
-        this.character.interpolateForceX(0.15, 0)
+        this.character.interpolateForceX(
+            this.character.X_DECELERATION,
+            this.character.X_MAX_DECELERATION,
+        )
     }
 
     onRight() {
@@ -23,7 +26,7 @@ export default class StateIdle extends State {
     }
 
     onAction1() {
-        this.character.currSpeedY -= 4
+        this.character.currSpeedY -= this.character.X_JUMP
         this.character.changeState(this.character.stateJump)
     }
 }
