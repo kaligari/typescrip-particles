@@ -41,7 +41,7 @@ export default abstract class State {
         }
     }
     onNoInput() {
-        if (this.character.accY === 0 && this.character.accY === 0) {
+        if (this.character.accX === 0 && this.character.accY === 0) {
             this.character.changeState(this.character.stateIdle)
         }
     }
