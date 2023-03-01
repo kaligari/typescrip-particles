@@ -5,11 +5,13 @@ import userInput from '@/modules/userInput/userInput'
 
 // new Game(640, 480, 2)
 game.init(320, 200, 3)
-game.debug = true
+// game.debug = true
 
 const debug = document.getElementById('debug') as HTMLElement
 
-printDebug()
+if (game.debug) {
+    printDebug()
+}
 
 function printDebug() {
     debug.innerHTML = `${rendererEngine.fps} FPS<br />
