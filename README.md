@@ -2,6 +2,10 @@
 
 This is a simple game engine for 2D platformers written in TypeScript. It allows you to create games based on web technologies such as HTML5 and JavaScript (Canvas). The engine allows you to create platform games, RPGs, puzzle games and much more.
 
+[Playable demo](https://piksel8it.soften.pl)
+
+![Screen from piksel8it](https://piksel8it.soften.pl/piksel8it.png)
+
 It includes features such as:
 
 - Basic physics (collisions, gravity, jumping)
