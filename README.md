@@ -10,7 +10,7 @@ It includes features such as:
 
 - Basic physics (collisions, gravity, jumping)
 - Tile-based rendering
-- Keyboard input handling
+- Keyboard and joystick input handling
 - Simple animation system
 
 # Installation
