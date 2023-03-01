@@ -17,9 +17,9 @@ export default class StateRun extends State {
 
     onLeft() {
         this.character.isLeft = true
-        if (this.character.currSpeedX > 0) {
+        if (this.character.accX > 0) {
             this.character.interpolateForceX(this.character.X_OPPOSITE_DECELERATION, 0)
-            if (this.character.currSpeedX === 0) {
+            if (this.character.accX === 0) {
                 this.character.isLeft = true
             }
             return
@@ -32,9 +32,9 @@ export default class StateRun extends State {
 
     onRight() {
         this.character.isLeft = false
-        if (this.character.currSpeedX < 0) {
+        if (this.character.accX < 0) {
             this.character.interpolateForceX(this.character.X_OPPOSITE_DECELERATION, 0)
-            if (this.character.currSpeedX === 0) {
+            if (this.character.accX === 0) {
                 this.character.isLeft = false
             }
             return
@@ -50,7 +50,7 @@ export default class StateRun extends State {
     }
 
     onAction1() {
-        this.character.currSpeedY -= this.character.X_JUMP_FROM_RUN
+        this.character.accY -= this.character.X_JUMP_FROM_RUN
         this.character.changeState(this.character.stateJump)
     }
 }

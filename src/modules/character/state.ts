@@ -19,8 +19,8 @@ export default abstract class State {
         // this.character.posX += 0.01 * this.character.posX
         // -----------------------------------------
         if (this.character.boundBottom === null) {
-            this.character.currSpeedY += 0.15
-            if (this.character.currSpeedY > 0) {
+            this.character.accY += 0.15
+            if (this.character.accY > 0) {
                 this.character.changeState(this.character.stateFall)
             }
         }
@@ -28,12 +28,12 @@ export default abstract class State {
         if (
             this.character.boundBottom &&
             this.character.y > this.character.boundBottom &&
-            this.character.currSpeedY > 0
+            this.character.accY > 0
         ) {
-            this.character.currSpeedY = 0
+            this.character.accY = 0
             this.character.y = this.character.boundBottom
             this.character.jumpBlocked = false
-            if (this.character.currSpeedX > 0 && this.character.inputXPressure !== 0) {
+            if (this.character.accY > 0 && this.character.inputXPressure !== 0) {
                 this.character.changeState(this.character.stateRun)
             } else {
                 this.character.changeState(this.character.stateIdle)
@@ -41,7 +41,7 @@ export default abstract class State {
         }
     }
     onNoInput() {
-        if (this.character.currSpeedX === 0 && this.character.currSpeedY === 0) {
+        if (this.character.accY === 0 && this.character.accY === 0) {
             this.character.changeState(this.character.stateIdle)
         }
     }

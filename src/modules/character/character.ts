@@ -34,8 +34,6 @@ export default class Character extends RigidBody {
     stateCrouch: State
     inputXPressure: number
     inputYPressure: number
-    currSpeedX: number
-    currSpeedY: number
     jumpBlocked: boolean
     offsetX: number
     offsetY: number
@@ -65,8 +63,6 @@ export default class Character extends RigidBody {
         this.state = this.stateIdle
         this.inputXPressure = 0
         this.inputYPressure = 0
-        this.currSpeedX = 0
-        this.currSpeedY = 0
         this.jumpBlocked = false
         this.tiles = null
         this.offsetX = 0
@@ -151,44 +147,17 @@ export default class Character extends RigidBody {
         this.inputYPressure = 0
     }
 
-    interpolateForceX(factor: number, target = 1) {
-        if (this.currSpeedX - factor > target) {
-            this.currSpeedX -= factor
-            return
-        }
-        if (this.currSpeedX + factor < target) {
-            this.currSpeedX += factor
-            return
-        }
-        this.currSpeedX = target
-    }
-
-    calcState() {
+    updateState() {
         this.collider?.update()
         this.state.updateAlways()
         this.state.update()
         if (!this.collider) return
         if (!this.tiles) return
 
-        const desiredX = this.currSpeedX
-        const desiredY = round(this.currSpeedY)
-
-        const x = floor(this.x) + desiredX
-        const y = floor(this.y) + desiredY
-
-        const bottomX = x + floor(this.width / 2)
-        const bottomY = y + this.height
-        const collisionBottom = this.calcColision(bottomX, bottomY)
-        if (collisionBottom !== null && this.boundBottom === null) {
-            this.boundBottom = collisionBottom - this.height
-        } else if (collisionBottom === null) {
-            this.boundBottom = null
-        }
-
-        if (this.currSpeedX > 0) {
+        if (this.accX > 0) {
             // end of the level
             if (this.x >= this.tiles.tileSetWidth * this.tiles.tileWidth - this.width) {
-                this.currSpeedX = 0
+                this.accX = 0
             }
             for (
                 let tileId = this.collider.topRightTileId;
@@ -199,7 +168,7 @@ export default class Character extends RigidBody {
                 const tmpX = tileId % this.tiles.tileSetWidth
                 const tmpY = floor(tileId / this.tiles.tileSetWidth)
                 if (tile !== 0) {
-                    this.currSpeedX = 0
+                    this.accX = 0
                     if (game.debug) {
                         new Rectangle().draw(
                             tmpX * this.tiles.tileWidth - camera.x,
@@ -211,24 +180,14 @@ export default class Character extends RigidBody {
                         )
                     }
                     continue
-                } else {
-                    if (game.debug) {
-                        new Rectangle().draw(
-                            tmpX * this.tiles.tileWidth - camera.x,
-                            tmpY * this.tiles.tileHeight,
-                            this.tiles.tileWidth,
-                            this.tiles.tileHeight,
-                            new Color(0, 0, 0),
-                        )
-                    }
                 }
             }
         }
 
-        if (this.currSpeedX < 0) {
+        if (this.accX < 0) {
             // begin of the level
             if (this.x <= 0) {
-                this.currSpeedX = 0
+                this.accX = 0
             }
 
             for (
@@ -240,7 +199,7 @@ export default class Character extends RigidBody {
                 const tmpX = tileId % this.tiles.tileSetWidth
                 const tmpY = floor(tileId / this.tiles.tileSetWidth)
                 if (tile !== 0) {
-                    this.currSpeedX = 0
+                    this.accX = 0
                     if (game.debug) {
                         new Rectangle().draw(
                             tmpX * this.tiles.tileWidth - camera.x,
@@ -252,19 +211,10 @@ export default class Character extends RigidBody {
                         )
                     }
                     continue
-                } else {
-                    if (game.debug) {
-                        new Rectangle().draw(
-                            tmpX * this.tiles.tileWidth - camera.x,
-                            tmpY * this.tiles.tileHeight,
-                            this.tiles.tileWidth,
-                            this.tiles.tileHeight,
-                            new Color(0, 0, 0),
-                        )
-                    }
                 }
             }
         }
+
         if (game.debug) {
             for (
                 let tileId = this.collider.topRightTileId;
@@ -296,20 +246,64 @@ export default class Character extends RigidBody {
                     new Color(0, 0, 0),
                 )
             }
+            // for (
+            //     let tileId = this.collider.bottomLeftTileId;
+            //     tileId <= this.collider.bottomRightTileId;
+            //     tileId++
+            // ) {
+            //     const tmpX = tileId % this.tiles.tileSetWidth
+            //     const tmpY = floor(tileId / this.tiles.tileSetWidth)
+            //     new Rectangle().draw(
+            //         tmpX * this.tiles.tileWidth - camera.x,
+            //         tmpY * this.tiles.tileHeight,
+            //         this.tiles.tileWidth,
+            //         this.tiles.tileHeight,
+            //         new Color(0, 255, 0),
+            //     )
+            // }
+            for (
+                let tileId = this.collider.topLeftTileId;
+                tileId <= this.collider.topRightTileId;
+                tileId++
+            ) {
+                const tmpX = tileId % this.tiles.tileSetWidth
+                const tmpY = floor(tileId / this.tiles.tileSetWidth)
+                new Rectangle().draw(
+                    tmpX * this.tiles.tileWidth - camera.x,
+                    tmpY * this.tiles.tileHeight,
+                    this.tiles.tileWidth,
+                    this.tiles.tileHeight,
+                    new Color(0, 0, 0),
+                )
+            }
+        }
+
+        const desiredX = this.accX
+        const desiredY = round(this.accY)
+
+        const x = floor(this.x) + desiredX
+        const y = floor(this.y) + desiredY
+
+        const bottomX = x + floor(this.width / 2)
+        const bottomY = y + this.height
+        const collisionBottom = this.calcColision(bottomX, bottomY)
+        if (collisionBottom !== null && this.boundBottom === null) {
+            this.boundBottom = collisionBottom - this.height
+        } else if (collisionBottom === null) {
+            this.boundBottom = null
         }
 
         const topX = x + floor(this.width / 2)
         const topY = y
         const collisionTop = this.calcColision(topX, topY)
         if (collisionTop !== null) {
-            this.currSpeedY = 0
+            this.accY = 0
         }
+        this.x += this.accX
+        this.y += round(this.accY)
     }
 
-    updateState() {
-        this.x += this.currSpeedX
-        this.y += round(this.currSpeedY)
-
+    updateCamera() {
         // update camera
         const marginRight = rendererEngine.width * 0.45
         const marginLeft = rendererEngine.width * 0.55

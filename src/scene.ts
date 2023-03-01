@@ -29,9 +29,9 @@ export default class Scene {
     render() {
         this.player.handleInput()
         this.drawBackground()
-        this.player.calcState()
-        this.tiles.renderBackground()
         this.player.updateState()
+        this.player.updateCamera()
+        this.tiles.renderBackground()
         this.player.render()
         this.tiles.renderForeground()
     }

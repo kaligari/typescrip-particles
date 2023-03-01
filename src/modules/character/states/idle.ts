@@ -26,7 +26,7 @@ export default class StateIdle extends State {
     }
 
     onAction1() {
-        this.character.currSpeedY -= this.character.X_JUMP
+        this.character.accY -= this.character.X_JUMP
         this.character.changeState(this.character.stateJump)
     }
 }

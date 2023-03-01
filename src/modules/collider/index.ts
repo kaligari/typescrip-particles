@@ -37,7 +37,10 @@ export default class TileCollider {
     }
 
     get bottomLeftTileId() {
-        return this.mainId + this.height * this.tiles.tileSetWidth
+        const col = Math.floor(this.parent.x / this.tiles.tileWidth)
+        const row = Math.floor((this.parent.y + this.parent.height) / this.tiles.tileWidth)
+        return row * this.tiles.tileSetWidth + col
+        // return this.mainId + this.height * this.tiles.tileSetWidth
     }
 
     get bottomRightTileId() {

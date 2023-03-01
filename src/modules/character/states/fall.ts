@@ -7,14 +7,14 @@ export default class StateFall extends StateRun {
     }
 
     onDown() {
-        this.character.currSpeedY += this.character.X_CROUCH
+        this.character.accY += this.character.X_CROUCH
         this.character.changeState(this.character.stateJump)
     }
 
     onAction1() {
         if (this.character.changeState(this.character.stateSomersault)) {
-            this.character.currSpeedY = 0
-            this.character.currSpeedY -= this.character.X_SOMERSAULT
+            this.character.accY = 0
+            this.character.accY -= this.character.X_SOMERSAULT
         }
     }
 }
