@@ -4,17 +4,17 @@ import Character from './modules/character/character'
 import { ITiledFileMapFile } from './modules/gameAnimation/types'
 import TileSet from './modules/tileSet'
 import camera from './libs/camera'
-import Bubbles from './modules/particles/models/bubbles'
+import ParticlesBubbles from './modules/particles/models/bubbles'
 
 export default class Scene {
     player: Character
     tiles: TileSet
-    bubbles: Bubbles
+    bubbles: ParticlesBubbles
 
     constructor() {
         this.player = new Character()
         this.tiles = new TileSet()
-        this.bubbles = new Bubbles(this.player)
+        this.bubbles = new ParticlesBubbles(this.player)
     }
 
     async init() {

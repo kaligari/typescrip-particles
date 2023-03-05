@@ -4,7 +4,7 @@ import userInput from '@/modules/userInput/userInput'
 import Game from '@/game'
 
 const game = new Game()
-game.init(320, 200, 5)
+game.init(320, 200, 4)
 // rendererEngine.debug = true
 
 const debug = document.getElementById('debug') as HTMLElement

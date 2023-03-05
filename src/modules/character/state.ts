@@ -30,14 +30,17 @@ export default abstract class State {
             this.character.y > this.character.boundBottom &&
             this.character.accY > 0
         ) {
-            this.character.accY = 0
-            this.character.y = this.character.boundBottom
-            this.character.jumpBlocked = false
             if (this.character.accY > 0 && this.character.inputXPressure !== 0) {
                 this.character.changeState(this.character.stateRun)
             } else {
+                if (this.character.accY > 5) {
+                    // TODO Implement dust on crouch
+                }
                 this.character.changeState(this.character.stateIdle)
             }
+            this.character.accY = 0
+            this.character.y = this.character.boundBottom
+            this.character.jumpBlocked = false
         }
     }
     onNoInput() {

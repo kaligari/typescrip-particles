@@ -5,7 +5,7 @@ import Color from '@/libs/color'
 import rendererEngine from '@/rendererEngine'
 import Character from '@/modules/character/character'
 
-export default class Bubbles extends Particles {
+export default class ParticlesBubbles extends Particles {
     object: Character
     amount: number
 
@@ -16,7 +16,7 @@ export default class Bubbles extends Particles {
     }
 
     override onReset(particle: Particle) {
-        particle.set(this.object.x + 10, this.object.y, 5000, this.color, true)
+        particle.set(this.object.x + 10, this.object.y, 5000, this.color, true, 1, 1)
     }
 
     override onUpdate(particle: Particle) {
