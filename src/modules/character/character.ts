@@ -298,7 +298,7 @@ export default class Character extends RigidBody {
         if (collisionTop !== null) {
             this.accY = 0
         }
-        this.x += this.accX
+        this.x += round(this.accX)
         this.y += round(this.accY)
     }
 
@@ -325,11 +325,27 @@ export default class Character extends RigidBody {
     }
 
     render() {
-        const x = round(this.x) - camera.x
-        const y = round(this.y) - camera.y
-        this.animation.render(x - this.offsetX, y - this.offsetY, this.isLeft)
+        this.animation.render(
+            this.XOnScreen - this.offsetX,
+            this.YOnScreen - this.offsetY,
+            this.isLeft,
+        )
         if (rendererEngine.debug) {
-            new Rectangle().draw(x, y, this.width, this.height, new Color(0, 0, 0))
+            new Rectangle().draw(
+                this.XOnScreen,
+                this.YOnScreen,
+                this.width,
+                this.height,
+                new Color(0, 0, 0),
+            )
         }
+    }
+
+    get XOnScreen() {
+        return this.x - camera.x
+    }
+
+    get YOnScreen() {
+        return this.y - camera.y
     }
 }
