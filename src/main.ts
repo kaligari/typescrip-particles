@@ -1,15 +1,15 @@
-import game from '@/game'
 import './style.css'
 import rendererEngine from './rendererEngine'
 import userInput from '@/modules/userInput/userInput'
+import Game from '@/game'
 
-// new Game(640, 480, 2)
+const game = new Game()
 game.init(320, 200, 3)
-// game.debug = true
+rendererEngine.debug = true
 
 const debug = document.getElementById('debug') as HTMLElement
 
-if (game.debug) {
+if (rendererEngine.debug === true) {
     printDebug()
 }
 

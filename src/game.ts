@@ -1,11 +1,9 @@
 import rendererEngine from '@/rendererEngine'
 import Scene from './scene'
 class Game {
-    debug: boolean
     scene: Scene
 
     constructor() {
-        this.debug = false
         this.scene = new Scene()
     }
 
@@ -21,5 +19,4 @@ class Game {
         window.requestAnimationFrame(this.render.bind(this))
     }
 }
-const game = new Game()
-export default game
+export default Game

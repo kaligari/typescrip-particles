@@ -169,7 +169,7 @@ export default class Character extends RigidBody {
                 const tmpY = floor(tileId / this.tiles.tileSetWidth)
                 if (tile !== 0) {
                     this.accX = 0
-                    if (game.debug) {
+                    if (rendererEngine.debug) {
                         new Rectangle().draw(
                             tmpX * this.tiles.tileWidth - camera.x,
                             tmpY * this.tiles.tileHeight,
@@ -200,7 +200,7 @@ export default class Character extends RigidBody {
                 const tmpY = floor(tileId / this.tiles.tileSetWidth)
                 if (tile !== 0) {
                     this.accX = 0
-                    if (game.debug) {
+                    if (rendererEngine.debug) {
                         new Rectangle().draw(
                             tmpX * this.tiles.tileWidth - camera.x,
                             tmpY * this.tiles.tileHeight,
@@ -215,7 +215,7 @@ export default class Character extends RigidBody {
             }
         }
 
-        if (game.debug) {
+        if (rendererEngine.debug) {
             for (
                 let tileId = this.collider.topRightTileId;
                 tileId < this.collider.bottomRightTileId;
@@ -325,7 +325,7 @@ export default class Character extends RigidBody {
         const x = round(this.x) - camera.x
         const y = this.y
         this.animation.render(x - this.offsetX, y - this.offsetY, this.isLeft)
-        if (game.debug) {
+        if (rendererEngine.debug) {
             new Rectangle().draw(x, y, this.width, this.height, new Color(0, 0, 0))
         }
     }

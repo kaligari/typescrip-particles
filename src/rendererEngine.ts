@@ -13,6 +13,7 @@ class RendererEngine {
     deltaThen: number
     delta: number
     fps: number
+    debug: boolean
 
     constructor() {
         this.width = 320
@@ -25,6 +26,7 @@ class RendererEngine {
         this.imagedata = null
         this.canvas = null
         this.ctx = null
+        this.debug = false
     }
 
     init(canvas: HTMLCanvasElement, width: number, height: number, scale: number) {
