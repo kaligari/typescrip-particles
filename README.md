@@ -9,7 +9,7 @@ This is a simple game engine for 2D platformers written in TypeScript. It allows
 It includes features such as:
 
 - Basic physics (collisions, gravity, jumping)
-- Tile-based rendering
+- Tile-based rendering, compatible with Tiled level editor
 - Keyboard and joystick input handling
 - Simple animation system
 
