@@ -4,14 +4,17 @@ import Character from './modules/character/character'
 import { ITiledFileMapFile } from './modules/gameAnimation/types'
 import TileSet from './modules/tileSet'
 import camera from './libs/camera'
+import Bubbles from './modules/particles/models/bubbles'
 
 export default class Scene {
     player: Character
     tiles: TileSet
+    bubbles: Bubbles
 
     constructor() {
         this.player = new Character()
         this.tiles = new TileSet()
+        this.bubbles = new Bubbles(this.player)
     }
 
     async init() {
@@ -27,13 +30,27 @@ export default class Scene {
         this.player.addCollisionsTiles(this.tiles)
     }
 
+    // TODO Create water layer
+    handleParticles() {
+        const tileId = this.player.collider?.mainId
+        if (!tileId) return
+        if (this.tiles.backgroundTiles[tileId] === 472) {
+            this.bubbles.active = true
+            return
+        }
+        this.bubbles.active = false
+    }
+
     render() {
         camera.update()
+        this.handleParticles()
+        this.bubbles.update()
         this.player.handleInput()
         this.drawBackground()
         this.player.updateState()
         this.player.updateCamera()
         this.tiles.renderBackground()
+        this.bubbles.draw()
         this.player.render()
         this.tiles.renderForeground()
     }
