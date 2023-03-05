@@ -1,13 +1,16 @@
 class Camera {
     private _x = 0
     private _y = 0
+    private destX = 0
+    private destY = 0
+    stiffness = 0.1
 
     get x() {
         return this._x
     }
 
     set x(value: number) {
-        this._x = value
+        this.destX = value
     }
 
     get y() {
@@ -15,7 +18,11 @@ class Camera {
     }
 
     set y(value: number) {
-        this._y = value
+        this.destY = value
+    }
+
+    update() {
+        this._x += Math.round((this.destX - this._x) * this.stiffness)
     }
 }
 

@@ -71,7 +71,7 @@ export default class Character extends RigidBody {
         this.collider = null
         // -----
         this.X_ACCELERATION = 0.15
-        this.X_DESIRED_ACCELERATION = 2
+        this.X_DESIRED_ACCELERATION = 3
         this.X_DECELERATION = 0.15
         this.X_DESIRED_DECELERATION = 0
         this.X_OPPOSITE_DECELERATION = 0.15
@@ -304,21 +304,14 @@ export default class Character extends RigidBody {
     }
 
     updateCamera() {
-        // update camera
-        const marginRight = rendererEngine.width * 0.45
-        const marginLeft = rendererEngine.width * 0.55
+        const playerOffset = this.width / 2
+        const offsetX = rendererEngine.width * 0.5 - playerOffset
 
         if (!this.tiles) return
+        if (this.x - offsetX < 0) return
+        if (this.x + offsetX + this.width > this.tiles.tileSetWidth * this.tiles.tileWidth) return
 
-        if (
-            camera.x < this.x - marginRight &&
-            this.x < this.tiles?.tileSetWidth * this.tiles?.tileWidth - rendererEngine.width * 0.45
-        ) {
-            camera.x += this.X_DESIRED_ACCELERATION
-        }
-        if (camera.x > this.x - marginLeft && camera.x > 0) {
-            camera.x -= this.X_DESIRED_ACCELERATION
-        }
+        camera.x = this.x - offsetX
     }
 
     render() {

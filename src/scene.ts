@@ -3,6 +3,7 @@ import rendererEngine from '@/rendererEngine'
 import Character from './modules/character/character'
 import { ITiledFileMapFile } from './modules/gameAnimation/types'
 import TileSet from './modules/tileSet'
+import camera from './libs/camera'
 
 export default class Scene {
     player: Character
@@ -27,6 +28,7 @@ export default class Scene {
     }
 
     render() {
+        camera.update()
         this.player.handleInput()
         this.drawBackground()
         this.player.updateState()
