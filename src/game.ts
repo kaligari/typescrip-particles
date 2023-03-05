@@ -1,5 +1,6 @@
 import rendererEngine from '@/rendererEngine'
 import Scene from './scene'
+import gamePerformance from './modules/gamePerformance'
 class Game {
     scene: Scene
 
@@ -15,6 +16,10 @@ class Game {
     }
 
     render() {
+        if (rendererEngine.debug) {
+            gamePerformance.clear()
+            gamePerformance.addMark('game.render')
+        }
         rendererEngine.render(this.scene)
         window.requestAnimationFrame(this.render.bind(this))
     }
