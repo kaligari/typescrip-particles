@@ -53,7 +53,7 @@ class RendererEngine {
 
     setDelta() {
         this.deltaNow = Date.now()
-        this.delta = this.deltaNow - this.deltaThen
+        this.delta = this.deltaThen ? this.deltaNow - this.deltaThen : 0
         this.deltaThen = this.deltaNow
         this.fps = floor(1000 / this.delta)
     }
