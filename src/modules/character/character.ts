@@ -12,7 +12,6 @@ import StateCrouch from './states/crouch'
 import Rectangle from '../primitives/rectangle'
 import Color from '@/libs/color'
 import rendererEngine from '@/rendererEngine'
-import game from '@/game'
 import TileSet from '../tileSet'
 import TileCollider from '../collider'
 import camera from '@/libs/camera'
@@ -304,19 +303,30 @@ export default class Character extends RigidBody {
     }
 
     updateCamera() {
-        const playerOffset = this.width / 2
-        const offsetX = rendererEngine.width * 0.5 - playerOffset
+        const playerOffsetX = this.width / 2
+        const playerOffsetY = this.height / 2
+        const offsetX = rendererEngine.width * 0.5 - playerOffsetX
+        const offsetY = rendererEngine.height * 0.5 - playerOffsetY
 
         if (!this.tiles) return
-        if (this.x - offsetX < 0) return
-        if (this.x + offsetX + this.width > this.tiles.tileSetWidth * this.tiles.tileWidth) return
+        if (
+            this.x - offsetX > 0 &&
+            this.x + offsetX + this.width < this.tiles.tileSetWidth * this.tiles.tileWidth
+        ) {
+            camera.x = this.x - offsetX
+        }
 
-        camera.x = this.x - offsetX
+        if (
+            this.y - offsetY > 0 &&
+            this.y + offsetY + this.height < this.tiles.tileSetHeight * this.tiles.tileHeight
+        ) {
+            camera.y = this.y - offsetY
+        }
     }
 
     render() {
         const x = round(this.x) - camera.x
-        const y = this.y
+        const y = round(this.y) - camera.y
         this.animation.render(x - this.offsetX, y - this.offsetY, this.isLeft)
         if (rendererEngine.debug) {
             new Rectangle().draw(x, y, this.width, this.height, new Color(0, 0, 0))

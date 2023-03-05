@@ -1,3 +1,5 @@
+import { round } from '@/helpers/math'
+
 class GamePerformance {
     marks: string[]
 
@@ -26,7 +28,7 @@ class GamePerformance {
         for (let i = 1; i < this.marks.length; i++) {
             const { duration } = performance.measure('measure', this.marks[i - 1], this.marks[i])
             const calcMeasure = duration * 10
-            output += `${this.marks[i - 1]}: ${Math.round(calcMeasure)}<br />`
+            output += `${this.marks[i - 1]}: ${round(calcMeasure)}<br />`
         }
         output += '-------------------<br />'
         const { duration } = performance.measure(
@@ -34,7 +36,7 @@ class GamePerformance {
             this.marks[0],
             this.marks[this.marks.length],
         )
-        output += `Total: ${Math.round(duration * 10)}`
+        output += `Total: ${round(duration * 10)}`
         return output
     }
 }

@@ -35,7 +35,7 @@ export default class GameTiles {
         this.image.renderSelection(
             {
                 x: (tileId % this.cols) * this.tileWidth,
-                y: Math.floor(tileId / this.cols) * this.tileHeight,
+                y: floor(tileId / this.cols) * this.tileHeight,
                 width: this.tileWidth,
                 height: this.tileHeight,
             },

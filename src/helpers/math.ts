@@ -6,6 +6,10 @@ export function floor(number: number) {
     return Math.floor(number)
 }
 
+export function ceil(number: number) {
+    return Math.ceil(number)
+}
+
 export function round(number: number) {
     return Math.round(number)
 }

@@ -1,3 +1,5 @@
+import { round } from '@/helpers/math'
+
 class Camera {
     private _x = 0
     private _y = 0
@@ -22,7 +24,8 @@ class Camera {
     }
 
     update() {
-        this._x += Math.round((this.destX - this._x) * this.stiffness)
+        this._x += round((this.destX - this._x) * this.stiffness)
+        this._y += round((this.destY - this._y) * this.stiffness)
     }
 }
 

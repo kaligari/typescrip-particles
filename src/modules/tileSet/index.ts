@@ -1,8 +1,8 @@
 import GameTiles from '@/libs/gameTiles'
 import { ITiledFileMapFile } from '@/modules/gameAnimation/types'
-import { floor } from '@/helpers/math'
 import rendererEngine from '@/rendererEngine'
 import camera from '@/libs/camera'
+import { ceil, floor } from '@/helpers/math'
 export default class TileSet {
     tilesFile: GameTiles
     /** Width of one tile (in px) */
@@ -11,6 +11,8 @@ export default class TileSet {
     tileHeight = 1
     /** Width of tile set */
     tileSetWidth = 1
+    /** Height of tile set */
+    tileSetHeight = 1
     /** List of main tiles */
     tiles: number[] = []
     /** List of background tiles */
@@ -36,8 +38,9 @@ export default class TileSet {
         this.tileWidth = mapFile.tileheight
         this.tileHeight = mapFile.tileheight
         this.tileSetWidth = mapFile.layers[0].width
-        this.renderedSizeWidth = floor(rendererEngine.width / this.tileWidth) + 1
-        this.renderedSizeHeigh = floor(rendererEngine.height / this.tileHeight) + 1
+        this.tileSetHeight = mapFile.layers[0].height
+        this.renderedSizeWidth = ceil(rendererEngine.width / this.tileWidth) + 1
+        this.renderedSizeHeigh = ceil(rendererEngine.height / this.tileHeight) + 1
         this.startXOffset = (rendererEngine.width - this.renderedSizeWidth * this.tileWidth) / 2
 
         const mainMap = mapFile.layers.find(map => map.name === 'main')
@@ -58,15 +61,17 @@ export default class TileSet {
     // TODO Change camera.x to Camera class
     renderBackground() {
         const destX = camera.x % this.tileWidth
+        const destY = camera.y % this.tileHeight
 
         for (let x = 0; x < this.renderedSizeWidth * this.renderedSizeHeigh; x++) {
-            const row = Math.floor(x / this.renderedSizeWidth)
+            const row = floor(x / this.renderedSizeWidth)
             const col = x % this.renderedSizeWidth
 
             const offset =
-                Math.floor(x / this.renderedSizeWidth) * this.tileSetWidth +
+                floor(x / this.renderedSizeWidth) * this.tileSetWidth +
                 col +
-                Math.floor(camera.x / this.tileWidth)
+                floor(camera.x / this.tileWidth) +
+                this.tileSetWidth * floor(camera.y / this.tileHeight)
 
             // background tiles
             const backgroundTileId = this.backgroundTiles[offset] - 1
@@ -74,7 +79,7 @@ export default class TileSet {
                 this.tilesFile.render(
                     backgroundTileId,
                     col * this.tileWidth - destX,
-                    row * this.tileHeight,
+                    row * this.tileHeight - destY,
                 )
             }
 
@@ -84,7 +89,7 @@ export default class TileSet {
                 this.tilesFile.render(
                     mainTileId,
                     col * this.tileWidth - destX,
-                    row * this.tileHeight,
+                    row * this.tileHeight - destY,
                 )
             }
         }
@@ -92,15 +97,17 @@ export default class TileSet {
 
     renderForeground() {
         const destX = camera.x % this.tileWidth
+        const destY = camera.y % this.tileHeight
 
         for (let x = 0; x < this.renderedSizeWidth * this.renderedSizeHeigh; x++) {
-            const row = Math.floor(x / this.renderedSizeWidth)
+            const row = floor(x / this.renderedSizeWidth)
             const col = x % this.renderedSizeWidth
 
             const offset =
-                Math.floor(x / this.renderedSizeWidth) * this.tileSetWidth +
+                floor(x / this.renderedSizeWidth) * this.tileSetWidth +
                 col +
-                Math.floor(camera.x / this.tileWidth)
+                floor(camera.x / this.tileWidth) +
+                this.tileSetWidth * floor(camera.y / this.tileHeight)
 
             // foreground tiles
             const foregroundTileId = this.foregroundTiles[offset] - 1
@@ -109,7 +116,7 @@ export default class TileSet {
                 this.tilesFile.render(
                     foregroundTileId,
                     col * this.tileWidth - destX,
-                    row * this.tileHeight,
+                    row * this.tileHeight - destY,
                 )
             }
         }
