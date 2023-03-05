@@ -19,7 +19,7 @@ export default abstract class State {
         // this.character.posX += 0.01 * this.character.posX
         // -----------------------------------------
         if (this.character.boundBottom === null) {
-            this.character.accY += 0.15
+            this.character.accY += this.character.Y_GRAVITY
             if (this.character.accY > 0) {
                 this.character.changeState(this.character.stateFall)
             }

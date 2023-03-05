@@ -47,6 +47,7 @@ export default class Character extends RigidBody {
     X_JUMP_FROM_RUN: number
     X_SOMERSAULT: number
     X_CROUCH: number
+    Y_GRAVITY: number
 
     constructor() {
         super()
@@ -78,6 +79,7 @@ export default class Character extends RigidBody {
         this.X_JUMP_FROM_RUN = 4
         this.X_SOMERSAULT = 4
         this.X_CROUCH = 0.5
+        this.Y_GRAVITY = 0.15
     }
 
     load(animation: ITiledFileTileset) {
@@ -325,27 +327,12 @@ export default class Character extends RigidBody {
     }
 
     render() {
-        this.animation.render(
-            this.XOnScreen - this.offsetX,
-            this.YOnScreen - this.offsetY,
-            this.isLeft,
-        )
+        const XOnScreen = this.x - camera.x
+        const YOnScreen = this.y - camera.y
+
+        this.animation.render(XOnScreen - this.offsetX, YOnScreen - this.offsetY, this.isLeft)
         if (rendererEngine.debug) {
-            new Rectangle().draw(
-                this.XOnScreen,
-                this.YOnScreen,
-                this.width,
-                this.height,
-                new Color(0, 0, 0),
-            )
+            new Rectangle().draw(XOnScreen, YOnScreen, this.width, this.height, new Color(0, 0, 0))
         }
-    }
-
-    get XOnScreen() {
-        return this.x - camera.x
-    }
-
-    get YOnScreen() {
-        return this.y - camera.y
     }
 }
