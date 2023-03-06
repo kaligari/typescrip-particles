@@ -290,6 +290,7 @@ export default class Character extends RigidBody {
         const collisionBottom = this.calcColision(bottomX, bottomY)
         if (collisionBottom !== null && this.boundBottom === null) {
             this.boundBottom = collisionBottom - this.height
+            this.changeState(this.stateIdle)
         } else if (collisionBottom === null) {
             this.boundBottom = null
         }
