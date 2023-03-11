@@ -13,6 +13,7 @@ class UserInput {
     buttonPressedOnce: boolean[]
     touch: Touch | null
     touchStart: number | null
+    BUTTONS = 9
 
     constructor() {
         this.mouseX = 0
@@ -22,8 +23,8 @@ class UserInput {
         this.keyPressedOnce = []
         this.gamepads = []
         this.gamepad = null
-        this.buttonPressedOncePrevious = Array(3).fill(false)
-        this.buttonPressedOnce = Array(3).fill(false)
+        this.buttonPressedOncePrevious = Array(this.BUTTONS).fill(false)
+        this.buttonPressedOnce = Array(this.BUTTONS).fill(false)
         this.touch = null
         this.touchStart = null
         window.addEventListener('mousemove', this.getMousePosition.bind(this), false)
@@ -37,11 +38,12 @@ class UserInput {
     }
 
     update() {
-        this.buttonPressedOnce = Array(3).fill(false)
+        this.buttonPressedOnce = Array(this.BUTTONS).fill(false)
 
         this.gamepad = navigator.getGamepads()[0]
+
         if (this.gamepad) {
-            for (let i = 0; i < 3; i++) {
+            for (let i = 0; i <= this.BUTTONS; i++) {
                 const gamepadButton = this.gamepad.buttons[i].pressed
                 if (gamepadButton && !this.buttonPressedOncePrevious[i]) {
                     this.buttonPressedOnce[i] = true
@@ -142,6 +144,10 @@ class UserInput {
 
     get actionA() {
         return this.isKeyPressedOnce('Space') || this.isButtonPressedOnce(2)
+    }
+
+    get start() {
+        return this.isKeyPressedOnce('KeyR') || this.isButtonPressedOnce(9)
     }
 }
 

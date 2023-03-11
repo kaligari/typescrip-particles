@@ -123,6 +123,10 @@ export default class Character extends RigidBody {
 
     handleInput() {
         userInput.update()
+        if (userInput.start) {
+            location.reload()
+            return
+        }
         if (userInput.actionA) {
             this.state.onAction1()
             this.inputYPressure = 1
