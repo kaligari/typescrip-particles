@@ -3,11 +3,10 @@ import { floor } from '@/helpers/math'
 import { ITiledFileTile, ITiledFileTileset } from './types'
 import GameTiles from '@/libs/gameTiles'
 import GameScript from '@/libs/gameScript'
-import Character from '../character/character'
 import camera from '@/libs/camera'
+import GameObject from '@/libs/gameObject'
 
 export default class GameAnimation extends GameScript {
-    parent: Character
     tiles: GameTiles
     animation: ITiledFileTile | undefined
     animationName: string
@@ -19,9 +18,8 @@ export default class GameAnimation extends GameScript {
     offsetX: number
     offsetY: number
 
-    constructor(name: string, parent: Character) {
-        super(name)
-        this.parent = parent
+    constructor(name: string, parent: GameObject) {
+        super(name, parent)
         this.animationName = ''
         this.tiles = new GameTiles()
 

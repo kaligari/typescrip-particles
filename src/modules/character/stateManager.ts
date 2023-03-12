@@ -5,14 +5,13 @@ import StateJump from './states/jump'
 import StateSomersault from './states/somersault'
 import StateFall from './states/fall'
 import StateCrouch from './states/crouch'
-import Character from './character'
 import GameScript from '@/libs/gameScript'
 import PlayerController from './playerController'
+import GameObject from '@/libs/gameObject'
 
 export type TStateTypes = StateRun | StateJump
 
 export default class StateManager extends GameScript {
-    parent: Character
     state: TStateTypes
     states: TStateTypes[]
     stateIdle: State
@@ -22,9 +21,8 @@ export default class StateManager extends GameScript {
     stateFall: State
     stateCrouch: State
 
-    constructor(name: string, parent: Character) {
-        super(name)
-        this.parent = parent
+    constructor(name: string, parent: GameObject) {
+        super(name, parent)
         this.states = []
         this.stateRun = new StateRun(this)
         this.stateIdle = new StateIdle(this)

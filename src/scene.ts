@@ -1,19 +1,20 @@
 import Color from '@/libs/color'
 import rendererEngine from '@/rendererEngine'
-import Character from './modules/character/character'
 import { ITiledFileMapFile } from './modules/gameAnimation/types'
 import TileSet from './modules/tileSet'
 import camera from './libs/camera'
 import GameAnimation from './modules/gameAnimation/gameAnimation'
 import TileCollider from './modules/collider'
+import GameObject from './libs/gameObject'
+import character from './modules/character/character'
 
 export default class Scene {
-    player: Character
+    player: GameObject
     tiles: TileSet
 
     constructor() {
         this.tiles = new TileSet()
-        this.player = new Character()
+        this.player = character
     }
 
     async init() {

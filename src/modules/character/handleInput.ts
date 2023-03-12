@@ -1,16 +1,14 @@
 import GameScript from '@/libs/gameScript'
 import userInput from '../userInput/userInput'
-import Character from './character'
 import StateManager from './stateManager'
+import GameObject from '@/libs/gameObject'
 
 export default class HandleInput extends GameScript {
-    parent: Character
     inputXPressure: number
     inputYPressure: number
 
-    constructor(name: string, parent: Character) {
-        super(name)
-        this.parent = parent
+    constructor(name: string, parent: GameObject) {
+        super(name, parent)
         this.inputXPressure = 0
         this.inputYPressure = 0
     }

@@ -1,13 +1,12 @@
 import { floor, round } from '@/helpers/math'
 import GameScript from '@/libs/gameScript'
 import TileCollider from '../collider'
-import Character from './character'
 import rendererEngine from '@/rendererEngine'
 import camera from '@/libs/camera'
 import StateManager from './stateManager'
+import GameObject from '@/libs/gameObject'
 
 export default class PlayerController extends GameScript {
-    parent: Character
     jumpBlocked: boolean
     offsetX: number
     offsetY: number
@@ -25,9 +24,8 @@ export default class PlayerController extends GameScript {
     X_CROUCH: number
     Y_GRAVITY: number
 
-    constructor(name: string, parent: Character) {
-        super(name)
-        this.parent = parent
+    constructor(name: string, parent: GameObject) {
+        super(name, parent)
         this.jumpBlocked = false
         this.offsetX = 20
         this.offsetY = 0
