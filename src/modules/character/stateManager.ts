@@ -45,6 +45,18 @@ export default class StateManager extends GameScript {
         return false
     }
 
+    interpolateForceX(factor: number, target = 1) {
+        if (this.parent.accX - factor > target) {
+            this.parent.accX -= factor
+            return
+        }
+        if (this.parent.accX + factor < target) {
+            this.parent.accX += factor
+            return
+        }
+        this.parent.accX = target
+    }
+
     update() {
         this.state.updateAlways()
         this.state.update()

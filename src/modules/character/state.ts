@@ -1,3 +1,4 @@
+import GameAnimation from '../gameAnimation/gameAnimation'
 import StateManager from './stateManager'
 
 export default abstract class State {
@@ -55,7 +56,8 @@ export default abstract class State {
         return true
     }
     changeAnimation() {
-        this.stateManager.parent.animation.changeAnimation(this.name)
+        const gameAnimation = this.stateManager.parent.getScript('gameAnimation') as GameAnimation
+        gameAnimation.changeAnimation(this.name)
     }
 
     update() {}

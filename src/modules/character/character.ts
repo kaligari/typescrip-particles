@@ -1,8 +1,6 @@
 import GameAnimation from '@/modules/gameAnimation/gameAnimation'
 import { ITiledFileTileset } from '@/modules/gameAnimation/types'
 import { floor, round } from '@/helpers/math'
-import Rectangle from '../primitives/rectangle'
-import Color from '@/libs/color'
 import rendererEngine from '@/rendererEngine'
 import TileSet from '../tileSet'
 import TileCollider from '../collider'
@@ -13,8 +11,6 @@ import StateManager from './stateManager'
 
 export default class Character extends GameObject {
     tiles: TileSet | null
-    animation: GameAnimation
-    isLeft: boolean
     inputXPressure: number
     inputYPressure: number
     jumpBlocked: boolean
@@ -23,7 +19,6 @@ export default class Character extends GameObject {
     accX: number
     accY: number
     boundBottom: number | null
-    collider: TileCollider | null
     X_ACCELERATION: number
     X_DESIRED_ACCELERATION: number
     X_DECELERATION: number
@@ -37,8 +32,6 @@ export default class Character extends GameObject {
 
     constructor() {
         super()
-        this.animation = new GameAnimation()
-        this.isLeft = false
         this.inputXPressure = 0
         this.inputYPressure = 0
         this.jumpBlocked = false
@@ -46,9 +39,12 @@ export default class Character extends GameObject {
         this.offsetX = 0
         this.offsetY = 0
         this.boundBottom = null
-        this.collider = null
         this.accX = 0
         this.accY = 0
+        this.x = 120
+        this.y = 20
+        this.width = 20
+        this.height = 30
         // -----
         this.X_ACCELERATION = 0.15
         this.X_DESIRED_ACCELERATION = 3
@@ -63,33 +59,23 @@ export default class Character extends GameObject {
         // ------
         this.scripts.push(new HandleInput('handleInput', this))
         this.scripts.push(new StateManager('stateManager', this))
+        this.scripts.push(new GameAnimation('gameAnimation', this))
     }
 
-    interpolateForceX(factor: number, target = 1) {
-        if (this.accX - factor > target) {
-            this.accX -= factor
-            return
-        }
-        if (this.accX + factor < target) {
-            this.accX += factor
-            return
-        }
-        this.accX = target
+    async init() {
+        super.init()
+        const gameAnimation = this.getScript('gameAnimation') as GameAnimation
+        const characterFile = await fetch('./assets/adventurer.json')
+            .then(response => response.json())
+            .catch(error => console.log(error))
+        this.offsetX = characterFile.tileoffset.x
+        this.offsetY = characterFile.tileoffset.y
+        await gameAnimation.load(characterFile)
     }
 
-    load(animation: ITiledFileTileset) {
-        this.animation.load(animation)
-        this.x = 120
-        this.y = 20
-        this.offsetX = animation.tileoffset.x
-        this.offsetY = animation.tileoffset.y
-        this.width = 20
-        this.height = 30
-    }
-
-    addCollisionsTiles(tiles: TileSet) {
+    addTiles(tiles: TileSet) {
         this.tiles = tiles
-        this.collider = new TileCollider(this, tiles)
+        this.scripts.push(new TileCollider('tileCollider', this, tiles))
     }
 
     calcColision(x: number, y: number) {
@@ -107,9 +93,9 @@ export default class Character extends GameObject {
 
     updateState() {
         super.update()
-        this.collider?.update()
-        if (!this.collider) return
         if (!this.tiles) return
+
+        const tileCollider = this.getScript('tileCollider') as TileCollider
 
         if (this.accX > 0) {
             // end of the level
@@ -117,25 +103,13 @@ export default class Character extends GameObject {
                 this.accX = 0
             }
             for (
-                let tileId = this.collider.topRightTileId;
-                tileId < this.collider.bottomRightTileId;
+                let tileId = tileCollider.topRightTileId;
+                tileId < tileCollider.bottomRightTileId;
                 tileId += this.tiles.tileSetWidth
             ) {
                 const tile = this.tiles.tiles[tileId]
-                const tmpX = tileId % this.tiles.tileSetWidth
-                const tmpY = floor(tileId / this.tiles.tileSetWidth)
                 if (tile !== 0) {
                     this.accX = 0
-                    if (rendererEngine.debug) {
-                        new Rectangle().draw(
-                            tmpX * this.tiles.tileWidth - camera.x,
-                            tmpY * this.tiles.tileHeight,
-                            this.tiles.tileWidth,
-                            this.tiles.tileHeight,
-                            new Color(0, 0, 0),
-                            new Color(255, 0, 0),
-                        )
-                    }
                     continue
                 }
             }
@@ -148,75 +122,15 @@ export default class Character extends GameObject {
             }
 
             for (
-                let tileId = this.collider.topLeftTileId;
-                tileId < this.collider.bottomLeftTileId;
+                let tileId = tileCollider.topLeftTileId;
+                tileId < tileCollider.bottomLeftTileId;
                 tileId += this.tiles.tileSetWidth
             ) {
                 const tile = this.tiles.tiles[tileId]
-                const tmpX = tileId % this.tiles.tileSetWidth
-                const tmpY = floor(tileId / this.tiles.tileSetWidth)
                 if (tile !== 0) {
                     this.accX = 0
-                    if (rendererEngine.debug) {
-                        new Rectangle().draw(
-                            tmpX * this.tiles.tileWidth - camera.x,
-                            tmpY * this.tiles.tileHeight,
-                            this.tiles.tileWidth,
-                            this.tiles.tileHeight,
-                            new Color(0, 0, 0),
-                            new Color(255, 0, 0),
-                        )
-                    }
                     continue
                 }
-            }
-        }
-
-        if (rendererEngine.debug) {
-            for (
-                let tileId = this.collider.topRightTileId;
-                tileId < this.collider.bottomRightTileId;
-                tileId += this.tiles.tileSetWidth
-            ) {
-                const tmpX = tileId % this.tiles.tileSetWidth
-                const tmpY = floor(tileId / this.tiles.tileSetWidth)
-                new Rectangle().draw(
-                    tmpX * this.tiles.tileWidth - camera.x,
-                    tmpY * this.tiles.tileHeight,
-                    this.tiles.tileWidth,
-                    this.tiles.tileHeight,
-                    new Color(0, 0, 0),
-                )
-            }
-            for (
-                let tileId = this.collider.topLeftTileId;
-                tileId < this.collider.bottomLeftTileId;
-                tileId += this.tiles.tileSetWidth
-            ) {
-                const tmpX = tileId % this.tiles.tileSetWidth
-                const tmpY = floor(tileId / this.tiles.tileSetWidth)
-                new Rectangle().draw(
-                    tmpX * this.tiles.tileWidth - camera.x,
-                    tmpY * this.tiles.tileHeight,
-                    this.tiles.tileWidth,
-                    this.tiles.tileHeight,
-                    new Color(0, 0, 0),
-                )
-            }
-            for (
-                let tileId = this.collider.topLeftTileId;
-                tileId <= this.collider.topRightTileId;
-                tileId++
-            ) {
-                const tmpX = tileId % this.tiles.tileSetWidth
-                const tmpY = floor(tileId / this.tiles.tileSetWidth)
-                new Rectangle().draw(
-                    tmpX * this.tiles.tileWidth - camera.x,
-                    tmpY * this.tiles.tileHeight,
-                    this.tiles.tileWidth,
-                    this.tiles.tileHeight,
-                    new Color(0, 0, 0),
-                )
             }
         }
 
@@ -228,6 +142,7 @@ export default class Character extends GameObject {
 
         const bottomX = x + floor(this.width / 2)
         const bottomY = y + this.height
+
         const collisionBottom = this.calcColision(bottomX, bottomY)
         if (collisionBottom !== null && this.boundBottom === null) {
             this.boundBottom = collisionBottom - this.height
@@ -271,13 +186,8 @@ export default class Character extends GameObject {
         }
     }
 
-    render() {
-        const XOnScreen = this.x - camera.x
-        const YOnScreen = this.y - camera.y
-
-        this.animation.render(XOnScreen - this.offsetX, YOnScreen - this.offsetY, this.isLeft)
-        if (rendererEngine.debug) {
-            new Rectangle().draw(XOnScreen, YOnScreen, this.width, this.height, new Color(0, 0, 0))
-        }
+    update() {
+        this.updateState()
+        this.updateCamera()
     }
 }

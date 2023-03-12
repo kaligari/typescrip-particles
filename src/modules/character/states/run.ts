@@ -8,7 +8,7 @@ export default class StateRun extends State {
 
     update() {
         if (this.stateManager.parent.inputXPressure === 0) {
-            this.stateManager.parent.interpolateForceX(
+            this.stateManager.interpolateForceX(
                 this.stateManager.parent.X_DECELERATION,
                 this.stateManager.parent.X_DESIRED_DECELERATION,
             )
@@ -16,36 +16,30 @@ export default class StateRun extends State {
     }
 
     onLeft() {
-        this.stateManager.parent.isLeft = true
+        this.stateManager.parent.flipY = true
         if (this.stateManager.parent.accX > 0) {
-            this.stateManager.parent.interpolateForceX(
-                this.stateManager.parent.X_OPPOSITE_DECELERATION,
-                0,
-            )
+            this.stateManager.interpolateForceX(this.stateManager.parent.X_OPPOSITE_DECELERATION, 0)
             if (this.stateManager.parent.accX === 0) {
-                this.stateManager.parent.isLeft = true
+                this.stateManager.parent.flipY = true
             }
             return
         }
-        this.stateManager.parent.interpolateForceX(
+        this.stateManager.interpolateForceX(
             this.stateManager.parent.X_ACCELERATION * this.stateManager.parent.inputXPressure,
             -this.stateManager.parent.X_DESIRED_ACCELERATION,
         )
     }
 
     onRight() {
-        this.stateManager.parent.isLeft = false
+        this.stateManager.parent.flipY = false
         if (this.stateManager.parent.accX < 0) {
-            this.stateManager.parent.interpolateForceX(
-                this.stateManager.parent.X_OPPOSITE_DECELERATION,
-                0,
-            )
+            this.stateManager.interpolateForceX(this.stateManager.parent.X_OPPOSITE_DECELERATION, 0)
             if (this.stateManager.parent.accX === 0) {
-                this.stateManager.parent.isLeft = false
+                this.stateManager.parent.flipY = false
             }
             return
         }
-        this.stateManager.parent.interpolateForceX(
+        this.stateManager.interpolateForceX(
             this.stateManager.parent.X_ACCELERATION * this.stateManager.parent.inputXPressure,
             this.stateManager.parent.X_DESIRED_ACCELERATION,
         )

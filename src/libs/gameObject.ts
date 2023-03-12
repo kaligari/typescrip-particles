@@ -6,6 +6,7 @@ export default class GameObject {
     y: number
     width: number
     height: number
+    flipY: boolean
     scripts: GameScript[]
 
     constructor() {
@@ -13,6 +14,7 @@ export default class GameObject {
         this.y = 0
         this.width = 0
         this.height = 0
+        this.flipY = false
         this.scripts = []
     }
 

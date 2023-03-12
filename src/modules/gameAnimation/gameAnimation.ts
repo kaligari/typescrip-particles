@@ -2,8 +2,12 @@ import rendererEngine from '@/rendererEngine'
 import { floor } from '@/helpers/math'
 import { ITiledFileTile, ITiledFileTileset } from './types'
 import GameTiles from '@/libs/gameTiles'
+import GameScript from '@/libs/gameScript'
+import Character from '../character/character'
+import camera from '@/libs/camera'
 
-export default class GameAnimation {
+export default class GameAnimation extends GameScript {
+    parent: Character
     tiles: GameTiles
     animation: ITiledFileTile | undefined
     animationName: string
@@ -13,7 +17,9 @@ export default class GameAnimation {
     afterEnd: string
     ignoreInput: boolean
 
-    constructor() {
+    constructor(name: string, parent: Character) {
+        super(name)
+        this.parent = parent
         this.animationName = ''
         this.tiles = new GameTiles()
 
@@ -25,12 +31,15 @@ export default class GameAnimation {
         this.changeAnimation('idle')
     }
 
-    load(animationFile: ITiledFileTileset) {
-        this.tiles.load(animationFile)
+    async load(animationFile: ITiledFileTileset) {
+        await this.tiles.load(animationFile)
     }
 
-    render(x: number, y: number, mirrorVertical: boolean) {
+    update() {
         if (!this.animation) return
+
+        const XOnScreen = this.parent.x - camera.x
+        const YOnScreen = this.parent.y - camera.y
 
         if (this.step >= this.maxSteps) {
             this.step = 0
@@ -40,7 +49,12 @@ export default class GameAnimation {
         const frame = floor(this.step)
         const tileId = this.animation.animation[frame].tileid
 
-        this.tiles.render(tileId, x, y, mirrorVertical)
+        this.tiles.render(
+            tileId,
+            XOnScreen - this.parent.offsetX,
+            YOnScreen - this.parent.offsetY,
+            this.parent.flipY,
+        )
 
         this.duration += rendererEngine.delta
         if (this.duration > this.animation.animation[frame].duration) {

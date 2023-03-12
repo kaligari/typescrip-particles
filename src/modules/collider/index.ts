@@ -1,13 +1,15 @@
 import TileSet from '@/modules/tileSet'
 import Character from '../character/character'
 import { floor, round } from '@/helpers/math'
+import GameScript from '@/libs/gameScript'
 
-export default class TileCollider {
+export default class TileCollider extends GameScript {
     parent: Character
     tiles: TileSet
     mainId: number
 
-    constructor(parent: Character, tileset: TileSet) {
+    constructor(name: string, parent: Character, tileset: TileSet) {
+        super(name)
         this.parent = parent
         this.tiles = tileset
         this.mainId = 0

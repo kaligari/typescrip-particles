@@ -7,7 +7,7 @@ export default class StateIdle extends State {
     }
 
     update() {
-        this.stateManager.parent.interpolateForceX(
+        this.stateManager.interpolateForceX(
             this.stateManager.parent.X_DECELERATION,
             this.stateManager.parent.X_DESIRED_DECELERATION,
         )
