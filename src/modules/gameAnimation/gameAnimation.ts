@@ -16,6 +16,8 @@ export default class GameAnimation extends GameScript {
     maxSteps: number
     afterEnd: string
     ignoreInput: boolean
+    offsetX: number
+    offsetY: number
 
     constructor(name: string, parent: Character) {
         super(name)
@@ -29,10 +31,14 @@ export default class GameAnimation extends GameScript {
         this.afterEnd = ''
         this.ignoreInput = false
         this.changeAnimation('idle')
+        this.offsetX = 0
+        this.offsetY = 0
     }
 
     async load(animationFile: ITiledFileTileset) {
         await this.tiles.load(animationFile)
+        this.offsetX = animationFile.tileoffset.x
+        this.offsetY = animationFile.tileoffset.y
     }
 
     update() {
@@ -51,8 +57,8 @@ export default class GameAnimation extends GameScript {
 
         this.tiles.render(
             tileId,
-            XOnScreen - this.parent.offsetX,
-            YOnScreen - this.parent.offsetY,
+            XOnScreen - this.offsetX,
+            YOnScreen - this.offsetY,
             this.parent.flipY,
         )
 

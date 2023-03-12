@@ -7,14 +7,15 @@ export default class StateFall extends StateRun {
     }
 
     onDown() {
-        this.stateManager.parent.accY += this.stateManager.parent.X_CROUCH
+        this.stateManager.playerController.accY += this.stateManager.playerController.X_CROUCH
         this.stateManager.changeState(this.stateManager.stateJump)
     }
 
     onAction1() {
         if (this.stateManager.changeState(this.stateManager.stateSomersault)) {
-            this.stateManager.parent.accY = 0
-            this.stateManager.parent.accY -= this.stateManager.parent.X_SOMERSAULT
+            this.stateManager.playerController.accY = 0
+            this.stateManager.playerController.accY -=
+                this.stateManager.playerController.X_SOMERSAULT
         }
     }
 }

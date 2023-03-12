@@ -15,7 +15,7 @@ export default class HandleInput extends GameScript {
         this.inputYPressure = 0
     }
 
-    update() {
+    override update() {
         userInput.update()
         if (userInput.start) {
             location.reload()

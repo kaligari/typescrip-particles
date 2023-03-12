@@ -7,6 +7,7 @@ import StateFall from './states/fall'
 import StateCrouch from './states/crouch'
 import Character from './character'
 import GameScript from '@/libs/gameScript'
+import PlayerController from './playerController'
 
 export type TStateTypes = StateRun | StateJump
 
@@ -45,20 +46,12 @@ export default class StateManager extends GameScript {
         return false
     }
 
-    interpolateForceX(factor: number, target = 1) {
-        if (this.parent.accX - factor > target) {
-            this.parent.accX -= factor
-            return
-        }
-        if (this.parent.accX + factor < target) {
-            this.parent.accX += factor
-            return
-        }
-        this.parent.accX = target
-    }
-
-    update() {
+    override update() {
         this.state.updateAlways()
         this.state.update()
+    }
+
+    get playerController() {
+        return this.parent.getScript('playerController') as PlayerController
     }
 }

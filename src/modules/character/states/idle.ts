@@ -1,3 +1,4 @@
+import PlayerController from '../playerController'
 import State from '../state'
 import StateManager from '../stateManager'
 
@@ -7,9 +8,9 @@ export default class StateIdle extends State {
     }
 
     update() {
-        this.stateManager.interpolateForceX(
-            this.stateManager.parent.X_DECELERATION,
-            this.stateManager.parent.X_DESIRED_DECELERATION,
+        this.stateManager.playerController.interpolateForceX(
+            this.stateManager.playerController.X_DECELERATION,
+            this.stateManager.playerController.X_DESIRED_DECELERATION,
         )
     }
 
@@ -26,7 +27,7 @@ export default class StateIdle extends State {
     }
 
     onAction1() {
-        this.stateManager.parent.accY -= this.stateManager.parent.X_JUMP
+        this.stateManager.playerController.accY -= this.stateManager.playerController.X_JUMP
         this.stateManager.changeState(this.stateManager.stateJump)
     }
 }

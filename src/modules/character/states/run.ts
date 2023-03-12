@@ -10,42 +10,48 @@ export default class StateRun extends State {
     update() {
         const handleInput = this.stateManager.parent.getScript('handleInput') as HandleInput
         if (handleInput.inputXPressure === 0) {
-            this.stateManager.interpolateForceX(
-                this.stateManager.parent.X_DECELERATION,
-                this.stateManager.parent.X_DESIRED_DECELERATION,
+            this.stateManager.playerController.interpolateForceX(
+                this.stateManager.playerController.X_DECELERATION,
+                this.stateManager.playerController.X_DESIRED_DECELERATION,
             )
         }
     }
 
     onLeft() {
         this.stateManager.parent.flipY = true
-        if (this.stateManager.parent.accX > 0) {
-            this.stateManager.interpolateForceX(this.stateManager.parent.X_OPPOSITE_DECELERATION, 0)
-            if (this.stateManager.parent.accX === 0) {
+        if (this.stateManager.playerController.accX > 0) {
+            this.stateManager.playerController.interpolateForceX(
+                this.stateManager.playerController.X_OPPOSITE_DECELERATION,
+                0,
+            )
+            if (this.stateManager.playerController.accX === 0) {
                 this.stateManager.parent.flipY = true
             }
             return
         }
         const { inputXPressure } = this.stateManager.parent.getScript('handleInput') as HandleInput
-        this.stateManager.interpolateForceX(
-            this.stateManager.parent.X_ACCELERATION * inputXPressure,
-            -this.stateManager.parent.X_DESIRED_ACCELERATION,
+        this.stateManager.playerController.interpolateForceX(
+            this.stateManager.playerController.X_ACCELERATION * inputXPressure,
+            -this.stateManager.playerController.X_DESIRED_ACCELERATION,
         )
     }
 
     onRight() {
         this.stateManager.parent.flipY = false
-        if (this.stateManager.parent.accX < 0) {
-            this.stateManager.interpolateForceX(this.stateManager.parent.X_OPPOSITE_DECELERATION, 0)
-            if (this.stateManager.parent.accX === 0) {
+        if (this.stateManager.playerController.accX < 0) {
+            this.stateManager.playerController.interpolateForceX(
+                this.stateManager.playerController.X_OPPOSITE_DECELERATION,
+                0,
+            )
+            if (this.stateManager.playerController.accX === 0) {
                 this.stateManager.parent.flipY = false
             }
             return
         }
         const { inputXPressure } = this.stateManager.parent.getScript('handleInput') as HandleInput
-        this.stateManager.interpolateForceX(
-            this.stateManager.parent.X_ACCELERATION * inputXPressure,
-            this.stateManager.parent.X_DESIRED_ACCELERATION,
+        this.stateManager.playerController.interpolateForceX(
+            this.stateManager.playerController.X_ACCELERATION * inputXPressure,
+            this.stateManager.playerController.X_DESIRED_ACCELERATION,
         )
     }
 
@@ -54,7 +60,8 @@ export default class StateRun extends State {
     }
 
     onAction1() {
-        this.stateManager.parent.accY -= this.stateManager.parent.X_JUMP_FROM_RUN
+        this.stateManager.playerController.accY -=
+            this.stateManager.playerController.X_JUMP_FROM_RUN
         this.stateManager.changeState(this.stateManager.stateJump)
     }
 }

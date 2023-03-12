@@ -9,11 +9,11 @@ export default class StateSomersault extends StateJump {
     onAction1() {}
 
     canChangeState() {
-        return !this.stateManager.parent.jumpBlocked
+        return !this.stateManager.playerController.jumpBlocked
     }
 
     onChangeState() {
-        this.stateManager.parent.jumpBlocked = true
+        this.stateManager.playerController.jumpBlocked = true
     }
 
     onDown() {

@@ -20,34 +20,38 @@ export default abstract class State {
         // this.stateManager.parent.currSpeedX += gravity
         // this.stateManager.parent.posX += 0.01 * this.stateManager.parent.posX
         // -----------------------------------------
-        if (this.stateManager.parent.boundBottom === null) {
-            this.stateManager.parent.accY += this.stateManager.parent.Y_GRAVITY
-            if (this.stateManager.parent.accY > 0) {
+
+        if (this.stateManager.playerController.boundBottom === null) {
+            this.stateManager.playerController.accY += this.stateManager.playerController.Y_GRAVITY
+            if (this.stateManager.playerController.accY > 0) {
                 this.stateManager.changeState(this.stateManager.stateFall)
             }
         }
 
         if (
-            this.stateManager.parent.boundBottom &&
-            this.stateManager.parent.y > this.stateManager.parent.boundBottom &&
-            this.stateManager.parent.accY > 0
+            this.stateManager.playerController.boundBottom &&
+            this.stateManager.parent.y > this.stateManager.playerController.boundBottom &&
+            this.stateManager.playerController.accY > 0
         ) {
             const handleInput = this.stateManager.parent.getScript('handleInput') as HandleInput
-            if (this.stateManager.parent.accY > 0 && handleInput.inputXPressure !== 0) {
+            if (this.stateManager.playerController.accY > 0 && handleInput.inputXPressure !== 0) {
                 this.stateManager.changeState(this.stateManager.stateRun)
             } else {
-                if (this.stateManager.parent.accY > 5) {
+                if (this.stateManager.playerController.accY > 5) {
                     // TODO Implement dust on crouch
                 }
                 this.stateManager.changeState(this.stateManager.stateIdle)
             }
-            this.stateManager.parent.accY = 0
-            this.stateManager.parent.y = this.stateManager.parent.boundBottom
-            this.stateManager.parent.jumpBlocked = false
+            this.stateManager.playerController.accY = 0
+            this.stateManager.parent.y = this.stateManager.playerController.boundBottom
+            this.stateManager.playerController.jumpBlocked = false
         }
     }
     onNoInput() {
-        if (this.stateManager.parent.accX === 0 && this.stateManager.parent.accY === 0) {
+        if (
+            this.stateManager.playerController.accX === 0 &&
+            this.stateManager.playerController.accY === 0
+        ) {
             this.stateManager.changeState(this.stateManager.stateIdle)
         }
     }

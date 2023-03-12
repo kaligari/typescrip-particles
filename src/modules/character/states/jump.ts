@@ -8,8 +8,9 @@ export default class StateJump extends StateRun {
 
     onAction1() {
         if (this.stateManager.changeState(this.stateManager.stateSomersault)) {
-            this.stateManager.parent.accY = 0
-            this.stateManager.parent.accY -= this.stateManager.parent.X_SOMERSAULT
+            this.stateManager.playerController.accY = 0
+            this.stateManager.playerController.accY -=
+                this.stateManager.playerController.X_SOMERSAULT
         }
     }
 
