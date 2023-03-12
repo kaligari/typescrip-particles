@@ -1,16 +1,27 @@
 import userInput from '@/modules/userInput/userInput'
+import GameScript from './gameScript'
 
 export default class GameObject {
     x: number
     y: number
     width: number
     height: number
+    scripts: GameScript[]
 
     constructor() {
         this.x = 0
         this.y = 0
         this.width = 0
         this.height = 0
+        this.scripts = []
+    }
+
+    init() {
+        this.scripts.forEach(script => script.init())
+    }
+
+    update() {
+        this.scripts.forEach(script => script.update())
     }
 
     isMouseHover() {

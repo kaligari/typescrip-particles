@@ -39,13 +39,13 @@ export default class Scene {
             return
         }
         this.bubbles.active = false
+        this.player.init()
     }
 
     render() {
         camera.update()
         this.handleParticles()
         this.bubbles.update()
-        this.player.handleInput()
         this.drawBackground()
         this.player.updateState()
         this.player.updateCamera()

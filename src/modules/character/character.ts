@@ -15,11 +15,12 @@ import rendererEngine from '@/rendererEngine'
 import TileSet from '../tileSet'
 import TileCollider from '../collider'
 import camera from '@/libs/camera'
-import RigidBody from '@/libs/rigidBody'
+import GameObject from '@/libs/gameObject'
+import HandleInput from './handleInput'
 
 export type TStateTypes = StateRun | StateJump
 
-export default class Character extends RigidBody {
+export default class Character extends GameObject {
     tiles: TileSet | null
     animation: GameAnimation
     isLeft: boolean
@@ -36,6 +37,8 @@ export default class Character extends RigidBody {
     jumpBlocked: boolean
     offsetX: number
     offsetY: number
+    accX: number
+    accY: number
     boundBottom: number | null
     collider: TileCollider | null
     X_ACCELERATION: number
@@ -48,6 +51,7 @@ export default class Character extends RigidBody {
     X_SOMERSAULT: number
     X_CROUCH: number
     Y_GRAVITY: number
+    // handleInputScript: HandleInput
 
     constructor() {
         super()
@@ -69,6 +73,8 @@ export default class Character extends RigidBody {
         this.offsetY = 0
         this.boundBottom = null
         this.collider = null
+        this.accX = 0
+        this.accY = 0
         // -----
         this.X_ACCELERATION = 0.15
         this.X_DESIRED_ACCELERATION = 3
@@ -80,6 +86,24 @@ export default class Character extends RigidBody {
         this.X_SOMERSAULT = 4
         this.X_CROUCH = 0.5
         this.Y_GRAVITY = 0.15
+        // ------
+        this.scripts.push(new HandleInput(this))
+    }
+
+    // init() {
+    //     super.init()
+    // }
+
+    interpolateForceX(factor: number, target = 1) {
+        if (this.accX - factor > target) {
+            this.accX -= factor
+            return
+        }
+        if (this.accX + factor < target) {
+            this.accX += factor
+            return
+        }
+        this.accX = target
     }
 
     load(animation: ITiledFileTileset) {
@@ -122,37 +146,38 @@ export default class Character extends RigidBody {
     }
 
     handleInput() {
-        userInput.update()
-        if (userInput.start) {
-            location.reload()
-            return
-        }
-        if (userInput.actionA) {
-            this.state.onAction1()
-            this.inputYPressure = 1
-            return
-        }
-        if (userInput.down) {
-            this.state.onDown()
-            return
-        }
-        if (userInput.right) {
-            this.state.onRight()
-            // TODO Read pressure from controller
-            this.inputXPressure = 1
-            return
-        }
-        if (userInput.left) {
-            this.state.onLeft()
-            this.inputXPressure = 1
-            return
-        }
-        this.state.onNoInput()
-        this.inputXPressure = 0
-        this.inputYPressure = 0
+        // userInput.update()
+        // if (userInput.start) {
+        //     location.reload()
+        //     return
+        // }
+        // if (userInput.actionA) {
+        //     this.state.onAction1()
+        //     this.inputYPressure = 1
+        //     return
+        // }
+        // if (userInput.down) {
+        //     this.state.onDown()
+        //     return
+        // }
+        // if (userInput.right) {
+        //     this.state.onRight()
+        //     // TODO Read pressure from controller
+        //     this.inputXPressure = 1
+        //     return
+        // }
+        // if (userInput.left) {
+        //     this.state.onLeft()
+        //     this.inputXPressure = 1
+        //     return
+        // }
+        // this.state.onNoInput()
+        // this.inputXPressure = 0
+        // this.inputYPressure = 0
     }
 
     updateState() {
+        super.update()
         this.collider?.update()
         this.state.updateAlways()
         this.state.update()
