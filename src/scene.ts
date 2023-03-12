@@ -5,6 +5,7 @@ import { ITiledFileMapFile } from './modules/gameAnimation/types'
 import TileSet from './modules/tileSet'
 import camera from './libs/camera'
 import GameAnimation from './modules/gameAnimation/gameAnimation'
+import TileCollider from './modules/collider'
 
 export default class Scene {
     player: Character
@@ -12,7 +13,7 @@ export default class Scene {
 
     constructor() {
         this.tiles = new TileSet()
-        this.player = new Character(this.tiles)
+        this.player = new Character()
     }
 
     async init() {
@@ -30,6 +31,8 @@ export default class Scene {
             .catch(error => console.log(error))
         const gameAnimation = this.player.getScript('gameAnimation') as GameAnimation
         await gameAnimation.load(characterFile)
+        const tileCollider = this.player.getScript('tileCollider') as TileCollider
+        tileCollider.loadTileSet(this.tiles)
     }
 
     update() {
