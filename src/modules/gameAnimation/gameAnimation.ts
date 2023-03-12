@@ -39,7 +39,7 @@ export default class GameAnimation extends GameScript {
         this.offsetY = animationFile.tileoffset.y
     }
 
-    update() {
+    override update() {
         if (!this.animation) return
 
         const XOnScreen = this.parent.x - camera.x

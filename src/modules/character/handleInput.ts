@@ -35,12 +35,10 @@ export default class HandleInput extends GameScript {
             return
         }
         if (userInput.left) {
-            // this.parent.state.onLeft()
             ;(this.parent.getScript('stateManager') as StateManager)?.state.onLeft()
             this.inputXPressure = 1
             return
         }
-        // this.parent.state.onNoInput()
         ;(this.parent.getScript('stateManager') as StateManager)?.state.onNoInput()
         this.inputXPressure = 0
         this.inputYPressure = 0

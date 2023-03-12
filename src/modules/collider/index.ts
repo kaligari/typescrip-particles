@@ -17,7 +17,7 @@ export default class TileCollider extends GameScript {
         this.tiles = tileset
     }
 
-    update() {
+    override update() {
         const col = floor(this.parent.x / this.tiles.tileWidth)
         const row = floor(this.parent.y / this.tiles.tileWidth)
         this.mainId = row * this.tiles.tileSetWidth + col
