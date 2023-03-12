@@ -1,3 +1,4 @@
+import HandleInput from '../handleInput'
 import State from '../state'
 import StateManager from '../stateManager'
 
@@ -7,7 +8,8 @@ export default class StateRun extends State {
     }
 
     update() {
-        if (this.stateManager.parent.inputXPressure === 0) {
+        const handleInput = this.stateManager.parent.getScript('handleInput') as HandleInput
+        if (handleInput.inputXPressure === 0) {
             this.stateManager.interpolateForceX(
                 this.stateManager.parent.X_DECELERATION,
                 this.stateManager.parent.X_DESIRED_DECELERATION,
@@ -24,8 +26,9 @@ export default class StateRun extends State {
             }
             return
         }
+        const { inputXPressure } = this.stateManager.parent.getScript('handleInput') as HandleInput
         this.stateManager.interpolateForceX(
-            this.stateManager.parent.X_ACCELERATION * this.stateManager.parent.inputXPressure,
+            this.stateManager.parent.X_ACCELERATION * inputXPressure,
             -this.stateManager.parent.X_DESIRED_ACCELERATION,
         )
     }
@@ -39,8 +42,9 @@ export default class StateRun extends State {
             }
             return
         }
+        const { inputXPressure } = this.stateManager.parent.getScript('handleInput') as HandleInput
         this.stateManager.interpolateForceX(
-            this.stateManager.parent.X_ACCELERATION * this.stateManager.parent.inputXPressure,
+            this.stateManager.parent.X_ACCELERATION * inputXPressure,
             this.stateManager.parent.X_DESIRED_ACCELERATION,
         )
     }

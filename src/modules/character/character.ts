@@ -9,8 +9,6 @@ import HandleInput from './handleInput'
 import StateManager from './stateManager'
 
 export default class Character extends GameObject {
-    inputXPressure: number
-    inputYPressure: number
     jumpBlocked: boolean
     offsetX: number
     offsetY: number
@@ -30,10 +28,7 @@ export default class Character extends GameObject {
 
     constructor(tiles: TileSet) {
         super()
-        this.inputXPressure = 0
-        this.inputYPressure = 0
         this.jumpBlocked = false
-        // this.tiles = tiles
         this.offsetX = 0
         this.offsetY = 0
         this.boundBottom = null

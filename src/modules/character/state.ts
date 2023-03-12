@@ -1,4 +1,5 @@
 import GameAnimation from '../gameAnimation/gameAnimation'
+import HandleInput from './handleInput'
 import StateManager from './stateManager'
 
 export default abstract class State {
@@ -31,10 +32,8 @@ export default abstract class State {
             this.stateManager.parent.y > this.stateManager.parent.boundBottom &&
             this.stateManager.parent.accY > 0
         ) {
-            if (
-                this.stateManager.parent.accY > 0 &&
-                this.stateManager.parent.inputXPressure !== 0
-            ) {
+            const handleInput = this.stateManager.parent.getScript('handleInput') as HandleInput
+            if (this.stateManager.parent.accY > 0 && handleInput.inputXPressure !== 0) {
                 this.stateManager.changeState(this.stateManager.stateRun)
             } else {
                 if (this.stateManager.parent.accY > 5) {
