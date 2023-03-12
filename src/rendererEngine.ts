@@ -46,7 +46,7 @@ class RendererEngine {
     render(scene: Scene) {
         if (!this.imagedata || !this.ctx || !this.canvas) return
         this.setDelta()
-        scene.render()
+        scene.update()
         this.ctx.putImageData(this.imagedata, 0, 0)
         this.ctx.drawImage(this.canvas, 0, 0)
     }

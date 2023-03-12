@@ -20,14 +20,4 @@ export default class Character extends GameObject {
         this.scripts.push(new TileCollider('tileCollider', this, tiles))
         this.scripts.push(new PlayerController('playerController', this))
     }
-
-    // TODO this shouldn't be here
-    async init() {
-        super.init()
-        const gameAnimation = this.getScript('gameAnimation') as GameAnimation
-        const characterFile = await fetch('./assets/adventurer.json')
-            .then(response => response.json())
-            .catch(error => console.log(error))
-        await gameAnimation.load(characterFile)
-    }
 }

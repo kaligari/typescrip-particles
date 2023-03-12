@@ -4,6 +4,7 @@ import Character from './modules/character/character'
 import { ITiledFileMapFile } from './modules/gameAnimation/types'
 import TileSet from './modules/tileSet'
 import camera from './libs/camera'
+import GameAnimation from './modules/gameAnimation/gameAnimation'
 
 export default class Scene {
     player: Character
@@ -15,14 +16,23 @@ export default class Scene {
     }
 
     async init() {
+        await this.player.init()
+        await this.loadFiles()
+    }
+
+    async loadFiles() {
         const levelFile = await fetch('./assets/level.json')
             .then(response => response.json())
             .catch(error => console.log(error))
         await this.tiles.load(levelFile as ITiledFileMapFile)
-        await this.player.init()
+        const characterFile = await fetch('./assets/adventurer.json')
+            .then(response => response.json())
+            .catch(error => console.log(error))
+        const gameAnimation = this.player.getScript('gameAnimation') as GameAnimation
+        await gameAnimation.load(characterFile)
     }
 
-    render() {
+    update() {
         camera.update()
         this.drawBackground()
         this.tiles.renderBackground()
