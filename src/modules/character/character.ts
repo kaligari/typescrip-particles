@@ -1,5 +1,4 @@
 import GameAnimation from '@/modules/gameAnimation/gameAnimation'
-import { ITiledFileTileset } from '@/modules/gameAnimation/types'
 import { floor, round } from '@/helpers/math'
 import rendererEngine from '@/rendererEngine'
 import TileSet from '../tileSet'
@@ -10,7 +9,6 @@ import HandleInput from './handleInput'
 import StateManager from './stateManager'
 
 export default class Character extends GameObject {
-    tiles: TileSet | null
     inputXPressure: number
     inputYPressure: number
     jumpBlocked: boolean
@@ -30,12 +28,12 @@ export default class Character extends GameObject {
     X_CROUCH: number
     Y_GRAVITY: number
 
-    constructor() {
+    constructor(tiles: TileSet) {
         super()
         this.inputXPressure = 0
         this.inputYPressure = 0
         this.jumpBlocked = false
-        this.tiles = null
+        // this.tiles = tiles
         this.offsetX = 0
         this.offsetY = 0
         this.boundBottom = null
@@ -60,6 +58,7 @@ export default class Character extends GameObject {
         this.scripts.push(new HandleInput('handleInput', this))
         this.scripts.push(new StateManager('stateManager', this))
         this.scripts.push(new GameAnimation('gameAnimation', this))
+        this.scripts.push(new TileCollider('tileCollider', this, tiles))
     }
 
     async init() {
@@ -73,41 +72,37 @@ export default class Character extends GameObject {
         await gameAnimation.load(characterFile)
     }
 
-    addTiles(tiles: TileSet) {
-        this.tiles = tiles
-        this.scripts.push(new TileCollider('tileCollider', this, tiles))
-    }
-
     calcColision(x: number, y: number) {
-        if (!this.tiles) return null
+        const tileCollider = this.getScript('tileCollider') as TileCollider
 
-        const col = floor(x / this.tiles.tileWidth)
-        const row = floor(y / this.tiles.tileWidth)
-        const tileId = row * this.tiles.tileSetWidth + col
+        const col = floor(x / tileCollider.tiles.tileWidth)
+        const row = floor(y / tileCollider.tiles.tileWidth)
+        const tileId = row * tileCollider.tiles.tileSetWidth + col
 
-        if (this.tiles.tiles[tileId] !== 0) {
-            return row * this.tiles.tileHeight
+        if (tileCollider.tiles.tiles[tileId] !== 0) {
+            return row * tileCollider.tiles.tileHeight
         }
         return null
     }
 
     updateState() {
         super.update()
-        if (!this.tiles) return
-
         const tileCollider = this.getScript('tileCollider') as TileCollider
 
         if (this.accX > 0) {
             // end of the level
-            if (this.x >= this.tiles.tileSetWidth * this.tiles.tileWidth - this.width) {
+            if (
+                this.x >=
+                tileCollider.tiles.tileSetWidth * tileCollider.tiles.tileWidth - this.width
+            ) {
                 this.accX = 0
             }
             for (
                 let tileId = tileCollider.topRightTileId;
                 tileId < tileCollider.bottomRightTileId;
-                tileId += this.tiles.tileSetWidth
+                tileId += tileCollider.tiles.tileSetWidth
             ) {
-                const tile = this.tiles.tiles[tileId]
+                const tile = tileCollider.tiles.tiles[tileId]
                 if (tile !== 0) {
                     this.accX = 0
                     continue
@@ -124,9 +119,9 @@ export default class Character extends GameObject {
             for (
                 let tileId = tileCollider.topLeftTileId;
                 tileId < tileCollider.bottomLeftTileId;
-                tileId += this.tiles.tileSetWidth
+                tileId += tileCollider.tiles.tileSetWidth
             ) {
-                const tile = this.tiles.tiles[tileId]
+                const tile = tileCollider.tiles.tiles[tileId]
                 if (tile !== 0) {
                     this.accX = 0
                     continue
@@ -165,22 +160,24 @@ export default class Character extends GameObject {
     }
 
     updateCamera() {
+        const tileCollider = this.getScript('tileCollider') as TileCollider
         const playerOffsetX = this.width / 2
         const playerOffsetY = this.height / 2
         const offsetX = rendererEngine.width * 0.5 - playerOffsetX
         const offsetY = rendererEngine.height * 0.5 - playerOffsetY
 
-        if (!this.tiles) return
         if (
             this.x - offsetX > 0 &&
-            this.x + offsetX + this.width < this.tiles.tileSetWidth * this.tiles.tileWidth
+            this.x + offsetX + this.width <
+                tileCollider.tiles.tileSetWidth * tileCollider.tiles.tileWidth
         ) {
             camera.x = this.x - offsetX
         }
 
         if (
             this.y - offsetY > 0 &&
-            this.y + offsetY + this.height < this.tiles.tileSetHeight * this.tiles.tileHeight
+            this.y + offsetY + this.height <
+                tileCollider.tiles.tileSetHeight * tileCollider.tiles.tileHeight
         ) {
             camera.y = this.y - offsetY
         }

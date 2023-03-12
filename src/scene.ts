@@ -11,7 +11,7 @@ export default class Scene {
 
     constructor() {
         this.tiles = new TileSet()
-        this.player = new Character()
+        this.player = new Character(this.tiles)
     }
 
     async init() {
@@ -20,7 +20,6 @@ export default class Scene {
             .catch(error => console.log(error))
         await this.tiles.load(levelFile as ITiledFileMapFile)
         await this.player.init()
-        this.player.addTiles(this.tiles)
     }
 
     render() {
