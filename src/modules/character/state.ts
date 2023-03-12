@@ -1,58 +1,61 @@
-import Character from './character'
+import StateManager from './stateManager'
 
 export default abstract class State {
-    character: Character
+    stateManager: StateManager
     name: string
 
-    constructor(character: Character, name: string) {
-        this.character = character
+    constructor(stateManager: StateManager, name: string) {
+        this.stateManager = stateManager
         this.name = name
     }
 
     updateAlways() {
-        // if (this.character.inputXPressure === 0) {
-        //     this.character.interpolateForceX(0.2, 1)
+        // if (this.stateManager.parent.inputXPressure === 0) {
+        //     this.stateManager.parent.interpolateForceX(0.2, 1)
         // }
         // apply gravity
         // const gravity = 0.01
-        // this.character.currSpeedX += gravity
-        // this.character.posX += 0.01 * this.character.posX
+        // this.stateManager.parent.currSpeedX += gravity
+        // this.stateManager.parent.posX += 0.01 * this.stateManager.parent.posX
         // -----------------------------------------
-        if (this.character.boundBottom === null) {
-            this.character.accY += this.character.Y_GRAVITY
-            if (this.character.accY > 0) {
-                this.character.changeState(this.character.stateFall)
+        if (this.stateManager.parent.boundBottom === null) {
+            this.stateManager.parent.accY += this.stateManager.parent.Y_GRAVITY
+            if (this.stateManager.parent.accY > 0) {
+                this.stateManager.changeState(this.stateManager.stateFall)
             }
         }
 
         if (
-            this.character.boundBottom &&
-            this.character.y > this.character.boundBottom &&
-            this.character.accY > 0
+            this.stateManager.parent.boundBottom &&
+            this.stateManager.parent.y > this.stateManager.parent.boundBottom &&
+            this.stateManager.parent.accY > 0
         ) {
-            if (this.character.accY > 0 && this.character.inputXPressure !== 0) {
-                this.character.changeState(this.character.stateRun)
+            if (
+                this.stateManager.parent.accY > 0 &&
+                this.stateManager.parent.inputXPressure !== 0
+            ) {
+                this.stateManager.changeState(this.stateManager.stateRun)
             } else {
-                if (this.character.accY > 5) {
+                if (this.stateManager.parent.accY > 5) {
                     // TODO Implement dust on crouch
                 }
-                this.character.changeState(this.character.stateIdle)
+                this.stateManager.changeState(this.stateManager.stateIdle)
             }
-            this.character.accY = 0
-            this.character.y = this.character.boundBottom
-            this.character.jumpBlocked = false
+            this.stateManager.parent.accY = 0
+            this.stateManager.parent.y = this.stateManager.parent.boundBottom
+            this.stateManager.parent.jumpBlocked = false
         }
     }
     onNoInput() {
-        if (this.character.accX === 0 && this.character.accY === 0) {
-            this.character.changeState(this.character.stateIdle)
+        if (this.stateManager.parent.accX === 0 && this.stateManager.parent.accY === 0) {
+            this.stateManager.changeState(this.stateManager.stateIdle)
         }
     }
     canChangeState(): boolean {
         return true
     }
     changeAnimation() {
-        this.character.animation.changeAnimation(this.name)
+        this.stateManager.parent.animation.changeAnimation(this.name)
     }
 
     update() {}

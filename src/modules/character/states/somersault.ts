@@ -1,22 +1,22 @@
-import Character from '@/modules/character/character'
 import StateJump from './jump'
+import StateManager from '../stateManager'
 
 export default class StateSomersault extends StateJump {
-    constructor(character: Character) {
-        super(character, 'somersault')
+    constructor(stateManager: StateManager) {
+        super(stateManager, 'somersault')
     }
 
     onAction1() {}
 
     canChangeState() {
-        return !this.character.jumpBlocked
+        return !this.stateManager.parent.jumpBlocked
     }
 
     onChangeState() {
-        this.character.jumpBlocked = true
+        this.stateManager.parent.jumpBlocked = true
     }
 
     onDown() {
-        this.character.changeState(this.character.stateJump)
+        this.stateManager.changeState(this.stateManager.stateJump)
     }
 }

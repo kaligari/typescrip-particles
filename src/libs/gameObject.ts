@@ -24,6 +24,10 @@ export default class GameObject {
         this.scripts.forEach(script => script.update())
     }
 
+    getScript(wantedScript: string) {
+        return this.scripts.find(script => script.name === wantedScript)
+    }
+
     isMouseHover() {
         const mouseX = userInput.mouseX
         const mouseY = userInput.mouseY

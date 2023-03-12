@@ -1,32 +1,32 @@
-import Character from '@/modules/character/character'
 import State from '../state'
+import StateManager from '../stateManager'
 
 export default class StateIdle extends State {
-    constructor(character: Character, name = 'idle') {
-        super(character, name)
+    constructor(stateManager: StateManager, name = 'idle') {
+        super(stateManager, name)
     }
 
     update() {
-        this.character.interpolateForceX(
-            this.character.X_DECELERATION,
-            this.character.X_DESIRED_DECELERATION,
+        this.stateManager.parent.interpolateForceX(
+            this.stateManager.parent.X_DECELERATION,
+            this.stateManager.parent.X_DESIRED_DECELERATION,
         )
     }
 
     onRight() {
-        this.character.changeState(this.character.stateRun)
+        this.stateManager.changeState(this.stateManager.stateRun)
     }
 
     onLeft() {
-        this.character.changeState(this.character.stateRun)
+        this.stateManager.changeState(this.stateManager.stateRun)
     }
 
     onDown() {
-        this.character.changeState(this.character.stateCrouch)
+        this.stateManager.changeState(this.stateManager.stateCrouch)
     }
 
     onAction1() {
-        this.character.accY -= this.character.X_JUMP
-        this.character.changeState(this.character.stateJump)
+        this.stateManager.parent.accY -= this.stateManager.parent.X_JUMP
+        this.stateManager.changeState(this.stateManager.stateJump)
     }
 }

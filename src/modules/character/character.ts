@@ -1,14 +1,6 @@
 import GameAnimation from '@/modules/gameAnimation/gameAnimation'
 import { ITiledFileTileset } from '@/modules/gameAnimation/types'
 import { floor, round } from '@/helpers/math'
-import userInput from '@/modules/userInput/userInput'
-import State from './state'
-import StateIdle from './states/idle'
-import StateRun from './states/run'
-import StateJump from './states/jump'
-import StateSomersault from './states/somersault'
-import StateFall from './states/fall'
-import StateCrouch from './states/crouch'
 import Rectangle from '../primitives/rectangle'
 import Color from '@/libs/color'
 import rendererEngine from '@/rendererEngine'
@@ -17,21 +9,12 @@ import TileCollider from '../collider'
 import camera from '@/libs/camera'
 import GameObject from '@/libs/gameObject'
 import HandleInput from './handleInput'
-
-export type TStateTypes = StateRun | StateJump
+import StateManager from './stateManager'
 
 export default class Character extends GameObject {
     tiles: TileSet | null
     animation: GameAnimation
     isLeft: boolean
-    state: TStateTypes
-    states: TStateTypes[]
-    stateIdle: State
-    stateRun: State
-    stateJump: State
-    stateSomersault: State
-    stateFall: State
-    stateCrouch: State
     inputXPressure: number
     inputYPressure: number
     jumpBlocked: boolean
@@ -51,20 +34,11 @@ export default class Character extends GameObject {
     X_SOMERSAULT: number
     X_CROUCH: number
     Y_GRAVITY: number
-    // handleInputScript: HandleInput
 
     constructor() {
         super()
         this.animation = new GameAnimation()
-        this.states = []
         this.isLeft = false
-        this.stateRun = new StateRun(this)
-        this.stateIdle = new StateIdle(this)
-        this.stateJump = new StateJump(this)
-        this.stateSomersault = new StateSomersault(this)
-        this.stateFall = new StateFall(this)
-        this.stateCrouch = new StateCrouch(this)
-        this.state = this.stateIdle
         this.inputXPressure = 0
         this.inputYPressure = 0
         this.jumpBlocked = false
@@ -87,12 +61,9 @@ export default class Character extends GameObject {
         this.X_CROUCH = 0.5
         this.Y_GRAVITY = 0.15
         // ------
-        this.scripts.push(new HandleInput(this))
+        this.scripts.push(new HandleInput('handleInput', this))
+        this.scripts.push(new StateManager('stateManager', this))
     }
-
-    // init() {
-    //     super.init()
-    // }
 
     interpolateForceX(factor: number, target = 1) {
         if (this.accX - factor > target) {
@@ -134,53 +105,9 @@ export default class Character extends GameObject {
         return null
     }
 
-    changeState(state: TStateTypes) {
-        if (this.state === state) return
-        if (state.canChangeState()) {
-            this.state = state
-            state.changeAnimation()
-            state.onChangeState()
-            return true
-        }
-        return false
-    }
-
-    handleInput() {
-        // userInput.update()
-        // if (userInput.start) {
-        //     location.reload()
-        //     return
-        // }
-        // if (userInput.actionA) {
-        //     this.state.onAction1()
-        //     this.inputYPressure = 1
-        //     return
-        // }
-        // if (userInput.down) {
-        //     this.state.onDown()
-        //     return
-        // }
-        // if (userInput.right) {
-        //     this.state.onRight()
-        //     // TODO Read pressure from controller
-        //     this.inputXPressure = 1
-        //     return
-        // }
-        // if (userInput.left) {
-        //     this.state.onLeft()
-        //     this.inputXPressure = 1
-        //     return
-        // }
-        // this.state.onNoInput()
-        // this.inputXPressure = 0
-        // this.inputYPressure = 0
-    }
-
     updateState() {
         super.update()
         this.collider?.update()
-        this.state.updateAlways()
-        this.state.update()
         if (!this.collider) return
         if (!this.tiles) return
 
@@ -276,21 +203,6 @@ export default class Character extends GameObject {
                     new Color(0, 0, 0),
                 )
             }
-            // for (
-            //     let tileId = this.collider.bottomLeftTileId;
-            //     tileId <= this.collider.bottomRightTileId;
-            //     tileId++
-            // ) {
-            //     const tmpX = tileId % this.tiles.tileSetWidth
-            //     const tmpY = floor(tileId / this.tiles.tileSetWidth)
-            //     new Rectangle().draw(
-            //         tmpX * this.tiles.tileWidth - camera.x,
-            //         tmpY * this.tiles.tileHeight,
-            //         this.tiles.tileWidth,
-            //         this.tiles.tileHeight,
-            //         new Color(0, 255, 0),
-            //     )
-            // }
             for (
                 let tileId = this.collider.topLeftTileId;
                 tileId <= this.collider.topRightTileId;
@@ -319,7 +231,10 @@ export default class Character extends GameObject {
         const collisionBottom = this.calcColision(bottomX, bottomY)
         if (collisionBottom !== null && this.boundBottom === null) {
             this.boundBottom = collisionBottom - this.height
-            this.changeState(this.stateIdle)
+            // this.changeState(this.stateIdle)
+            const stateManager = this.getScript('stateManager') as StateManager
+            if (!stateManager) return
+            stateManager.changeState(stateManager.stateIdle)
         } else if (collisionBottom === null) {
             this.boundBottom = null
         }

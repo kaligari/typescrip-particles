@@ -1,20 +1,20 @@
-import Character from '@/modules/character/character'
 import StateRun from './run'
+import StateManager from '../stateManager'
 
 export default class StateFall extends StateRun {
-    constructor(character: Character, name = 'fall') {
-        super(character, name)
+    constructor(stateManager: StateManager, name = 'fall') {
+        super(stateManager, name)
     }
 
     onDown() {
-        this.character.accY += this.character.X_CROUCH
-        this.character.changeState(this.character.stateJump)
+        this.stateManager.parent.accY += this.stateManager.parent.X_CROUCH
+        this.stateManager.changeState(this.stateManager.stateJump)
     }
 
     onAction1() {
-        if (this.character.changeState(this.character.stateSomersault)) {
-            this.character.accY = 0
-            this.character.accY -= this.character.X_SOMERSAULT
+        if (this.stateManager.changeState(this.stateManager.stateSomersault)) {
+            this.stateManager.parent.accY = 0
+            this.stateManager.parent.accY -= this.stateManager.parent.X_SOMERSAULT
         }
     }
 }

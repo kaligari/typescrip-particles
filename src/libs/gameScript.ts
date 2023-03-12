@@ -1,8 +1,12 @@
 export default class GameScript {
+    name: string
+
     // parent: GameObject
-    // constructor(parent: GameObject) {
-    //     this.parent = parent
-    // }
+    constructor(name: string) {
+        // parent: GameObject) {
+        this.name = name
+        // this.parent = parent
+    }
 
     init() {}
 

@@ -1,12 +1,13 @@
 import GameScript from '@/libs/gameScript'
 import userInput from '../userInput/userInput'
 import Character from './character'
+import StateManager from './stateManager'
 
 export default class HandleInput extends GameScript {
     parent: Character
 
-    constructor(parent: Character) {
-        super()
+    constructor(name: string, parent: Character) {
+        super(name)
         this.parent = parent
     }
 
@@ -17,26 +18,28 @@ export default class HandleInput extends GameScript {
             return
         }
         if (userInput.actionA) {
-            this.parent.state.onAction1()
+            ;(this.parent.getScript('stateManager') as StateManager)?.state.onAction1()
             this.parent.inputYPressure = 1
             return
         }
         if (userInput.down) {
-            this.parent.state.onDown()
+            ;(this.parent.getScript('stateManager') as StateManager)?.state.onDown()
             return
         }
         if (userInput.right) {
-            this.parent.state.onRight()
+            ;(this.parent.getScript('stateManager') as StateManager)?.state.onRight()
             // TODO Read pressure from controller
             this.parent.inputXPressure = 1
             return
         }
         if (userInput.left) {
-            this.parent.state.onLeft()
+            // this.parent.state.onLeft()
+            ;(this.parent.getScript('stateManager') as StateManager)?.state.onLeft()
             this.parent.inputXPressure = 1
             return
         }
-        this.parent.state.onNoInput()
+        // this.parent.state.onNoInput()
+        ;(this.parent.getScript('stateManager') as StateManager)?.state.onNoInput()
         this.parent.inputXPressure = 0
         this.parent.inputYPressure = 0
     }

@@ -1,9 +1,9 @@
-import Character from '@/modules/character/character'
 import StateIdle from './idle'
+import StateManager from '../stateManager'
 
 export default class StateCrouch extends StateIdle {
-    constructor(character: Character) {
-        super(character, 'crouch')
+    constructor(stateManager: StateManager) {
+        super(stateManager, 'crouch')
     }
 
     onAction1() {}

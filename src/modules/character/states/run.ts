@@ -1,56 +1,62 @@
-import Character from '@/modules/character/character'
 import State from '../state'
+import StateManager from '../stateManager'
 
 export default class StateRun extends State {
-    constructor(character: Character, name = 'run') {
-        super(character, name)
+    constructor(stateManager: StateManager, name = 'run') {
+        super(stateManager, name)
     }
 
     update() {
-        if (this.character.inputXPressure === 0) {
-            this.character.interpolateForceX(
-                this.character.X_DECELERATION,
-                this.character.X_DESIRED_DECELERATION,
+        if (this.stateManager.parent.inputXPressure === 0) {
+            this.stateManager.parent.interpolateForceX(
+                this.stateManager.parent.X_DECELERATION,
+                this.stateManager.parent.X_DESIRED_DECELERATION,
             )
         }
     }
 
     onLeft() {
-        this.character.isLeft = true
-        if (this.character.accX > 0) {
-            this.character.interpolateForceX(this.character.X_OPPOSITE_DECELERATION, 0)
-            if (this.character.accX === 0) {
-                this.character.isLeft = true
+        this.stateManager.parent.isLeft = true
+        if (this.stateManager.parent.accX > 0) {
+            this.stateManager.parent.interpolateForceX(
+                this.stateManager.parent.X_OPPOSITE_DECELERATION,
+                0,
+            )
+            if (this.stateManager.parent.accX === 0) {
+                this.stateManager.parent.isLeft = true
             }
             return
         }
-        this.character.interpolateForceX(
-            this.character.X_ACCELERATION * this.character.inputXPressure,
-            -this.character.X_DESIRED_ACCELERATION,
+        this.stateManager.parent.interpolateForceX(
+            this.stateManager.parent.X_ACCELERATION * this.stateManager.parent.inputXPressure,
+            -this.stateManager.parent.X_DESIRED_ACCELERATION,
         )
     }
 
     onRight() {
-        this.character.isLeft = false
-        if (this.character.accX < 0) {
-            this.character.interpolateForceX(this.character.X_OPPOSITE_DECELERATION, 0)
-            if (this.character.accX === 0) {
-                this.character.isLeft = false
+        this.stateManager.parent.isLeft = false
+        if (this.stateManager.parent.accX < 0) {
+            this.stateManager.parent.interpolateForceX(
+                this.stateManager.parent.X_OPPOSITE_DECELERATION,
+                0,
+            )
+            if (this.stateManager.parent.accX === 0) {
+                this.stateManager.parent.isLeft = false
             }
             return
         }
-        this.character.interpolateForceX(
-            this.character.X_ACCELERATION * this.character.inputXPressure,
-            this.character.X_DESIRED_ACCELERATION,
+        this.stateManager.parent.interpolateForceX(
+            this.stateManager.parent.X_ACCELERATION * this.stateManager.parent.inputXPressure,
+            this.stateManager.parent.X_DESIRED_ACCELERATION,
         )
     }
 
     onDown() {
-        this.character.changeState(this.character.stateIdle)
+        this.stateManager.changeState(this.stateManager.stateIdle)
     }
 
     onAction1() {
-        this.character.accY -= this.character.X_JUMP_FROM_RUN
-        this.character.changeState(this.character.stateJump)
+        this.stateManager.parent.accY -= this.stateManager.parent.X_JUMP_FROM_RUN
+        this.stateManager.changeState(this.stateManager.stateJump)
     }
 }
