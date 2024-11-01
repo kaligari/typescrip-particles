@@ -2,7 +2,7 @@ import { abs, floor } from '@/helpers/math'
 import { EPathfinderNodeType } from './types'
 import PathfinderNode from './pathfinderNode'
 
-class Pathfinder {
+export class Pathfinder {
     nodes: PathfinderNode[]
     obstacles: number[]
     sizeX = 11
